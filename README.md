@@ -9,6 +9,6 @@ Using BootCat one can build a relatively large quick-and-dirty corpus (typically
 
 ## Binaries
 
-You can download binaries packaged for Mac, Windows and Linux on the official web site at:
+You can download binaries packaged for Mac, Windows and Linux from the official web site:
 
 https://bootcat.dipintra.it/
