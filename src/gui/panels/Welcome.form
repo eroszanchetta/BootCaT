@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[382, 373]"/>
+    </Property>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[452, 366]"/>
+    </Property>
+  </Properties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="mainLabel" max="32767" attributes="0"/>
+          <Component id="jLabel1" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="mainLabel" min="-2" pref="336" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="mainLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;     &lt;title&gt;&lt;/title&gt;   &lt;/head&gt;   &lt;body&gt;      &lt;h1&gt;Welcome to BootCaT&lt;/h1&gt;   &lt;p&gt;This wizard will walk you through the creation of a corpus.&lt;/p&gt;   &lt;p&gt;Several corpus creation modes are available, the original BootCaT creation process (that we call &quot;Simple&quot; mode) involves the following steps:&lt;/p&gt;   &lt;ul&gt;   &lt;li&gt;providing a list of seeds, i.e. words (or combination of words) that identify the domain you&apos;re investigating, or generic lexical items if you want to create a general-language corpus;&lt;/li&gt;   &lt;li&gt;combining these seeds in random tuples (i.e. sequences of &lt;em&gt;n&lt;/em&gt; seeds);&lt;/li&gt;   &lt;li&gt;querying a search engine to find web pages and documents that contain the generated tuples;&lt;/li&gt;   &lt;li&gt;downloading the relevant web pages/documents and extracting plain text from them.&lt;/li&gt;   &lt;/ul&gt;   &lt;p&gt;Please note that BootCaT collects anonymous usage statistics, if you wish to disable this feature, you can do so in the Options menu.&lt;/p&gt;   &lt;/body&gt; &lt;/html&gt;"/>
+        <Property name="verticalAlignment" type="int" value="1"/>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 0]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[452, 366]"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Follow the &lt;a href=&apos;&apos;&gt;online tutorial&lt;/a&gt; to get started.&lt;/p&gt; &lt;/html&gt;"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseClicked"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
