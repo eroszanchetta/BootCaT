@@ -1,0 +1,130 @@
+%1$s version %2$s
+Usage:
+  java -jar %1$s [OPTIONS] -e SEARCH_ENGINE tuples.txt
+
+  For each query string (word/phrase or combination of words/phrases) in input
+  file (e.g. tuples.txt), this script returns all the pages that matched the
+  query on a search engine.
+
+  Currently two search engines are supported: Bing and Google.
+
+  To use this script with the Bing Search Engine (see -e option) you'll need a
+  Bing Search Key. At the time of writing, you can obtain a free demo key that
+  allows you to submit a limited number of queries per month (the free query
+  will be valid only for a limited time).
+
+  Alternatively, you can use the Google Scraper engine, which does not require
+  a key but has the following caveats: a) it might violate the Google Terms of
+  use (therefore you USE IT AT YOUR OWN RISK), b) it might not work and c) is
+  much slower than the Bing Search API.
+
+  For more information see the documentation section of the official BootCaT
+  website:
+
+  http://bootcat.dipintra.it/
+
+  Other search parameters can be specified using the options described below.
+
+Options:
+
+    -a, --available-sources
+        This option is no longer supported.
+
+    -c, --count
+        Maximum number of URLs returned per query, default value is 10, maximum
+        is 50.
+
+    -d, --doctype
+        Print list of supported file types and quit (see -t option).
+
+    -e, --engine
+        The search engine to use. At the time of writing the following search
+        engines are supported:
+
+        bing    the Bing search engine (requires a key, see -k option) version 7
+        bingv5  the Bing search engine (requires a key, see -k option) version 5
+        gs      the Google search engine via a page scraper (no key is required
+                but it might not work, it is much slower, and possibly violates
+                Google's terms of use, USE AT YOUR OWN RISK!)
+        yacy    the free Yacy search engine (does not require a key), this is
+                the default search engine
+
+    -g, --aggressiveness
+        Google scraper only: sets the aggressiveness of the scraper (i.e. the
+        interval between queries). Possible value are:
+
+        low
+        medium (recommended)
+        high
+        reckless (do not use this!)
+        foolhardy (do not use this either)
+        
+        The default value is "medium".
+
+    -h, --help
+        Print this information and quit.
+
+    -k, --key
+        Your Bing Search Key (this is only required if you select Bing as your
+        search engine).
+
+    -i, restrict-to-domain
+        Restrict search to a single Internet domain (e.g. .it, wikipedia.org,
+        .com, .co.uk etc). You can combine this with the -u option, for example:
+
+        -i .org -u wikipedia.org
+
+        searches only the .org domain but excludes wikipedia.org.
+
+    -l, --language-name
+        Promote search results in the specified language. You need to provide
+        the exact language code (i.e. en, en-US). Codes are dependent on the
+        search engine you choose, see also the -n option.
+
+    -n, --names
+        Print the list of languages supported by the chosen search engine and
+        quit (you also need to specify the search engine with -e for this to
+        work).
+
+    -p, --adult
+        Specify the level of filtering of sexually explicit material, possible
+        values are "Off", "Strict" or "Moderate" (default).
+
+    -r, --license
+        This option is no longer supported.
+
+    -s, --source
+        This option is no longer supported.
+
+    -t, --type
+        Restrict the results to only a specific file type (use -d option to see
+        the list of allowed values). You can specify only one value.
+
+    -u, --exclude-domain
+        Exclude the specified Internet domains, you can specify multiple
+        domains separating them with a comma (with no extra spaces). For
+        example, if you want to exclude youtube.com and ebay.com use:
+
+        -u youtube.com,ebay.com
+
+        This option can be combined with -i for fine grained searches.
+
+    -v, --version
+        Print version number and quit.
+
+    -- vogon
+        use the Vogon Mode, which has more options.
+
+    -x, --exclude
+        Exclude the specified file types, you can specify multiple
+        file types separating them with a comma (with no extra spaces). For
+        example, if you want to exclude DOC, DOCX and PDF files use:
+
+        -x doc,docx,pdf
+
+        This option cannot be combined with -t.
+
+    -w, --download
+        When using the Google Scraper, save downloaded search results in this
+        directory. If this parameter is not specified, downloaded pages will be
+        discarded after search results have been parsed.

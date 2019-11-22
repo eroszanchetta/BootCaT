@@ -1,0 +1,35 @@
+%1$s version %2$s
+Usage:
+  java -jar %1$s [-n] [-l] items
+
+This script generates a list of L random N-tuples from the items 
+in the input list (assumed to be in one-keyword-per-line format).
+
+The items are sampled with replacement. 
+
+The tuples will not be identical (nor will they be permutations of 
+each other).
+
+Thus, the maximum number of tuples requested cannot be higher than the 
+number of N-sets that can be chosen from the number of items.
+
+N defaults to 3, L defaults to 10.
+
+***********
+* LICENSE *
+***********
+
+Copyright (C) 2016 Eros Zanchetta <eros@sslmit.unibo.it>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
