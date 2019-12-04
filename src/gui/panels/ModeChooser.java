@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.UriRedirect;
-import bootcat.gui.WizardStep;
-import bootcat.common.Utils;
-import bootcat.gui.ProjectMode;
-import bootcat.gui.dialogs.GenericMessage;
+import common.UriRedirect;
+import gui.WizardStep;
+import common.Utils;
+import gui.ProjectMode;
+import gui.dialogs.GenericMessage;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;

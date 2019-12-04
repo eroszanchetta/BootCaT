@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.urlcollector;
+package tools.urlcollector;
 
-import bootcat.common.FileType;
-import bootcat.common.Market;
-import bootcat.common.BingQueryStatus;
-import bootcat.common.SearchEngine;
-import bootcat.common.SearchEngineSafeSearch;
+import common.FileType;
+import common.Market;
+import common.BingQueryStatus;
+import common.SearchEngine;
+import common.SearchEngineSafeSearch;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;

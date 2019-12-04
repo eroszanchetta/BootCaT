@@ -15,11 +15,11 @@
  *
  */
 
-package bootcat.gui.dialogs;
+package gui.dialogs;
 
-import bootcat.gui.dialogs.options.Display;
-import bootcat.gui.dialogs.options.General;
-import bootcat.gui.panels.MainPanel;
+import gui.dialogs.options.Display;
+import gui.dialogs.options.General;
+import gui.panels.MainPanel;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;

@@ -15,10 +15,10 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.Utils;
-import bootcat.gui.WizardStep;
+import common.Utils;
+import gui.WizardStep;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

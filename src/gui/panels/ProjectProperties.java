@@ -15,12 +15,12 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.Language;
-import bootcat.gui.WizardStep;
-import bootcat.common.Market;
-import bootcat.common.UriRedirect;
+import common.Language;
+import gui.WizardStep;
+import common.Market;
+import common.UriRedirect;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;

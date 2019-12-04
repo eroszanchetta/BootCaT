@@ -15,12 +15,12 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.Language;
-import bootcat.common.HtmlExtractionMode;
-import bootcat.gui.WizardStep;
-import bootcat.gui.helpers.BootcatExtractor;
+import common.Language;
+import common.HtmlExtractionMode;
+import gui.WizardStep;
+import gui.helpers.BootcatExtractor;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -238,7 +238,7 @@ public class CorpusBuilder extends WizardStep {
         minCharsLabel = new javax.swing.JLabel();
         maxCharsLabel = new javax.swing.JLabel();
         maxWordsLabel3 = new javax.swing.JLabel();
-        htmlExtractorComboBox = new javax.swing.JComboBox(bootcat.common.HtmlExtractionMode.values());
+        htmlExtractorComboBox = new javax.swing.JComboBox(common.HtmlExtractionMode.values());
         minCharsCheckBox = new javax.swing.JCheckBox();
         maxCharsCheckBox = new javax.swing.JCheckBox();
         maxFileSizeCheckBox = new javax.swing.JCheckBox();

@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.urlcollector.test;
+package tools.urlcollector.test;
 
-import bootcat.tools.urlcollector.GoogleScraper;
+import tools.urlcollector.GoogleScraper;
 import java.io.File;
 
 /**

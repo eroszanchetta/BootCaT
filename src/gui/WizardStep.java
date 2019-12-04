@@ -15,7 +15,7 @@
  *
  */
 
-package bootcat.gui;
+package gui;
 
 import java.util.TreeMap;
 

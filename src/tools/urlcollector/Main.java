@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.urlcollector;
+package tools.urlcollector;
 
-import bootcat.common.FileType;
-import bootcat.common.Market;
-import bootcat.common.SearchEngineSafeSearch;
-import bootcat.common.BingQueryStatus;
-import bootcat.common.GoogleLanguageCode;
-import bootcat.common.GoogleScraperAggressiveness;
-import bootcat.common.Language;
-import bootcat.common.SearchEngine;
+import common.FileType;
+import common.Market;
+import common.SearchEngineSafeSearch;
+import common.BingQueryStatus;
+import common.GoogleLanguageCode;
+import common.GoogleScraperAggressiveness;
+import common.Language;
+import common.SearchEngine;
 import jargs.gnu.CmdLineParser;
 import java.io.*;
 import java.net.URISyntaxException;
@@ -478,7 +478,7 @@ public class Main {
         try {
             // determine the location of the jar file and create a regular File
             // reference to it
-            programFile = new File (bootcat.tools.urlcollector.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            programFile = new File (tools.urlcollector.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
             // now create a JarFile reference to the File
             jarFile = new JarFile(programFile);

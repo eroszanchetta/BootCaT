@@ -15,10 +15,10 @@
  *
  */
 
-package bootcat.gui.helpers;
+package gui.helpers;
 
-import bootcat.gui.Config;
-import bootcat.common.Utils;
+import gui.Config;
+import common.Utils;
 import java.io.File;
 import java.io.IOException;
 

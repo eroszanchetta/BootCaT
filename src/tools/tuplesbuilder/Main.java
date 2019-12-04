@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.tuplesbuilder;
+package tools.tuplesbuilder;
 
 import jargs.gnu.CmdLineParser;
 import java.io.BufferedReader;
@@ -181,7 +181,7 @@ public class Main {
         try {
             // determine the location of the jar file and create a regular File
             // reference to it
-            programFile = new File (bootcat.tools.tuplesbuilder.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            programFile = new File (tools.tuplesbuilder.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
             // now create a JarFile reference to the File
             jarFile = new JarFile(programFile);

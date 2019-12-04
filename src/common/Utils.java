@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bootcat.common;
+package common;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

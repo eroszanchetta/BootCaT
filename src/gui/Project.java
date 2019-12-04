@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.gui;
+package gui;
 
-import bootcat.common.FileType;
-import bootcat.common.Language;
-import bootcat.common.Market;
-import bootcat.common.SearchEngine;
-import bootcat.common.SearchEngineSafeSearch;
-import bootcat.common.Utils;
-import bootcat.common.HtmlExtractionMode;
-import bootcat.gui.panels.MainPanel;
+import common.FileType;
+import common.Language;
+import common.Market;
+import common.SearchEngine;
+import common.SearchEngineSafeSearch;
+import common.Utils;
+import common.HtmlExtractionMode;
+import gui.panels.MainPanel;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;

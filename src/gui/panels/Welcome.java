@@ -15,10 +15,10 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.UriRedirect;
-import bootcat.gui.WizardStep;
+import common.UriRedirect;
+import gui.WizardStep;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;

@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bootcat.contentextractor;
+package contentextractor;
 
-import bootcat.common.HtmlExtractionMode;
-import bootcat.common.CorpusChunk;
-import bootcat.common.Language;
-import bootcat.common.TextFormatter;
-import bootcat.common.Tokenizer;
-import bootcat.common.Utils;
-import bootcat.gui.panels.MainPanel;
+import common.HtmlExtractionMode;
+import common.CorpusChunk;
+import common.Language;
+import common.TextFormatter;
+import common.Tokenizer;
+import common.Utils;
+import gui.panels.MainPanel;
 import com.optimaize.langdetect.DetectedLanguage;
 import com.optimaize.langdetect.LanguageDetector;
 import com.optimaize.langdetect.LanguageDetectorBuilder;
@@ -56,6 +56,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -76,8 +78,11 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;   
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -339,6 +344,14 @@ public class ContentExtractor {
                 continue;                
             }
 
+            // now recheck every sentence and strip those that are in the wrong langauge
+            text = stripExtraneousLanguages(text, language, corpusChunk, mainPanel.getPaths().getTextSplitterResources());
+
+            // overwrite old extracted files with new ones
+            // TODO: you should probably find a better way of doing this, now the files are written twice
+            writePlainTextFile(corpusChunk, text);
+            writeXMLFile(corpusChunk, text, xmlAttributes);
+            
             // count tokens
             corpusChunk.setTokenCount(Tokenizer.count(text));
             
@@ -388,9 +401,6 @@ public class ContentExtractor {
                     encodedQuery;
             
             fixedUri = new URI(address);
-
-            System.out.println("Address\t" + address);
-            System.out.println("FixedURI\t" + fixedUri);
             
             return fixedUri;
             
@@ -427,12 +437,88 @@ public class ContentExtractor {
                 corpusChunk.setStatus(CorpusChunk.CorpusChunkStatus.CANNOT_DETERMINE_LANGUAGE);
             }
             else {
-                // the first detected language if wrong or confidence is too low
+                // the first detected language is wrong or confidence is too low
                 if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) || detectedLangs.get(0).getProbability() < 0.9) {
                     corpusChunk.setStatus(CorpusChunk.CorpusChunkStatus.WRONG_LANGUAGE);
                 }                    
             }            
         }
+    }
+    
+    /**
+     * Split the text in sentences and only keep those in the specified language.
+     * 
+     * The function tries to discard as little text as possible:
+     * 
+     * - sentences shorter than 100 characters will be kept
+     * - sentences for which the confidence that the language is the *wrong* one is below a certain threshold will be kept
+     * 
+     * @param text
+     * @param language
+     * @param corpusChunk
+     * @return 
+     */
+    private String stripExtraneousLanguages(String text, Language language, CorpusChunk corpusChunk, File textSplitterResources) {
+        
+        double  minimalConfidence = 0.9; // the minimal confidence that the language is the *wrong one*
+        int     minSentenceLength = 100; // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
+        
+        String output = "";
+
+        // use Apache OpenNLP library to split text into sentences
+        try (InputStream modelIn = new FileInputStream(textSplitterResources)) {
+            SentenceModel model = new SentenceModel(modelIn);
+            
+            SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
+            
+            String sentences[] = sentenceDetector.sentDetect(text);
+            
+            for (int i = 0; i < sentences.length; ++i) {
+                
+                String currentSentence = sentences[i];
+                
+                // if sentence is empty, skip it
+                if (StringUtils.isBlank(currentSentence)) continue;
+
+                List<DetectedLanguage> detectedLangs = languageDetector.getProbabilities(currentSentence);
+                
+                if (language == null) {
+                    output += currentSentence + "\n";
+                    continue;
+                }
+                
+                if (language == Language._unspecified) {
+                    output += currentSentence + "\n";
+                    continue;
+                }
+                
+                // if sentence is too short, play it safe and keep the sentence
+                if (currentSentence.length() < minSentenceLength) {
+                    output += currentSentence + "\n";
+                    continue;                    
+                }
+                
+                // if language coult not be detected, play it safe and keep the sentence
+                if (detectedLangs.isEmpty()) {
+                    output += currentSentence + "\n";
+                    continue;
+                }                
+
+                // skip sentence if first detected language is wrong and we're highly confident that it's the wrong language
+                if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minimalConfidence) {
+                    System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
+                    continue;
+                }
+
+                // if we got this far, keep the sentence
+                output += currentSentence + "\n";
+            }
+        } catch (FileNotFoundException ex) { 
+            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return output;
     }
     
     /**
@@ -787,39 +873,10 @@ public class ContentExtractor {
             corpusChunk.setCharacterCount(text.length());
             
             // write plain text file
-            PrintWriter plainTextWriter;
-            try {
-                plainTextWriter = new PrintWriter(corpusChunk.getExtractedFile(), "UTF-8");
-                plainTextWriter.println(text);
-                plainTextWriter.flush();
-                plainTextWriter.close();
-
-                plainTextWriter = null;
-                System.gc();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // convert plain text to XML
-            xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes, mainPanel.getPaths().getTextSplitterResources());
+            writePlainTextFile(corpusChunk, text);
             
             // write XML file
-            PrintWriter xmlFileWriter;
-            try {
-                xmlFileWriter = new PrintWriter(corpusChunk.getExtractedXMLFile(), "UTF-8");
-                xmlFileWriter.println(xmlText);
-                xmlFileWriter.flush();
-                xmlFileWriter.close();
-
-                xmlFileWriter = null;
-                System.gc();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            writeXMLFile(corpusChunk, text, xmlAttributes);
             
             return text;
             
@@ -829,7 +886,43 @@ public class ContentExtractor {
 
         return null;
     }
+    
+    private void writePlainTextFile(CorpusChunk corpusChunk, String text) {
+        PrintWriter plainTextWriter;
+        try {
+            plainTextWriter = new PrintWriter(corpusChunk.getExtractedFile(), "UTF-8");
+            plainTextWriter.println(text);
+            plainTextWriter.flush();
+            plainTextWriter.close();
+
+            plainTextWriter = null;
+            System.gc();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+    
+    private void writeXMLFile(CorpusChunk corpusChunk, String text, LinkedHashMap<String, String> xmlAttributes) {
+        String xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes, mainPanel.getPaths().getTextSplitterResources());        
         
+        PrintWriter xmlFileWriter;
+        try {
+            xmlFileWriter = new PrintWriter(corpusChunk.getExtractedXMLFile(), "UTF-8");
+            xmlFileWriter.println(xmlText);
+            xmlFileWriter.flush();
+            xmlFileWriter.close();
+
+            xmlFileWriter = null;
+            System.gc();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+    
     /**
      * 
      * Extract text content from a file and write it to a plain text file.

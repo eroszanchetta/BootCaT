@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.gui.dialogs;
+package gui.dialogs;
 
-import bootcat.gui.panels.TupleGenerator;
+import gui.panels.TupleGenerator;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JButton;

@@ -21,13 +21,13 @@
  * Created on May 28, 2010, 12:48:04 PM
  */
 
-package bootcat.gui.dialogs.options;
+package gui.dialogs.options;
 
-import bootcat.common.UriRedirect;
-import bootcat.gui.Config;
-import bootcat.gui.dialogs.GenericMessage;
-import bootcat.gui.helpers.PathVerifier;
-import bootcat.gui.panels.MainPanel;
+import common.UriRedirect;
+import gui.Config;
+import gui.dialogs.GenericMessage;
+import gui.helpers.PathVerifier;
+import gui.panels.MainPanel;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;

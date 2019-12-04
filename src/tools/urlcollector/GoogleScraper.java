@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.urlcollector;
+package tools.urlcollector;
 
-import bootcat.common.FileType;
-import bootcat.common.SearchEngineSafeSearch;
-import bootcat.common.GoogleLanguageCode;
-import bootcat.common.GoogleScraperAggressiveness;
+import common.FileType;
+import common.SearchEngineSafeSearch;
+import common.GoogleLanguageCode;
+import common.GoogleScraperAggressiveness;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -367,7 +367,7 @@ public class GoogleScraper {
         
         try {
             // determine the location of the jar file and create a regular File reference to it
-            programFile = new File (bootcat.tools.urlcollector.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            programFile = new File (tools.urlcollector.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
             // now create a JarFile reference to the File
             jarFile = new JarFile(programFile);

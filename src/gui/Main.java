@@ -15,16 +15,16 @@
  *
  */
 
-package bootcat.gui;
+package gui;
 
-import bootcat.common.BootcatUrls;
-import bootcat.common.UriRedirect;
-import bootcat.common.Utils;
-import bootcat.gui.panels.MainPanel;
-import bootcat.gui.dialogs.ConfirmDialog;
-import bootcat.gui.dialogs.GenericMessage;
-import bootcat.gui.dialogs.Options;
-import bootcat.gui.helpers.PathVerifier;
+import common.BootcatUrls;
+import common.UriRedirect;
+import common.Utils;
+import gui.panels.MainPanel;
+import gui.dialogs.ConfirmDialog;
+import gui.dialogs.GenericMessage;
+import gui.dialogs.Options;
+import gui.helpers.PathVerifier;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.*;
@@ -144,7 +144,7 @@ public class Main {
 
     public void main() {
 		try {
-			File jarFile = new File (bootcat.gui.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			File jarFile = new File (gui.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			programDir = jarFile.getParentFile();
 		}
 		catch (URISyntaxException e) {

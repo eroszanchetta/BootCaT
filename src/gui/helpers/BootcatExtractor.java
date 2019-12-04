@@ -15,16 +15,16 @@
  *
  */
 
-package bootcat.gui.helpers;
+package gui.helpers;
 
-import bootcat.common.Language;
-import bootcat.common.Utils;
-import bootcat.contentextractor.ContentExtractor;
-import bootcat.common.CorpusChunk;
-import bootcat.gui.Paths;
-import bootcat.gui.WizardStep.Issues;
-import bootcat.gui.panels.CorpusBuilder;
-import bootcat.gui.panels.MainPanel;
+import common.Language;
+import common.Utils;
+import contentextractor.ContentExtractor;
+import common.CorpusChunk;
+import gui.Paths;
+import gui.WizardStep.Issues;
+import gui.panels.CorpusBuilder;
+import gui.panels.MainPanel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

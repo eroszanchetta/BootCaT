@@ -15,10 +15,10 @@
  *
  */
 
-package bootcat.gui.helpers;
+package gui.helpers;
 
-import bootcat.gui.Paths;
-import bootcat.tools.tuplesbuilder.TuplesBuilder;
+import gui.Paths;
+import tools.tuplesbuilder.TuplesBuilder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

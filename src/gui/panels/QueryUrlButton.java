@@ -21,9 +21,9 @@
  * Created on 12-oct-2017, 13.14.45
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.gui.dialogs.GenericMessage;
+import gui.dialogs.GenericMessage;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.io.IOException;

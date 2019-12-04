@@ -20,13 +20,13 @@
  *
  * Created on Aug 2, 2011, 6:58:50 PM
  */
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.SearchEngine;
-import bootcat.common.UriRedirect;
-import bootcat.gui.Config;
-import bootcat.common.Utils;
-import bootcat.gui.WizardStep;
+import common.SearchEngine;
+import common.UriRedirect;
+import gui.Config;
+import common.Utils;
+import gui.WizardStep;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;

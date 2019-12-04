@@ -15,10 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bootcat.gui;
+package gui;
 
-import bootcat.common.Language;
-import bootcat.common.SearchEngine;
+import common.Language;
+import common.SearchEngine;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

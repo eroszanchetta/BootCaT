@@ -15,17 +15,17 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.gui.WizardStep;
-import bootcat.gui.helpers.CollectUrls;
-import bootcat.common.FileType;
-import bootcat.common.GoogleLanguageCode;
-import bootcat.common.Market;
-import bootcat.common.SearchEngine;
-import bootcat.common.SearchEngineSafeSearch;
-import bootcat.gui.Project;
-import bootcat.tools.urlcollector.GoogleScraper;
+import gui.WizardStep;
+import gui.helpers.CollectUrls;
+import common.FileType;
+import common.GoogleLanguageCode;
+import common.Market;
+import common.SearchEngine;
+import common.SearchEngineSafeSearch;
+import gui.Project;
+import tools.urlcollector.GoogleScraper;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -201,7 +201,7 @@ public class UrlFinder extends WizardStep {
         excludeDomainsTextArea = new javax.swing.JTextArea();
         excludeDomainsLabel = new javax.swing.JLabel();
         adultFilterLabel = new javax.swing.JLabel();
-        adultFilterCombobox = new javax.swing.JComboBox(bootcat.common.SearchEngineSafeSearch.values());
+        adultFilterCombobox = new javax.swing.JComboBox(common.SearchEngineSafeSearch.values());
         maxPagesLabel = new javax.swing.JLabel();
         maxPagesSpinner = new javax.swing.JSpinner();
         limitSearchLabel = new javax.swing.JLabel();

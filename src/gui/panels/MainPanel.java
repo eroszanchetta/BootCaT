@@ -15,19 +15,19 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.UriRedirect;
-import bootcat.gui.WizardStep;
-import bootcat.gui.Steps;
-import bootcat.gui.Paths;
-import bootcat.gui.Config;
-import bootcat.gui.Main;
-import bootcat.gui.Project;
-import bootcat.gui.dialogs.AboutBox;
-import bootcat.gui.dialogs.ConfirmDialog;
-import bootcat.gui.dialogs.GenericMessage;
-import bootcat.gui.dialogs.Options;
+import common.UriRedirect;
+import gui.WizardStep;
+import gui.Steps;
+import gui.Paths;
+import gui.Config;
+import gui.Main;
+import gui.Project;
+import gui.dialogs.AboutBox;
+import gui.dialogs.ConfirmDialog;
+import gui.dialogs.GenericMessage;
+import gui.dialogs.Options;
 import java.awt.CardLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;

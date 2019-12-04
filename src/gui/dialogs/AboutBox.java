@@ -15,10 +15,10 @@
  *
  */
 
-package bootcat.gui.dialogs;
+package gui.dialogs;
 
-import bootcat.common.UriRedirect;
-import bootcat.gui.Main;
+import common.UriRedirect;
+import gui.Main;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.IOException;

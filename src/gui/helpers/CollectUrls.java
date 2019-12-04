@@ -15,17 +15,17 @@
  *
  */
 
-package bootcat.gui.helpers;
+package gui.helpers;
 
-import bootcat.common.FileType;
-import bootcat.common.Market;
-import bootcat.common.SearchEngine;
-import bootcat.common.SearchEngineSafeSearch;
-import bootcat.common.Utils;
-import bootcat.gui.Paths;
-import bootcat.gui.WizardStep;
-import bootcat.gui.panels.UrlFinder;
-import bootcat.tools.urlcollector.YacySearch;
+import common.FileType;
+import common.Market;
+import common.SearchEngine;
+import common.SearchEngineSafeSearch;
+import common.Utils;
+import gui.Paths;
+import gui.WizardStep;
+import gui.panels.UrlFinder;
+import tools.urlcollector.YacySearch;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;

@@ -15,7 +15,7 @@
  *
  */
 
-package bootcat.gui;
+package gui;
 
 import java.util.ArrayList;
 import java.util.Iterator;

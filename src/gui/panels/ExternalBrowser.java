@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.UriRedirect;
-import bootcat.common.Utils;
-import bootcat.gui.WizardStep;
-import bootcat.gui.dialogs.ConfirmDialog;
-import bootcat.gui.dialogs.GenericMessage;
-import bootcat.tools.urlcollector.GoogleScraper;
+import common.UriRedirect;
+import common.Utils;
+import gui.WizardStep;
+import gui.dialogs.ConfirmDialog;
+import gui.dialogs.GenericMessage;
+import tools.urlcollector.GoogleScraper;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.io.BufferedWriter;

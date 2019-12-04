@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.common;
+package common;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -108,8 +108,8 @@ public class TextFormatter {
      * 
      * @param text the plain text
      * @param corpusChunk
-     * @param xmlAttributes optional XML attribute HashMap, key is the attribute's name,
-     * value is the value
+     * @param xmlAttributes optional XML attribute HashMap, key is the attribute's name, value is the value
+     * @param textSplitterResources
      * @return 
      */
     public static String convertToXml(String text, CorpusChunk corpusChunk, LinkedHashMap<String, String> xmlAttributes, File textSplitterResources) {
@@ -130,7 +130,6 @@ public class TextFormatter {
         output += ">\n";
         
         // use Apache OpenNLP library to split text into sentences
-        // TODO: figure out how to load this resource in the packaged version
         try (InputStream modelIn = new FileInputStream(textSplitterResources)) {
             SentenceModel model = new SentenceModel(modelIn);
             

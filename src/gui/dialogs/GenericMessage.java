@@ -15,7 +15,7 @@
  *
  */
 
-package bootcat.gui.dialogs;
+package gui.dialogs;
 
 import java.awt.Cursor;
 import java.awt.Desktop;

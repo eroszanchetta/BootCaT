@@ -15,12 +15,12 @@
  *
  */
 
-package bootcat.gui.panels;
-import bootcat.gui.dialogs.GenericMessage;
-import bootcat.gui.WizardStep;
-import bootcat.gui.dialogs.TupleEditor;
-import bootcat.gui.helpers.BuildRandomTuples;
-import bootcat.gui.helpers.PermutationGenerator;
+package gui.panels;
+import gui.dialogs.GenericMessage;
+import gui.WizardStep;
+import gui.dialogs.TupleEditor;
+import gui.helpers.BuildRandomTuples;
+import gui.helpers.PermutationGenerator;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;

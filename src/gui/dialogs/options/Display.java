@@ -20,10 +20,10 @@
  *
  * Created on May 28, 2010, 6:36:55 PM
  */
-package bootcat.gui.dialogs.options;
+package gui.dialogs.options;
 
-import bootcat.gui.ComboBoxItem;
-import bootcat.gui.panels.MainPanel;
+import gui.ComboBoxItem;
+import gui.panels.MainPanel;
 import javax.swing.UIManager;
 
 /**

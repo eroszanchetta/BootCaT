@@ -15,13 +15,13 @@
  *
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
-import bootcat.common.UriRedirect;
-import bootcat.common.Utils;
-import bootcat.gui.ProjectMode;
-import bootcat.gui.WizardStep;
-import bootcat.gui.dialogs.GenericMessage;
+import common.UriRedirect;
+import common.Utils;
+import gui.ProjectMode;
+import gui.WizardStep;
+import gui.dialogs.GenericMessage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

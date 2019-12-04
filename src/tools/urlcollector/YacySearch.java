@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bootcat.tools.urlcollector;
+package tools.urlcollector;
 
-import bootcat.common.BootcatUrls;
-import bootcat.common.FileType;
-import bootcat.common.Language;
+import common.BootcatUrls;
+import common.FileType;
+import common.Language;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;

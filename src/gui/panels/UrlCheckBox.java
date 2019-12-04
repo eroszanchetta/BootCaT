@@ -21,7 +21,7 @@
  * Created on 22-apr-2010, 10.57.38
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
 import java.awt.Desktop;
 import java.io.IOException;

@@ -21,7 +21,7 @@
  * Created on 3-giu-2010, 11.00.45
  */
 
-package bootcat.gui.panels;
+package gui.panels;
 
 /**
  *

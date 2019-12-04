@@ -21,7 +21,7 @@
  * Created on 22-apr-2010, 9.52.27
  */
 
-package bootcat.test;
+package test;
 
 
 /**
