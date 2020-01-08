@@ -72,6 +72,7 @@ import java.util.regex.Pattern;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
@@ -344,14 +345,21 @@ public class ContentExtractor {
                 continue;                
             }
 
-            // now recheck every sentence and strip those that are in the wrong langauge
-            text = stripExtraneousLanguages(text, language, corpusChunk, mainPanel.getPaths().getTextSplitterResources());
+            /**
+             * FIXME: either add a config option somewhere to disable this, or remove it entirely.
+             * 
+             * For now this only works in devel mode
+             */
+            if (mainPanel.getMain().isDevelMode()) {
+                // now recheck every sentence and strip those that are in the wrong langauge
+                text = stripExtraneousLanguages(text, language, corpusChunk, mainPanel.getPaths().getTextSplitterResources());
 
-            // overwrite old extracted files with new ones
-            // TODO: you should probably find a better way of doing this, now the files are written twice
-            writePlainTextFile(corpusChunk, text);
-            writeXMLFile(corpusChunk, text, xmlAttributes);
-            
+                // overwrite old extracted files with new ones
+                // FIXME: you should probably find a better way of doing this, now the files are written twice
+                writePlainTextFile(corpusChunk, text);
+                writeXMLFile(corpusChunk, text, xmlAttributes);                
+            }
+
             // count tokens
             corpusChunk.setTokenCount(Tokenizer.count(text));
             
@@ -446,6 +454,8 @@ public class ContentExtractor {
     }
     
     /**
+     * FIXME: THIS IS TOTALLY AD HOC, REMOVE THIS METHOD!
+     * 
      * Split the text in sentences and only keep those in the specified language.
      * 
      * The function tries to discard as little text as possible:
@@ -460,8 +470,8 @@ public class ContentExtractor {
      */
     private String stripExtraneousLanguages(String text, Language language, CorpusChunk corpusChunk, File textSplitterResources) {
         
-        double  minimalConfidence = 0.9; // the minimal confidence that the language is the *wrong one*
-        int     minSentenceLength = 100; // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
+        double  minConfidence = 0.9;        // the minimum confidence that the language is the *wrong one*
+        int     minSentenceLength = 0;     // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
         
         String output = "";
 
@@ -504,11 +514,17 @@ public class ContentExtractor {
                     continue;
                 }                
 
-                // skip sentence if first detected language is wrong and we're highly confident that it's the wrong language
-                if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minimalConfidence) {
+                // skip sentence if first detected language is English, no matter the probability
+                if (detectedLangs.get(0).getLocale().toString().equals("en")) {
                     System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
                     continue;
-                }
+                }                
+                
+                // skip sentence if first detected language is wrong and we're highly confident that it's the wrong language
+//                if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minConfidence) {
+//                    System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
+//                    continue;
+//                }
 
                 // if we got this far, keep the sentence
                 output += currentSentence + "\n";
@@ -650,6 +666,9 @@ public class ContentExtractor {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
             disableSslVerification();
             return download(corpusChunk);
+        } catch (SSLException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         } catch (SocketTimeoutException ex) {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
             return false;

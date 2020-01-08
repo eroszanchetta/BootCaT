@@ -64,7 +64,7 @@ public class Main {
     private String          bootCatInstallationId;
     
     private boolean         vogonMode = false;
-    private final boolean   develMode = true;
+    private final boolean   develMode = false;
     
 	public enum UpdateStatus {
 		UPDATE_AVAILABLE,
