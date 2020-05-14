@@ -45,7 +45,6 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 /**
  *
@@ -55,7 +54,7 @@ public class MainPanel extends javax.swing.JFrame {
 
     private final Main          main;
     private final Paths         paths;
-	private final Charset		defaultOutputCharset;
+	private final Charset       defaultOutputCharset;
     private final Project       project;
 
     private Steps               steps;

@@ -51,9 +51,9 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.23;
+    private final Double    versionNumber       = 1.24;
     private final String    codeName            = "Sylvester";
-    private final int       buildNumber         = 182;
+    private final int       buildNumber         = 185;
 
 	private File            programDir;
 	private File            defaultBootCatDir;
@@ -64,7 +64,7 @@ public class Main {
     private String          bootCatInstallationId;
     
     private boolean         vogonMode = false;
-    private final boolean   develMode = true;
+    private final boolean   develMode = false;
     
 	public enum UpdateStatus {
 		UPDATE_AVAILABLE,
