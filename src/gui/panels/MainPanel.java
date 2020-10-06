@@ -54,7 +54,7 @@ public class MainPanel extends javax.swing.JFrame {
 
     private final Main          main;
     private final Paths         paths;
-	private final Charset       defaultOutputCharset;
+    private final Charset       defaultOutputCharset;
     private final Project       project;
 
     private Steps               steps;
@@ -547,7 +547,7 @@ public class MainPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_homePageMenuItemMousePressed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        AboutBox aboutBox = new AboutBox(this, true, main.getVersionNumber(), main.getBuildNumber(), main.getCodeName(), main.getBootCatInstallationId());
+        AboutBox aboutBox = new AboutBox(this, true, main.getVersionNumber(), main.getBuildNumber(), main.getCodeName(), main.getBootCatInstallationId(), main.getCopyRightYear());
         aboutBox.setMain(main);
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

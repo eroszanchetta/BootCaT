@@ -111,7 +111,7 @@ public class GoogleScraper {
         for (URL url : tupleURLs.values()) {
             File file = getResultPage(url, count++, aggressiveness, queriesDir);
             
-            for (String result : parseLocalGoogleFile2018(file, excludedDomains)) {
+            for (String result : parseLocalGoogleFile2020(file, excludedDomains)) {
                 System.out.println(result);
             }
         }
@@ -139,7 +139,7 @@ public class GoogleScraper {
         File[] files = queriesDir.listFiles();
         
         for (File file : files) {
-            for (String result : parseLocalGoogleFile2018(file, excludedDomains)) {
+            for (String result : parseLocalGoogleFile2020(file, excludedDomains)) {
                 System.out.println(result);
             }
         }
@@ -296,6 +296,7 @@ public class GoogleScraper {
      * @param file
      * @param excludedDomains
      * @return 
+     * @deprecated 
      */    
     public LinkedList<String> parseLocalGoogleFile2018(File file, String[] excludedDomains) {
         LinkedList<String> results = new LinkedList<String>();
@@ -341,12 +342,65 @@ public class GoogleScraper {
         return results;
     }    
     
+    /**
+     * Parse a local Google result page (in the format introduced by Google in September 2020).
+     * 
+     * NB: the only difference since version 2018 is the class of the div element (it used to be "r", now it's "rc")
+     * 
+     * @param file
+     * @param excludedDomains
+     * @return 
+     */    
+    public LinkedList<String> parseLocalGoogleFile2020(File file, String[] excludedDomains) {
+        LinkedList<String> results = new LinkedList<String>();
+        
+        try {            
+            Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
+
+            // get all links, results are enclosed in div elements with the "rc" class
+            Elements tag = doc.getElementsByClass("rc");
+            Elements links = tag.select("a[href]");
+            for (Element link : links) {
+                String cleanUrl = link.attr("href");
+                
+                if (!cleanUrl.startsWith("http")) continue;
+                
+                if (cleanUrl.startsWith("https://webcache.googleusercontent")) continue;
+                if (cleanUrl.startsWith("http://webcache.googleusercontent")) continue;
+                
+                if (cleanUrl.startsWith("http://www.google.*/url?url=")) {
+                    cleanUrl = cleanUrl.replaceFirst("http://www.google.*/url?url=", "");
+                    cleanUrl = cleanUrl.replaceFirst("&.*", "");
+                }
+                
+                if (cleanUrl.startsWith("/url?url=")) {
+                    cleanUrl = cleanUrl.replaceFirst("/url\\?url=(.*)", "$1");
+                    cleanUrl = cleanUrl.replaceFirst("&.*", "");     
+                }
+                
+                if (cleanUrl.startsWith("/url?q=")) {
+                    cleanUrl = cleanUrl.replaceFirst("/url\\?q=(.*)", "$1");
+                    cleanUrl = cleanUrl.replaceFirst("&.*", "");
+                }
+                
+                // if domain is blacklisted, exclude URLs
+                if (excludedDomains != null && domainIsExcluded(cleanUrl, excludedDomains)) continue;
+                
+                results.add(cleanUrl);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return results;
+    }        
+    
     private boolean domainIsExcluded(String url, String[] excludedDomains) {
         
         for (String exclude : excludedDomains) {
             exclude = exclude.replace("*", ".*");
             if (url.matches("http.?:\\/\\/w{0,3}\\.?" + exclude + ".*")) {
-                System.err.println("Skipping " + url + " (contains excluded domain " + exclude + ")");
+//                System.err.println("Skipping " + url + " (contains excluded domain " + exclude + ")");
                 return true;                
             }
         }

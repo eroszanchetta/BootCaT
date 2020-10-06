@@ -21,7 +21,7 @@ import gui.WizardStep;
 import gui.helpers.CollectUrls;
 import common.FileType;
 import common.GoogleLanguageCode;
-import common.Market;
+import common.Language;
 import common.SearchEngine;
 import common.SearchEngineSafeSearch;
 import gui.Project;
@@ -421,8 +421,8 @@ public class UrlFinder extends WizardStep {
         this.getBlockingIssues().remove(Issues.SEARCH_ENGINE_ISSUE);
         
         String restrictToDomain             = mainPanel.getProject().getRestrictToDomain();
-        SearchEngine searchEngine           = mainPanel.getProject().getSearchEngine();		
-        Market bingMarket                   = mainPanel.getProject().getBingMarket();
+        SearchEngine searchEngine           = mainPanel.getProject().getSearchEngine();
+        Language language                   = mainPanel.getProject().getLanguage();
         TreeSet excludeDomains              = mainPanel.getProject().getExcludeDomains();
         FileType restrictToFileType         = mainPanel.getProject().getRestrictToFileType();
         int maxPagesPerQuery                = mainPanel.getProject().getMaxPagesPerQuery();
@@ -435,7 +435,7 @@ public class UrlFinder extends WizardStep {
             case YACY:
                 
                 // initialize URL collector
-                CollectUrls collect = new CollectUrls(searchEngine, mainPanel.getPaths(), bingMarket,
+                CollectUrls collect = new CollectUrls(searchEngine, mainPanel.getPaths(), language,
                         maxPagesPerQuery, restrictToDomain, this, excludeDomains,
                         mainPanel.getMain().getAccountKey(), safeSearch, restrictToFileType, excludedFileTypes);
 
@@ -457,7 +457,7 @@ public class UrlFinder extends WizardStep {
                 ArrayList<String> tuples = readTuples();
 
                 GoogleScraper scraper = new GoogleScraper();
-                GoogleLanguageCode langCode = GoogleLanguageCode.getByCode(bingMarket.getLanguage().getIso_639_1());
+                GoogleLanguageCode langCode = GoogleLanguageCode.getByCode(language.getIso_639_1());
                 
                 // convert TreeSet to string array
                 String[] domainsToExclude = null;

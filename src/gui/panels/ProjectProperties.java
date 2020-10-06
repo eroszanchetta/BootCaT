@@ -19,14 +19,12 @@ package gui.panels;
 
 import common.Language;
 import gui.WizardStep;
-import common.Market;
 import common.UriRedirect;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -45,10 +43,10 @@ public class ProjectProperties extends WizardStep {
     private final String    blockingProjectNameExists   = "A corpus with the same name already exists, pick a different name";
     private final String    blockingIllegalCorpusName   = "The name of the corpus can only contain letters and numbers";
 
-	private File            projectDir;
-	private File            lastOpenedDir;
+    private File            projectDir;
+    private File            lastOpenedDir;
 
-	private File            blacklistFile;
+    private File            blacklistFile;
 
     public ProjectProperties (int stepNumber, String name, MainPanel mainPanel) {
         this();
@@ -58,11 +56,11 @@ public class ProjectProperties extends WizardStep {
 
         initializeIssues();
 
-		addSupportedLanguages();
+        addSupportedLanguages();
 
-		advancedOptionsPanel.setVisible(false);
-		toggleAdvancedOptions(false);
-		resetBlacklistParams();
+        advancedOptionsPanel.setVisible(false);
+        toggleAdvancedOptions(false);
+        resetBlacklistParams();
         
         // change the look of cursors for buttons
         advancedOptionsLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -70,10 +68,16 @@ public class ProjectProperties extends WizardStep {
     }
 
     private void addSupportedLanguages() {
-        languageSelector.addItem(Language._null);
-        for (Market m : Market.values()) {
-            languageSelector.addItem(m);
+//        languageSelector.addItem(Language._null);
+        
+        for (Language l : Language.values()) {
+            if (l.getIso_639_1() == null) continue;
+            languageSelector.addItem(l);            
         }
+        
+//        for (Market m : Market.values()) {
+//            languageSelector.addItem(m);
+//        }
     }
 
     @Override
@@ -504,27 +508,26 @@ public class ProjectProperties extends WizardStep {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void languageSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languageSelectorActionPerformed
-		if (languageSelector.getSelectedItem().equals(Language._null)) {
-			getBlockingIssues().put(Issues.LANGUAGE_SELECTED, blockingLanguageSelection);
-            mainPanel.getProject().setLanguage(Language._null);
-            mainPanel.getProject().setLanguageFilter(Language._null);
-            mainPanel.getProject().setBingMarket(null);
-			toggleAdvancedOptions(false);
+            if (languageSelector.getSelectedItem().equals(Language._null)) {
+                    getBlockingIssues().put(Issues.LANGUAGE_SELECTED, blockingLanguageSelection);
+                    mainPanel.getProject().setLanguage(Language._null);
+                    mainPanel.getProject().setLanguageFilter(Language._null);
+                    toggleAdvancedOptions(false);
 		}
-		else {
-            Market market = (Market) languageSelector.getSelectedItem();
-            mainPanel.getProject().setLanguage(market.getLanguage());
-            mainPanel.getProject().setLanguageFilter(market.getLanguage());
-            mainPanel.getProject().setBingMarket(market);
-			getBlockingIssues().remove(Issues.LANGUAGE_SELECTED);
-			mainPanel.resetSubsequentSteps(this.getStepNumber());
-			toggleAdvancedOptions(true);
-		}
+            else {
+                Language language = (Language) languageSelector.getSelectedItem();
+                mainPanel.getProject().setLanguage(language);
+                mainPanel.getProject().setLanguageFilter(language);
+//                mainPanel.getProject().setBingMarket(market);
+		getBlockingIssues().remove(Issues.LANGUAGE_SELECTED);
+		mainPanel.resetSubsequentSteps(this.getStepNumber());
+		toggleAdvancedOptions(true);
+            }
 
-		// TODO porcheria!
-		try {
-			mainPanel.verifyNavigation();
-		} catch (NullPointerException ex) {}
+            // TODO porcheria!
+            try {
+		mainPanel.verifyNavigation();
+            } catch (NullPointerException ex) {}
 	}//GEN-LAST:event_languageSelectorActionPerformed
 
 	private void languageSelectorPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_languageSelectorPropertyChange

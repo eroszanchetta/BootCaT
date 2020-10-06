@@ -17,22 +17,28 @@
 package test;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import tools.urlcollector.GoogleScraper;
 
 public class GenericTest {
 
-	public static void main(String[] args) {
-
-		ArrayList<String> arrayList = new ArrayList<String>();
-
-		arrayList.add("cane");
-		arrayList.add("gatto");
-		arrayList.add("topo");
-
-
-
-		String pippo = null;
-
-		File newFile = new File(pippo);
-	}
+    public static void main(String[] args) {
+        GenericTest test = new GenericTest();
+        
+//        test.TestGoogleScraper();
+    }
+    
+    private void TestGoogleScraper() {
+        GoogleScraper scraper = new GoogleScraper();
+        
+        File file = new File("/Users/eros/test/googe_query.html");
+        
+        String[] excludedDomains = new String[0];
+        
+        LinkedList<String> urlList = scraper.parseLocalGoogleFile2020(file, excludedDomains);
+        
+        for (String url : urlList) {
+            System.out.println(url);
+        }
+    }
 }

@@ -29,8 +29,6 @@ public class Paths {
     private final String java                       = "java";
 
     // Bootcat scripts
-//    private final String buildRandomTuples          = "TuplesBuilder.jar";
-//    private final String collectUrls                = "UrlCollector.jar";
     private final String languageProfiles           = "profiles";
     private final String customLanguageProfiles     = "language_samples";
     private final String textSplitterResources      = "en-sent.bin";
@@ -41,7 +39,7 @@ public class Paths {
     private final String cleanedUrlList     = "url_list_cleaned.txt";    
     private final String collectedUrls      = "url_list_collected.txt";
     private final String finalUrlList       = "url_list_final.txt";
-    private final String logfile            = "report.csv";
+    private final String reportFile         = "report.csv";
 
     private File toolkitPath;
     private File projectDataPath;
@@ -52,10 +50,10 @@ public class Paths {
     private File xmlCorpusFile;
     private File queriesDir;
 
-	private final Config config;
+    private final Config config;
 
     public Paths(Properties systemProperties, Config config) {
-        this.config     = config;
+        this.config = config;
     }
 
     public File getCorpusFile() {
@@ -95,7 +93,7 @@ public class Paths {
     }
 
     public File getReportFile() {
-        return new File(getProjectDataPath().getPath() + File.separator + logfile);
+        return new File(getProjectDataPath().getPath() + File.separator + reportFile);
     }
     
     public File getDownloadDir() {

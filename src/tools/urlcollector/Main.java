@@ -17,7 +17,6 @@
 package tools.urlcollector;
 
 import common.FileType;
-import common.Market;
 import common.SearchEngineSafeSearch;
 import common.BingQueryStatus;
 import common.GoogleLanguageCode;
@@ -43,7 +42,6 @@ public class Main {
     private static final double VERSION = 1.2;
     
     private String                      accountKey;
-    private Market                      market;
     private GoogleLanguageCode          googleLanguageCode;
     private FileType                    restrictToFileType;
     private ArrayList<FileType>         excludedFileTypes;    
@@ -58,7 +56,7 @@ public class Main {
     private File                        googlePagesDownloadPath;
     private GoogleScraperAggressiveness aggressiveness;
     private boolean                     vogonMode;
-    private Language                    yacyLanguage;
+    private Language                    language;
     
     public static void main(String[] args) {
         Main main = new Main();
@@ -87,7 +85,7 @@ public class Main {
     private void collectUrlsWithBing() {
         
         for (String query : tuples) {
-            BingSearch bingSearch = new BingSearch(accountKey, market, query,
+            BingSearch bingSearch = new BingSearch(accountKey, language, query,
                     searchEngineSafeSearch, restrictToFileType, excludedFileTypes,
                     maxResults, restrictToDomain, excludedDomains, charset, searchEngine);
             
@@ -120,7 +118,7 @@ public class Main {
     }
     
     private void collectUrlsWithYacy() {
-        YacySearch yacySearch = new YacySearch(yacyLanguage, restrictToFileType,
+        YacySearch yacySearch = new YacySearch(language, restrictToFileType,
                     maxResults, charset, null, null, null);
         
         yacySearch.collectUrls(tuples);
@@ -300,9 +298,9 @@ public class Main {
             switch (searchEngine) {
                 case BING_V5:
                 case BING_V7:
-                    for (Market m : Market.values()) {
-                        if (m.getCode().toLowerCase().equals(reqLanguage.toLowerCase())) {
-                            market = m;
+                    for (Language l : Language.values()) {
+                        if (l.getIso_639_1().equals(reqLanguage.toLowerCase())) {
+                            language = l;
                             break;
                         }
                     }
@@ -320,7 +318,7 @@ public class Main {
                 case YACY:
                     for (Language language : Language.values()) {
                         if (language.getIso_639_1() != null && language.getIso_639_1().equals(reqLanguage.toLowerCase())) {
-                            yacyLanguage = language;
+                            language = language;
                             break;                            
                         }
                     }
@@ -330,7 +328,7 @@ public class Main {
         }
                 
         // if reqLanguage is not null and search engines language enums are also null, then the code provided by the user is invalid
-        if (reqLanguage != null & market == null & googleLanguageCode == null & yacyLanguage == null) {
+        if (reqLanguage != null & language == null & googleLanguageCode == null & language == null) {
             System.err.println("Invalid language code. Use -n to see a list of valid languages or -h for help.");
             System.exit(1);
         }
@@ -531,8 +529,8 @@ public class Main {
         switch (searchEngine) {
             case BING_V5:
             case BING_V7:
-                for (Market m : Market.values()) {
-                    System.out.println(m.getCode() + "\t" + m.getLongName());
+                for (Language l : Language.values()) {
+                    System.out.println(l.getIso_639_1() + "\t" + l.getName());
                 }
                 break;
             

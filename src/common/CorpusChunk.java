@@ -42,6 +42,7 @@ public class CorpusChunk {
     private CorpusChunkStatus       status;
     private Integer                 tokenCount;
     private Integer                 characterCount;
+    private Integer                 skippedSentences;
     private HtmlExtractionMode      htmlExtractionMode;
     private List<DetectedLanguage>  detectedLanguages;
     private String                  baseFileName;
@@ -302,5 +303,13 @@ public class CorpusChunk {
 
     public void setCharacterCount(Integer characterCount) {
         this.characterCount = characterCount;
+    }
+
+    public Integer getSkippedSentences() {
+        return skippedSentences;
+    }
+
+    public void setSkippedSentences(Integer skippedSentences) {
+        this.skippedSentences = skippedSentences;
     }
 }

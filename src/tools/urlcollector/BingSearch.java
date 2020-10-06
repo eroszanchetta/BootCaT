@@ -17,8 +17,8 @@
 package tools.urlcollector;
 
 import common.FileType;
-import common.Market;
 import common.BingQueryStatus;
+import common.Language;
 import common.SearchEngine;
 import common.SearchEngineSafeSearch;
 import java.io.*;
@@ -39,25 +39,23 @@ public class BingSearch {
     
     private String                          searchUrl;
     private SearchEngine                    searchEngine;
-    
     private final SearchEngineSafeSearch    adult;
     private final String                    accountKey;
     private final String                    restrictToDomain;
     private final String[]                  excludedDomains;
     private final Charset                   charset;
-    
-    private Market                  market;
-    private String                  query;
-    private FileType                restrictToFileType;
-    private ArrayList<FileType>     excludedFileTypes;
-    private long                    maxResults;
+    private String                          query;
+    private FileType                        restrictToFileType;
+    private ArrayList<FileType>             excludedFileTypes;
+    private long                            maxResults;
+    private Language                        language;
 
-    public BingSearch(String accountKey, Market market, String query, SearchEngineSafeSearch adult,
+    public BingSearch(String accountKey, Language language, String query, SearchEngineSafeSearch adult,
             FileType fileType, ArrayList<FileType> excludedFileTypes, long maxResults, String restrictToDomain,
             String[] excludedDomains, Charset charset, SearchEngine searchEngine) {
 
         this.accountKey         = accountKey;
-        this.market             = market;
+        this.language           = language;
         this.query              = query;
         this.adult              = adult;
         this.restrictToFileType = fileType;
@@ -146,8 +144,8 @@ public class BingSearch {
         urlString += "?q=" + query;
 
         //market
-        if (market != null)
-            urlString += "&mkt=" + market.getCode();
+        if (language != null)
+            urlString += "&mkt=" + language.getIso_639_1();
 
         // adult filter
         if (adult != null) {
@@ -299,12 +297,12 @@ public class BingSearch {
         this.restrictToFileType = restrictToFileType;
     }
 
-    public Market getMarket() {
-        return market;
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setMarket(Market market) {
-        this.market = market;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public long getMaxResults() {

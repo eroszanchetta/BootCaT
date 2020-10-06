@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,7 +49,7 @@ public class BootcatExtractor implements Runnable {
 
     private final CorpusBuilder corpusBuilder;
     private final File          editedUrlList;
-	private final MainPanel     mainPanel;
+    private final MainPanel     mainPanel;
     private final JProgressBar  progBar;
     private int                 corpusTokenCount = 0;
 
@@ -105,6 +104,8 @@ public class BootcatExtractor implements Runnable {
         ArrayList<CorpusChunk> corpusChunks = extractor.extract(
                 editedUrlList,
                 languageFilter,
+                mainPanel.getProject().isUseTextLevelLanguageFilter(),
+                mainPanel.getProject().isUseSentLevelLanguageFilter(),
                 minDocSize,
                 maxDocSize,
                 maxFileSize,
@@ -173,6 +174,7 @@ public class BootcatExtractor implements Runnable {
             writer.print("Detected_languages" + delimiter);
             writer.print("Content_type" + delimiter);
             writer.print("Status" + delimiter);
+            writer.print("Skipped_sentences" + delimiter);
             writer.print("Downloaded_file_size" + delimiter);
             writer.print("Extracted_file_size" + delimiter);
             writer.print("HTML_Extraction_mode" + delimiter);
@@ -195,6 +197,7 @@ public class BootcatExtractor implements Runnable {
                 writer.print(chunk.getDetectedLanguagesString() + delimiter);
                 writer.print(chunk.getContentType() + delimiter);
                 writer.print(chunk.getStatus() + delimiter);
+                writer.print(chunk.getSkippedSentences() + delimiter);
                 writer.print(chunk.getDownloadedFileSizeHR() + delimiter);
                 writer.print(chunk.getExtractedFileSizeHR() + delimiter);
                 writer.print(chunk.getHtmlExtractionMode() + delimiter);

@@ -301,7 +301,7 @@ public class ExternalBrowser extends WizardStep {
                     excluded = excludedArray.toArray(new String[excludedArray.size()]);                    
                 } 
 
-                for (String result : scraper.parseLocalGoogleFile2018(file, excluded)) {
+                for (String result : scraper.parseLocalGoogleFile2020(file, excluded)) {
                     bw.write(result + "\n");
                     System.out.println(result);
                 }

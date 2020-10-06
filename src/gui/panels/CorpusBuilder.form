@@ -40,11 +40,11 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Component id="showAdvancedOptionsLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="advancedOptionsPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="100" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="advancedOptionsPanel" min="-2" pref="191" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="81" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="progressBar" min="-2" pref="21" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -113,27 +113,36 @@
                               <Component id="maxCharsCheckBox" pref="292" max="32767" attributes="0"/>
                               <Component id="minCharsCheckBox" max="32767" attributes="0"/>
                               <Component id="maxFileSizeCheckBox" max="32767" attributes="0"/>
-                              <Component id="languageFilterCheckbox" max="32767" attributes="0"/>
+                              <Component id="textLanguageFilterCheckbox" max="32767" attributes="0"/>
+                              <Component id="sentLanguageFilterCheckBox" alignment="1" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="maxCharsSpinner" min="-2" pref="108" max="-2" attributes="0"/>
-                                      <Component id="minCharsSpinner" min="-2" pref="108" max="-2" attributes="0"/>
-                                      <Component id="maxFileSizeSpinner" min="-2" pref="108" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="minCharsLabel" max="32767" attributes="0"/>
-                                          <Component id="maxCharsLabel" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="maxCharsSpinner" min="-2" pref="108" max="-2" attributes="0"/>
+                                              <Component id="minCharsSpinner" min="-2" pref="108" max="-2" attributes="0"/>
+                                              <Component id="maxFileSizeSpinner" min="-2" pref="108" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="minCharsLabel" max="32767" attributes="0"/>
+                                                  <Component id="maxCharsLabel" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Component id="maxFileSizeLabel" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="maxFileSizeLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="textLanguageFilterComboBox" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="languageFilterComboBox" max="32767" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="sentLanguageFilterComboBox" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -150,8 +159,13 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="languageFilterCheckbox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="languageFilterComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="textLanguageFilterCheckbox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="textLanguageFilterComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="sentLanguageFilterComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sentLanguageFilterCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -171,13 +185,13 @@
                       <Component id="maxFileSizeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="maxFileSizeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JComboBox" name="languageFilterComboBox">
+        <Component class="javax.swing.JComboBox" name="textLanguageFilterComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
@@ -185,16 +199,16 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="languageFilterComboBoxActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLanguageFilterComboBoxActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="languageFilterCheckbox">
+        <Component class="javax.swing.JCheckBox" name="textLanguageFilterCheckbox">
           <Properties>
             <Property name="text" type="java.lang.String" value="discard documents not in this language"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="languageFilterCheckboxStateChanged"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="languageFilterCheckboxActionPerformed"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="textLanguageFilterCheckboxStateChanged"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLanguageFilterCheckboxActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSpinner" name="maxCharsSpinner">
@@ -237,7 +251,7 @@
             <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="htmlExtractorComboBoxPropertyChange"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox(bootcat.common.HtmlExtractionMode.values())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox(common.HtmlExtractionMode.values())"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
@@ -279,13 +293,33 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JCheckBox" name="sentLanguageFilterCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="discard sentences not in this language"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sentLanguageFilterCheckBoxStateChanged"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sentLanguageFilterCheckBoxActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="sentLanguageFilterComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sentLanguageFilterComboBoxActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="showAdvancedOptionsLabel">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/bootcat/gui/resources/options_more_16x16.png"/>
+          <Image iconType="3" name="/gui/resources/options_more_16x16.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Show advanced options"/>
         <Property name="horizontalTextPosition" type="int" value="2"/>

@@ -56,8 +56,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -85,7 +83,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
-import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 
 /**
@@ -125,6 +122,8 @@ public class ContentExtractor {
      * 
      * @param urlList text file containing URLs to be downloaded and extracted (one URL per line)
      * @param language language documents are supposed to be in or null if no filtering is required
+     * @param textLevelLanguageFilter filter out texts in the wrong language
+     * @param sentLevelLanguageFilter filter out sentences in the wrong language
      * @param minSize minimum size of the extracted text file, in characters (-1 means no filtering)
      * @param maxSize maximum size of the extracted text file, in characters (-1 means no filtering)
      * @param maxFileSize
@@ -137,7 +136,7 @@ public class ContentExtractor {
      * @param progBar a ProgressBar GUI element that will track job progress
      * @return 
      */
-    public ArrayList<CorpusChunk> extract (File urlList, Language language,  int minSize, int maxSize,
+    public ArrayList<CorpusChunk> extract (File urlList, Language language, boolean textLevelLanguageFilter, boolean sentLevelLanguageFilter, int minSize, int maxSize,
             int maxFileSize, String corpusName, File downloadDir, File corpusDir, File xmlCorpusDir,
             LinkedHashMap<String, String> xmlAttributes, JTextArea textArea, JProgressBar progBar) {
         ArrayList<URI> uris = new ArrayList<>();
@@ -161,11 +160,11 @@ public class ContentExtractor {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return extract(uris, language, minSize, maxSize, maxFileSize, corpusName, downloadDir, corpusDir,
+        return extract(uris, language, textLevelLanguageFilter, sentLevelLanguageFilter, minSize, maxSize, maxFileSize, corpusName, downloadDir, corpusDir,
                 xmlCorpusDir, xmlAttributes, textArea, progBar);
     }
     
-    private ArrayList<CorpusChunk> extract (ArrayList<URI> uris, Language language, int minDocSize,
+    private ArrayList<CorpusChunk> extract (ArrayList<URI> uris, Language language, boolean textLevelLanguageFilter, boolean sentLevelLanguageFilter, int minDocSize,
             int maxDocSize, int maxFileSize, String corpusName, File downloadDir, File corpusDir, File xmlCorpusDir,
             LinkedHashMap<String, String> xmlAttributes, JTextArea textArea, JProgressBar progBar) {
         
@@ -309,7 +308,7 @@ public class ContentExtractor {
 
             // check whitelisted words
             // FIXME: THIS IS JUST A HACK I USED TO CREATE A FEW SPECIFIC CORPORA
-//            if (!isGoodDocument(text, "mama")) {
+//            if (!isGoodDocument(text, "fluegelhorn")) {
 //                corpusChunk.setStatus(CorpusChunk.CorpusChunkStatus.TOO_FEW_WHITELISTED_WORDS_FIX_ME);
 //                corpusChunk.getExtractedFile().delete();
 //                corpusChunk.getExtractedXMLFile().delete();
@@ -334,25 +333,24 @@ public class ContentExtractor {
                 continue;
             }
             
-            // detect language, if language is wrong or cennot be determined, discard file
-            detectLanguage(text, language, corpusChunk);
-            if (corpusChunk.getStatus().equals(CorpusChunk.CorpusChunkStatus.WRONG_LANGUAGE) ||
-                    corpusChunk.getStatus().equals(CorpusChunk.CorpusChunkStatus.CANNOT_DETERMINE_LANGUAGE)) {
-                
-                corpusChunk.getExtractedFile().delete();
-                corpusChunk.getExtractedXMLFile().delete();
-                updateProgressBar(progBar);
-                continue;                
-            }
+            // discard the text if the language is wrong or if it cannot be detected
+            if (textLevelLanguageFilter) {
+                // try to detect language
+                detectLanguage(text, language, corpusChunk);                
+                if (corpusChunk.getStatus().equals(CorpusChunk.CorpusChunkStatus.WRONG_LANGUAGE) ||
+                        corpusChunk.getStatus().equals(CorpusChunk.CorpusChunkStatus.CANNOT_DETERMINE_LANGUAGE)) {
 
-            /**
-             * FIXME: either add a config option somewhere to disable this, or remove it entirely.
-             * 
-             * For now this only works in devel mode
-             */
-            if (mainPanel.getMain().isDevelMode()) {
-                // now recheck every sentence and strip those that are in the wrong langauge
-                text = stripExtraneousLanguages(text, language, corpusChunk, mainPanel.getPaths().getTextSplitterResources());
+                    corpusChunk.getExtractedFile().delete();
+                    corpusChunk.getExtractedXMLFile().delete();
+                    updateProgressBar(progBar);
+                    continue;                
+                }                
+            }
+            
+            // filter out sentences in the wrong language
+            if (sentLevelLanguageFilter) {
+
+                text = filterOutSentences(text, language, mainPanel.getPaths().getTextSplitterResources(), corpusChunk);
 
                 // overwrite old extracted files with new ones
                 // FIXME: you should probably find a better way of doing this, now the files are written twice
@@ -454,8 +452,6 @@ public class ContentExtractor {
     }
     
     /**
-     * FIXME: THIS IS TOTALLY AD HOC, REMOVE THIS METHOD!
-     * 
      * Split the text in sentences and only keep those in the specified language.
      * 
      * The function tries to discard as little text as possible:
@@ -468,12 +464,13 @@ public class ContentExtractor {
      * @param corpusChunk
      * @return 
      */
-    private String stripExtraneousLanguages(String text, Language language, CorpusChunk corpusChunk, File textSplitterResources) {
+    private String filterOutSentences(String text, Language language, File textSplitterResources, CorpusChunk corpusChunk) {
         
-        double  minConfidence = 0.9;        // the minimum confidence that the language is the *wrong one*
-        int     minSentenceLength = 0;     // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
+        double  minConfidence = 0.9;    // the minimum confidence that the language is the *wrong one*
+        int     minSentenceLength = 0;  // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
         
         String output = "";
+        int skippedSentences = 0;
 
         // use Apache OpenNLP library to split text into sentences
         try (InputStream modelIn = new FileInputStream(textSplitterResources)) {
@@ -492,39 +489,24 @@ public class ContentExtractor {
 
                 List<DetectedLanguage> detectedLangs = languageDetector.getProbabilities(currentSentence);
                 
-                if (language == null) {
-                    output += currentSentence + "\n";
-                    continue;
-                }
-                
-                if (language == Language._unspecified) {
-                    output += currentSentence + "\n";
-                    continue;
-                }
-                
                 // if sentence is too short, play it safe and keep the sentence
                 if (currentSentence.length() < minSentenceLength) {
                     output += currentSentence + "\n";
                     continue;                    
                 }
                 
-                // if language coult not be detected, play it safe and keep the sentence
+                // if language could not be detected, play it safe and keep the sentence
                 if (detectedLangs.isEmpty()) {
                     output += currentSentence + "\n";
                     continue;
                 }                
-
-                // skip sentence if first detected language is English, no matter the probability
-                if (detectedLangs.get(0).getLocale().toString().equals("en")) {
-                    System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
-                    continue;
-                }                
                 
                 // skip sentence if first detected language is wrong and we're highly confident that it's the wrong language
-//                if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minConfidence) {
+                if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minConfidence) {
+                    ++skippedSentences;
 //                    System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
-//                    continue;
-//                }
+                    continue;
+                }
 
                 // if we got this far, keep the sentence
                 output += currentSentence + "\n";
@@ -533,7 +515,10 @@ public class ContentExtractor {
             Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
+        
+        corpusChunk.setSkippedSentences(skippedSentences);
+        
         return output;
     }
     
@@ -666,10 +651,7 @@ public class ContentExtractor {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
             disableSslVerification();
             return download(corpusChunk);
-        } catch (SSLException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } catch (SocketTimeoutException ex) {
+        } catch (SSLException | SocketTimeoutException ex) {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         } catch (IOException | URISyntaxException ex) {

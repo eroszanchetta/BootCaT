@@ -18,7 +18,6 @@ package gui;
 
 import common.FileType;
 import common.Language;
-import common.Market;
 import common.SearchEngine;
 import common.SearchEngineSafeSearch;
 import common.Utils;
@@ -33,12 +32,10 @@ import java.util.LinkedHashMap;
 import java.util.TreeSet;
 
 /**
- * TODO: finish and actually use this class
  * @author Eros Zanchetta <eros@sslmit.unibo.it>
  */
 public class Project {
 
-    private Market                          bingMarket;
     private File                            blackListFile;
     private String                          corpusName;
     private Integer                         corpusCreationTime;
@@ -50,6 +47,8 @@ public class Project {
     private HtmlExtractionMode              htmlExtractionMode;
     private Language                        language;
     private Language                        languageFilter;
+    private boolean                         useTextLevelLanguageFilter;
+    private boolean                         useSentLevelLanguageFilter;
     private int                             maxDocSize;
     private int                             maxFileSize;
     private int                             maxPagesPerQuery;
@@ -70,19 +69,20 @@ public class Project {
     }
 
     public final void initialize() {
-        language        = Language._null;
-        languageFilter  = Language._null;
-        projectMode     = ProjectMode.STANDARD;
-        searchEngine    = SearchEngine.UNDEFINED;
+        language                = Language._null;
+        languageFilter          = Language._null;
+        useSentLevelLanguageFilter = false;
+        projectMode             = ProjectMode.STANDARD;
+        searchEngine            = SearchEngine.UNDEFINED;
         
-        seeds           = new TreeSet<>();
-        tuples          = new HashMap<>();
-        uris            = new HashMap<>();
-        xmlAttributes   = new LinkedHashMap<>();    // use a LinkedHashMap to preserve insertion order
+        seeds                   = new TreeSet<>();
+        tuples                  = new HashMap<>();
+        uris                    = new HashMap<>();
+        xmlAttributes           = new LinkedHashMap<>();    // use a LinkedHashMap to preserve insertion order
         
-        downloadErrors  = new ArrayList<>();
+        downloadErrors          = new ArrayList<>();
         
-        excludeDomains  = new TreeSet<>();
+        excludeDomains          = new TreeSet<>();
         excludeDomains.add("www.google.*");
         excludeDomains.add("books.google.*");
         excludeDomains.add("www.googleadservices.*");
@@ -317,14 +317,6 @@ public class Project {
         this.blackListFile = blackListFile;
     }
 
-    public Market getBingMarket() {
-        return bingMarket;
-    }
-
-    public void setBingMarket(Market bingMarket) {
-        this.bingMarket = bingMarket;
-    }
-
     public Language getLanguage() {
         return language;
     }
@@ -370,5 +362,21 @@ public class Project {
 
     public void setSearchEngine(SearchEngine searchEngine) {
         this.searchEngine = searchEngine;
+    }
+
+    public boolean isUseSentLevelLanguageFilter() {
+        return useSentLevelLanguageFilter;
+    }
+
+    public void setUseSentLevelLanguageFilter(boolean useSentLevelLanguageFilter) {
+        this.useSentLevelLanguageFilter = useSentLevelLanguageFilter;
+    }
+
+    public boolean isUseTextLevelLanguageFilter() {
+        return useTextLevelLanguageFilter;
+    }
+
+    public void setUseTextLevelLanguageFilter(boolean useTextLevelLanguageFilter) {
+        this.useTextLevelLanguageFilter = useTextLevelLanguageFilter;
     }
 }

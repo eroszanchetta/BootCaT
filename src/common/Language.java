@@ -30,13 +30,10 @@ public enum Language {
      *
      */
     
-    _chi_tw ("_chi_tw", null, "zh-tw", "Chinese Taiwan"),
-    _chi_cn ("_chi_cn", null, "zh-cn", "Chinese"),
+//    _chi_tw ("_chi_tw", null, "zh-tw", "Chinese Taiwan"),
+//    _chi_cn ("_chi_cn", null, "zh-cn", "Chinese"),
+    _null ("NULL", null, "", "<select language>"),    
     _unspecified ("_unspecified", null, "zz-zz", "Unspecified"),
-    _null ("NULL", null, "", "<select language>"),
-    /**
-     * Afar
-     */
     aar ("aar", null, "aa", "Afar"),
     abk ("abk", null, "ab", "Abkhazian"),
     ace ("ace", null, null, "Achinese"),

@@ -47,30 +47,31 @@ import org.json.JSONObject;
  */
 public class Main {
 
-	private Config          config;
+    private Config          config;
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.24;
+    private final Double    versionNumber       = 1.25;
     private final String    codeName            = "Sylvester";
     private final int       buildNumber         = 185;
+    private final int       copyRightYear       = 2020;
 
-	private File            programDir;
-	private File            defaultBootCatDir;
-	private String          defaultDataDir;
+    private File            programDir;
+    private File            defaultBootCatDir;
+    private String          defaultDataDir;
 
     private String          accountKey;
 
     private String          bootCatInstallationId;
     
     private boolean         vogonMode = false;
-    private final boolean   develMode = false;
+    private final boolean   develMode = true;
     
-	public enum UpdateStatus {
-		UPDATE_AVAILABLE,
-		NO_UPDATES,
-		ERROR
-	}
+    public enum UpdateStatus {
+            UPDATE_AVAILABLE,
+            NO_UPDATES,
+            ERROR
+    }
 
     public boolean isDevelMode() {
         return develMode;
@@ -78,6 +79,10 @@ public class Main {
 
     public String getBootCatInstallationId() {
         return bootCatInstallationId;
+    }
+
+    public int getCopyRightYear() {
+        return copyRightYear;
     }
 
     public String getCodeName() {
