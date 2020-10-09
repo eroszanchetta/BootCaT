@@ -58,11 +58,11 @@ public abstract class WizardStep extends javax.swing.JPanel{
 
     public abstract void reset();
 
-	public abstract void back();
+    public abstract void back();
 
     public abstract void onDisplay();
 
-	public abstract void next();
+    public abstract void next();
 
     public abstract void save();
     

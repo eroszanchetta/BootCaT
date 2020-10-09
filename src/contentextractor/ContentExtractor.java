@@ -84,6 +84,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
+import sun.tools.java.ClassPath;
 
 /**
  *
@@ -349,8 +350,7 @@ public class ContentExtractor {
             
             // filter out sentences in the wrong language
             if (sentLevelLanguageFilter) {
-
-                text = filterOutSentences(text, language, mainPanel.getPaths().getTextSplitterResources(), corpusChunk);
+                text = filterOutSentences(text, language, corpusChunk);
 
                 // overwrite old extracted files with new ones
                 // FIXME: you should probably find a better way of doing this, now the files are written twice
@@ -464,16 +464,17 @@ public class ContentExtractor {
      * @param corpusChunk
      * @return 
      */
-    private String filterOutSentences(String text, Language language, File textSplitterResources, CorpusChunk corpusChunk) {
+    private String filterOutSentences(String text, Language language, CorpusChunk corpusChunk) {
         
         double  minConfidence = 0.9;    // the minimum confidence that the language is the *wrong one*
         int     minSentenceLength = 0;  // if sentence is shorter than this (in chars) then keep it because there's not enough data for detection
         
         String output = "";
         int skippedSentences = 0;
-
+               
         // use Apache OpenNLP library to split text into sentences
-        try (InputStream modelIn = new FileInputStream(textSplitterResources)) {
+        try (InputStream modelIn = ContentExtractor.class.getResourceAsStream("/resources/en-sent.bin")) {
+            
             SentenceModel model = new SentenceModel(modelIn);
             
             SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
@@ -504,7 +505,6 @@ public class ContentExtractor {
                 // skip sentence if first detected language is wrong and we're highly confident that it's the wrong language
                 if (!detectedLangs.get(0).getLocale().toString().equals(language.getIso_639_1()) && detectedLangs.get(0).getProbability() > minConfidence) {
                     ++skippedSentences;
-//                    System.err.println("(DEBUG " + detectedLangs.get(0).getProbability() +  detectedLangs.get(0).getLocale() + ") SKIPPING SENTENCE: " + currentSentence);
                     continue;
                 }
 
@@ -906,7 +906,7 @@ public class ContentExtractor {
     }
     
     private void writeXMLFile(CorpusChunk corpusChunk, String text, LinkedHashMap<String, String> xmlAttributes) {
-        String xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes, mainPanel.getPaths().getTextSplitterResources());        
+        String xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes);        
         
         PrintWriter xmlFileWriter;
         try {
@@ -990,7 +990,7 @@ public class ContentExtractor {
             line   = null;
             
             // convert extracted plain text to XML
-            String xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes, mainPanel.getPaths().getTextSplitterResources());
+            String xmlText = TextFormatter.convertToXml(text, corpusChunk, xmlAttributes);
             
             // write XML file
             PrintWriter xmlFileWriter;

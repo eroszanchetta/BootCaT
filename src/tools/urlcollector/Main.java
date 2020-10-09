@@ -34,8 +34,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * NO LONGER MAINTAINED 
+ * 
  * @author Eros Zanchetta <eros@sslmit.unibo.it>
+ * @deprecated 
  */
 public class Main {
 

@@ -31,7 +31,6 @@ public class Paths {
     // Bootcat scripts
     private final String languageProfiles           = "profiles";
     private final String customLanguageProfiles     = "language_samples";
-    private final String textSplitterResources      = "en-sent.bin";
     
     // name of data files
     private final String seeds              = "seeds.txt";
@@ -62,10 +61,6 @@ public class Paths {
 
     public void setCorpusFile(File corpusFile) {
         this.corpusFile = corpusFile;
-    }
-
-    public File getTextSplitterResources() {
-        return new File(toolkitPath + File.separator + textSplitterResources);
     }
 
     public File getXmlCorpusFile() {

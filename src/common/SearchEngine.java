@@ -22,8 +22,8 @@ package common;
  */
 public enum SearchEngine {
     
-    BING_V5                 ("Bing Version 5", 50, true, false, true, false),
-    BING_V7                 ("Bing Version 7", 50, true, false, true, false),
+    BING_V5                 ("Bing Version 5", 50, true, true, true, false),
+    BING_V7                 ("Bing Version 7", 50, true, true, true, false),
     GOOGLE_SCRAPER          ("Google Scraper", 100, false, true, false, false),
     EXTERNAL_BROWSER_GOOGLE ("External Browser (Google)", 100, false, false, true, true),
     YACY                    ("Yacy", 100, false, true, false, false),
@@ -36,7 +36,7 @@ public enum SearchEngine {
     private final boolean   adultFilter;
     private final boolean   useBrowser;
     
-        private SearchEngine(String friendlyName, long maxResultsLimit, boolean keyProtected, boolean secret, boolean adultFilter, boolean useBrowser) {
+    private SearchEngine(String friendlyName, long maxResultsLimit, boolean keyProtected, boolean secret, boolean adultFilter, boolean useBrowser) {
         
         this.friendlyName       = friendlyName;
         this.maxResultsLimit    = maxResultsLimit;

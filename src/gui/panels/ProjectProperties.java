@@ -509,24 +509,22 @@ public class ProjectProperties extends WizardStep {
 
 	private void languageSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languageSelectorActionPerformed
             if (languageSelector.getSelectedItem().equals(Language._null)) {
-                    getBlockingIssues().put(Issues.LANGUAGE_SELECTED, blockingLanguageSelection);
-                    mainPanel.getProject().setLanguage(Language._null);
-                    mainPanel.getProject().setLanguageFilter(Language._null);
-                    toggleAdvancedOptions(false);
-		}
-            else {
+                getBlockingIssues().put(Issues.LANGUAGE_SELECTED, blockingLanguageSelection);
+                mainPanel.getProject().setLanguage(Language._null);
+                mainPanel.getProject().setLanguageFilter(Language._null);
+                toggleAdvancedOptions(false);
+            } else {
                 Language language = (Language) languageSelector.getSelectedItem();
                 mainPanel.getProject().setLanguage(language);
                 mainPanel.getProject().setLanguageFilter(language);
-//                mainPanel.getProject().setBingMarket(market);
-		getBlockingIssues().remove(Issues.LANGUAGE_SELECTED);
-		mainPanel.resetSubsequentSteps(this.getStepNumber());
-		toggleAdvancedOptions(true);
+                getBlockingIssues().remove(Issues.LANGUAGE_SELECTED);
+                mainPanel.resetSubsequentSteps(this.getStepNumber());
+                toggleAdvancedOptions(true);
             }
 
             // TODO porcheria!
             try {
-		mainPanel.verifyNavigation();
+                mainPanel.verifyNavigation();
             } catch (NullPointerException ex) {}
 	}//GEN-LAST:event_languageSelectorActionPerformed
 
@@ -591,44 +589,46 @@ public class ProjectProperties extends WizardStep {
 	}//GEN-LAST:event_blacklistCheckboxActionPerformed
 
 	private void advancedOptionsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_advancedOptionsLabelMouseClicked
-		if (advancedOptionsPanel.isVisible()) {
-			advancedOptionsLabel.setText("More options");
-			advancedOptionsPanel.setVisible(false);
-			advancedOptionsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/options_more_16x16.png")));
-		}
-		else {
-			advancedOptionsLabel.setText("Less options");
-			advancedOptionsPanel.setVisible(true);
-			advancedOptionsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/options_less_16x16.png")));
-		}
+            if (advancedOptionsPanel.isVisible()) {
+                advancedOptionsLabel.setText("More options");
+                advancedOptionsPanel.setVisible(false);
+                advancedOptionsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/options_more_16x16.png")));
+            } else {
+                advancedOptionsLabel.setText("Less options");
+                advancedOptionsPanel.setVisible(true);
+                advancedOptionsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/options_less_16x16.png")));
+            }
 	}//GEN-LAST:event_advancedOptionsLabelMouseClicked
 
 	private void blacklistBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blacklistBrowseActionPerformed
-        if (pickBlacklist()) blacklistCheckbox.setSelected(true);
+            if (pickBlacklist())
+                blacklistCheckbox.setSelected(true);
 	}//GEN-LAST:event_blacklistBrowseActionPerformed
 
 	private void alwaysUseBlacklistCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alwaysUseBlacklistCheckboxActionPerformed
-		if (!alwaysUseBlacklistCheckbox.isSelected()) return;
+            if (!alwaysUseBlacklistCheckbox.isSelected()) {
+                return;
+            }
 
-		if (!blacklistCheckbox.isSelected()) {
-			blacklistCheckbox.setSelected(blacklistCheckboxSelected());
-		}
-        
-        alwaysUseBlacklistCheckbox.setSelected(blacklistCheckbox.isSelected());
+            if (!blacklistCheckbox.isSelected()) {
+                blacklistCheckbox.setSelected(blacklistCheckboxSelected());
+            }
+
+            alwaysUseBlacklistCheckbox.setSelected(blacklistCheckbox.isSelected());
 	}//GEN-LAST:event_alwaysUseBlacklistCheckboxActionPerformed
 
 	private void listsHelpLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listsHelpLabel1MouseClicked
-        URI uri = URI.create(mainPanel.getMain().redirectUrl(UriRedirect.HELP_LISTS));
-        
-        try {
-            Desktop.getDesktop().browse(uri);
-        } catch (IOException ex) {
-            Logger.getLogger(ProjectProperties.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            URI uri = URI.create(mainPanel.getMain().redirectUrl(UriRedirect.HELP_LISTS));
+
+            try {
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException ex) {
+                Logger.getLogger(ProjectProperties.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}//GEN-LAST:event_listsHelpLabel1MouseClicked
 
 	private void defaultBlacklistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultBlacklistButtonActionPerformed
-		resetBlacklistParams();
+            resetBlacklistParams();
 	}//GEN-LAST:event_defaultBlacklistButtonActionPerformed
 
     private void corpusNameTextAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_corpusNameTextAreaFocusLost
@@ -675,47 +675,56 @@ public class ProjectProperties extends WizardStep {
         xmlAttributesCheckBox.setSelected(true);
     }//GEN-LAST:event_value3TextFieldKeyTyped
 
-	/**
-	 * Open a file selector
-	 * @param initialDirectory if null is specified, user's home directory will be opened
-	 * @return the file chosen by the user or null if no file was chosen
-	 */
-	private File openWordListSelector(File initialDirectory) {
-		JFileChooser fc = new JFileChooser();
+    /**
+     * Open a file selector
+     *
+     * @param initialDirectory if null is specified, user's home directory will be opened
+     * @return the file chosen by the user or null if no file was chosen
+     */
+    private File openWordListSelector(File initialDirectory) {
+        JFileChooser fc = new JFileChooser();
 
-		/* set initial directory for file chooser which can be (in decreasing order of preference):
+        /* set initial directory for file chooser which can be (in decreasing order of preference):
 		 * - the directory specified by the caller of this method
 		 * - the last opened directory
 		 * - the default user directory
-		 */
-		File currentDir;
-		if (lastOpenedDir == null) currentDir = FileSystemView.getFileSystemView().getDefaultDirectory();
-		else currentDir = lastOpenedDir;
+         */
+        File currentDir;
+        if (lastOpenedDir == null) {
+            currentDir = FileSystemView.getFileSystemView().getDefaultDirectory();
+        }
+        else {
+            currentDir = lastOpenedDir;
+        }
 
-		if (initialDirectory != null) {
-			if (initialDirectory.exists() && initialDirectory.canRead())
-				currentDir = initialDirectory;
-		}
+        if (initialDirectory != null) {
+            if (initialDirectory.exists() && initialDirectory.canRead()) {
+                currentDir = initialDirectory;
+            }
+        }
 
-		fc.setCurrentDirectory(currentDir);
+        fc.setCurrentDirectory(currentDir);
 
+        // set filechooser options
+        fc.setMultiSelectionEnabled(false);
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.setFileFilter(new FileNameExtensionFilter("Wordlist (*.txt)", "txt", "TXT"));
 
-		// set filechooser options
-		fc.setMultiSelectionEnabled(false);
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setFileFilter(new FileNameExtensionFilter("Wordlist (*.txt)", "txt", "TXT"));
+        // open the dialog
+        int retVal = fc.showOpenDialog(this);
 
-		// open the dialog
-		int retVal = fc.showOpenDialog(this);
-        
-        if (retVal == JFileChooser.CANCEL_OPTION) return null;
-        
-		if (fc.getSelectedFile() != null) {
-			lastOpenedDir = fc.getSelectedFile().getParentFile();
-			return fc.getSelectedFile();
-		}
-		else return null;
-	}
+        if (retVal == JFileChooser.CANCEL_OPTION) {
+            return null;
+        }
+
+        if (fc.getSelectedFile() != null) {
+            lastOpenedDir = fc.getSelectedFile().getParentFile();
+            return fc.getSelectedFile();
+        }
+        else {
+            return null;
+        }
+    }
 
     /**
      * See if corpus name contains illegal characters
@@ -738,68 +747,68 @@ public class ProjectProperties extends WizardStep {
         return true;        
     }
     
-	private void verifyProjectDir() {
-		this.getBlockingIssues().remove(Issues.NO_PROJECT_NAME);
-		String corpusName = corpusNameTextArea.getText().trim();
-        
+    private void verifyProjectDir() {
+        this.getBlockingIssues().remove(Issues.NO_PROJECT_NAME);
+        String corpusName = corpusNameTextArea.getText().trim();
+
         // if corpus name is empty
-		if (corpusName.equals("")) {
-			this.getBlockingIssues().put(Issues.NO_PROJECT_NAME, blockingNoProjectName);
+        if (corpusName.equals("")) {
+            this.getBlockingIssues().put(Issues.NO_PROJECT_NAME, blockingNoProjectName);
             projectDir = null;
-			mainPanel.verifyNavigation();
-			return;
-		}
+            mainPanel.verifyNavigation();
+            return;
+        }
 
         // if corpus name contains illegal characters
         if (!verifyCorpusName(corpusName)) {
-			this.getBlockingIssues().put(Issues.ILLEGAL_CORPUS_NAME, blockingIllegalCorpusName);
-			projectDir = null;
+            this.getBlockingIssues().put(Issues.ILLEGAL_CORPUS_NAME, blockingIllegalCorpusName);
+            projectDir = null;
             mainPanel.verifyNavigation();
-			return;            
+            return;
         }
         else {
             this.getBlockingIssues().remove(Issues.ILLEGAL_CORPUS_NAME);
         }
-        
+
         projectDir = new File(mainPanel.getPaths().getUserDataPath().getPath() + File.separator + corpusName);
 
         // if directory already exists, complain
         if (projectDir.exists()) {
             this.getBlockingIssues().put(Issues.PROJECT_NAME_EXISTS, blockingProjectNameExists);
             projectDir = null;
-		}
+        }
         else {
-			this.getBlockingIssues().remove(Issues.PROJECT_NAME_EXISTS);
-		}
+            this.getBlockingIssues().remove(Issues.PROJECT_NAME_EXISTS);
+        }
 
         mainPanel.verifyNavigation();
-	}
+    }
 
     /**
      * Define file and directory names and create project directory tree
      */
-	private void assignProjectFiles() {                                
+    private void assignProjectFiles() {                                
         File corpusDir      = new File(projectDir.getPath() + File.separator + "corpus");
         File corpusFile     = new File(projectDir.getPath() + File.separator + "corpus.txt");
         File xmlCorpusDir   = new File(projectDir.getPath() + File.separator + "xml_corpus");
         File xmlCorpusFile  = new File(projectDir.getPath() + File.separator + "corpus.xml");
         File downloadDir    = new File(projectDir.getPath() + File.separator + "download");
         File queriesDir     = new File(projectDir.getPath() + File.separator + "queries");
-        
+
         projectDir.mkdir();
         corpusDir.mkdir();
         xmlCorpusDir.mkdir();
         downloadDir.mkdir();
         queriesDir.mkdir();
-        
-		mainPanel.getPaths().setProjectDataPath(projectDir);
+
+        mainPanel.getPaths().setProjectDataPath(projectDir);
         mainPanel.getPaths().setCorpusDir(corpusDir);
         mainPanel.getPaths().setCorpusFile(corpusFile);
         mainPanel.getPaths().setXmlCorpusDir(xmlCorpusDir);
         mainPanel.getPaths().setXmlCorpusFile(xmlCorpusFile);
         mainPanel.getPaths().setDownloadDir(downloadDir);
         mainPanel.getPaths().setQueriesDir(queriesDir);
-	}
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel advancedOptionsLabel;
@@ -838,42 +847,41 @@ public class ProjectProperties extends WizardStep {
         String corpusName = corpusNameTextArea.getText().trim();
         mainPanel.getProject().setCorpusName(corpusName);
         
-		corpusNameTextArea.setEnabled(false);
+        corpusNameTextArea.setEnabled(false);
 
         Language corpusLanguage = mainPanel.getProject().getLanguage();
         
-		// store blacklist preferences on file and in project class
-		if (blacklistCheckbox.isSelected()) {
-			mainPanel.getMain().getConfig().setBlacklist(
-				corpusLanguage,
-				blacklistFile
-			);
-			mainPanel.getMain().getConfig().setBlackListAlways(
-				corpusLanguage,
-				alwaysUseBlacklistCheckbox.isSelected()
-			);
+	// store blacklist preferences on file and in project class
+        if (blacklistCheckbox.isSelected()) {
+            mainPanel.getMain().getConfig().setBlacklist(
+		corpusLanguage,
+                blacklistFile
+            );
+            mainPanel.getMain().getConfig().setBlackListAlways(
+                corpusLanguage,
+		alwaysUseBlacklistCheckbox.isSelected()
+            );
 
             mainPanel.getProject().setBlackListFile(blacklistFile);
 
-			mainPanel.getMain().getConfig().setBlacklistMaxTokens(
-				corpusLanguage,
+            mainPanel.getMain().getConfig().setBlacklistMaxTokens(
+                corpusLanguage,
                 blacklistTokensSpinner.getValue().toString()
-			);
+		);
             
-			mainPanel.getMain().getConfig().setBlacklistMaxTypes(
-				corpusLanguage,
+            mainPanel.getMain().getConfig().setBlacklistMaxTypes(
+		corpusLanguage,
                 blacklistTypesSpinner.getValue().toString()
-			);
-            
-		}
-		else {
+		);
+        }
+	else {
             mainPanel.getProject().setBlackListFile(null);
 
-			mainPanel.getMain().getConfig().setBlackListAlways(
-					corpusLanguage,
-					alwaysUseBlacklistCheckbox.isSelected()
-			);
-		}
+            mainPanel.getMain().getConfig().setBlackListAlways(
+		corpusLanguage,
+		alwaysUseBlacklistCheckbox.isSelected()
+		);
+        }
         
         // store XML attributes in project class
         if (xmlAttributesCheckBox.isSelected()) {

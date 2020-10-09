@@ -150,7 +150,7 @@ public class MainPanel extends javax.swing.JFrame {
         currentStepNumber = 1;
         initComponents();
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
         
         if (main.isDevelMode()) {
             isDevLabel.setText("DEVELOPMENT MODE");

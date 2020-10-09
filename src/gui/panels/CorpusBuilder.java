@@ -414,26 +414,22 @@ public class CorpusBuilder extends WizardStep {
                             .addComponent(maxFileSizeCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textLanguageFilterCheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(sentLanguageFilterCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
                         .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(advancedOptionsPanelLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
                                 .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(advancedOptionsPanelLayout.createSequentialGroup()
-                                        .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(maxCharsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(minCharsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(maxFileSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(minCharsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(maxCharsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addComponent(maxFileSizeLabel))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(textLanguageFilterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, advancedOptionsPanelLayout.createSequentialGroup()
+                                    .addComponent(maxCharsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(minCharsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(maxFileSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sentLanguageFilterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(minCharsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(maxCharsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(maxFileSizeLabel))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(textLanguageFilterComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sentLanguageFilterComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         advancedOptionsPanelLayout.setVerticalGroup(
@@ -446,7 +442,7 @@ public class CorpusBuilder extends WizardStep {
                 .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textLanguageFilterCheckbox)
                     .addComponent(textLanguageFilterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(advancedOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sentLanguageFilterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sentLanguageFilterCheckBox))
@@ -561,7 +557,6 @@ public class CorpusBuilder extends WizardStep {
         if (textLanguageFilterCheckbox.isSelected()) {
             sentLanguageFilterCheckBox.setSelected(false);
             sentLanguageFilterComboBox.setEnabled(false);
-            textLanguageFilterComboBox.setSelectedItem(mainPanel.getProject().getLanguageFilter());
         }
         
         if (!textLanguageFilterCheckbox.isSelected()) textLanguageFilterComboBox.setSelectedItem(null);
@@ -572,7 +567,7 @@ public class CorpusBuilder extends WizardStep {
     }//GEN-LAST:event_textLanguageFilterCheckboxStateChanged
 
     private void textLanguageFilterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLanguageFilterComboBoxActionPerformed
-
+        sentLanguageFilterComboBox.setSelectedItem(textLanguageFilterComboBox.getSelectedItem());
     }//GEN-LAST:event_textLanguageFilterComboBoxActionPerformed
 
     private void maxFileSizeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxFileSizeSpinnerStateChanged
@@ -596,23 +591,22 @@ public class CorpusBuilder extends WizardStep {
     }//GEN-LAST:event_maxFileSizeCheckBoxActionPerformed
 
     private void sentLanguageFilterCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sentLanguageFilterCheckBoxStateChanged
+
+    }//GEN-LAST:event_sentLanguageFilterCheckBoxStateChanged
+
+    private void sentLanguageFilterCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sentLanguageFilterCheckBoxActionPerformed
         sentLanguageFilterComboBox.setEnabled(sentLanguageFilterCheckBox.isSelected());
         
         if (sentLanguageFilterCheckBox.isSelected()) {
             textLanguageFilterCheckbox.setSelected(false);
             textLanguageFilterComboBox.setEnabled(false);
-            sentLanguageFilterComboBox.setSelectedItem(mainPanel.getProject().getLanguageFilter());
         }
 
         if (!sentLanguageFilterCheckBox.isSelected()) sentLanguageFilterComboBox.setSelectedItem(null);
-    }//GEN-LAST:event_sentLanguageFilterCheckBoxStateChanged
-
-    private void sentLanguageFilterCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sentLanguageFilterCheckBoxActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_sentLanguageFilterCheckBoxActionPerformed
 
     private void sentLanguageFilterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sentLanguageFilterComboBoxActionPerformed
-        // TODO add your handling code here:
+        textLanguageFilterComboBox.setSelectedItem(sentLanguageFilterComboBox.getSelectedItem());
     }//GEN-LAST:event_sentLanguageFilterComboBoxActionPerformed
 
 
@@ -667,7 +661,7 @@ public class CorpusBuilder extends WizardStep {
         if (languageFilter == null) {
             languageFilter = Language._unspecified;
         }
-        
+        System.out.println("CorpusBuilder language filter is " + languageFilter);
         mainPanel.getProject().setLanguageFilter(languageFilter);
         
         mainPanel.getProject().setUseTextLevelLanguageFilter(textLanguageFilterCheckbox.isSelected());

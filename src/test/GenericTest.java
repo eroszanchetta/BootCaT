@@ -24,10 +24,10 @@ public class GenericTest {
 
     public static void main(String[] args) {
         GenericTest test = new GenericTest();
-        
+                
 //        test.TestGoogleScraper();
     }
-    
+        
     private void TestGoogleScraper() {
         GoogleScraper scraper = new GoogleScraper();
         

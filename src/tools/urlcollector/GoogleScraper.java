@@ -70,6 +70,7 @@ public class GoogleScraper {
      * @param restrictToDomain
      * @param excludedDomains
      * @param excludedFileTypes
+     * @deprecated 
      */
     public void scrapeRemoteQueries(ArrayList<String> tuples, GoogleLanguageCode language, long maxResults,
             SearchEngineSafeSearch adultFilter, FileType fileType, GoogleScraperAggressiveness aggressiveness,
@@ -125,6 +126,12 @@ public class GoogleScraper {
         }
     }
     
+    /**
+     * Used for testing only
+     * 
+     * @param queriesDir
+     * @param excludedDomains 
+     */
     public void scrapeLocalQueries(File queriesDir, String[] excludedDomains) {
         if (!queriesDir.exists()) {
             System.err.println("Queries directory does not exist");
@@ -202,6 +209,15 @@ public class GoogleScraper {
         return tupleURLs;
     }
     
+    /**
+     * 
+     * @param url
+     * @param count
+     * @param aggressiveness
+     * @param queriesDir
+     * @return 
+     * @deprecated 
+     */
     private File getResultPage(URL url, int count, GoogleScraperAggressiveness aggressiveness, File queriesDir) {
         
         try {
@@ -408,9 +424,10 @@ public class GoogleScraper {
         return false;
     }
     
-    
     /**
      * Read file userAgents.txt into userAgents ArrayList
+     * 
+     * @deprecated 
      */
     private void initializeUserAgentList() {
         JarFile jarFile             = null;
@@ -458,6 +475,7 @@ public class GoogleScraper {
      * Get a random user agent from the list provided in userAgents.txt
      * 
      * @return 
+     * @deprecated 
      */
     private String getRandomUserAgent() {
         Random random = new Random();

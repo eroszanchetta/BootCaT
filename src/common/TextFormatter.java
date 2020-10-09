@@ -109,10 +109,9 @@ public class TextFormatter {
      * @param text the plain text
      * @param corpusChunk
      * @param xmlAttributes optional XML attribute HashMap, key is the attribute's name, value is the value
-     * @param textSplitterResources
      * @return 
      */
-    public static String convertToXml(String text, CorpusChunk corpusChunk, LinkedHashMap<String, String> xmlAttributes, File textSplitterResources) {
+    public static String convertToXml(String text, CorpusChunk corpusChunk, LinkedHashMap<String, String> xmlAttributes) {
         
         String output = "<text id='" +
                 FilenameUtils.removeExtension(corpusChunk.getDownloadedFile().getName()) + "' filename='" +
@@ -130,7 +129,7 @@ public class TextFormatter {
         output += ">\n";
         
         // use Apache OpenNLP library to split text into sentences
-        try (InputStream modelIn = new FileInputStream(textSplitterResources)) {
+        try (InputStream modelIn = TextFormatter.class.getResourceAsStream("/resources/en-sent.bin")) {
             SentenceModel model = new SentenceModel(modelIn);
             
             SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
