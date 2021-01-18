@@ -35,7 +35,7 @@ public class GenericTest {
         
         String[] excludedDomains = new String[0];
         
-        LinkedList<String> urlList = scraper.parseLocalGoogleFile2020(file, excludedDomains);
+        LinkedList<String> urlList = scraper.parseLocalGoogleFile2021(file, excludedDomains);
         
         for (String url : urlList) {
             System.out.println(url);

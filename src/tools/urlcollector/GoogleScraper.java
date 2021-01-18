@@ -112,7 +112,7 @@ public class GoogleScraper {
         for (URL url : tupleURLs.values()) {
             File file = getResultPage(url, count++, aggressiveness, queriesDir);
             
-            for (String result : parseLocalGoogleFile2020(file, excludedDomains)) {
+            for (String result : parseLocalGoogleFile2021(file, excludedDomains)) {
                 System.out.println(result);
             }
         }
@@ -146,7 +146,7 @@ public class GoogleScraper {
         File[] files = queriesDir.listFiles();
         
         for (File file : files) {
-            for (String result : parseLocalGoogleFile2020(file, excludedDomains)) {
+            for (String result : parseLocalGoogleFile2021(file, excludedDomains)) {
                 System.out.println(result);
             }
         }
@@ -359,22 +359,27 @@ public class GoogleScraper {
     }    
     
     /**
-     * Parse a local Google result page (in the format introduced by Google in September 2020).
+     * Parse a local Google result page (in the format introduced by Google in February 2021).
      * 
-     * NB: the only difference since version 2018 is the class of the div element (it used to be "r", now it's "rc")
+     * History:
+     * 
+     * - in 2018 the class of the div element was "r"
+     * - in 2020 the class of the div element changed to "rc"
+     * - in 2021 the class of the div element changed to "tF2Cxc"
      * 
      * @param file
      * @param excludedDomains
      * @return 
      */    
-    public LinkedList<String> parseLocalGoogleFile2020(File file, String[] excludedDomains) {
+    public LinkedList<String> parseLocalGoogleFile2021(File file, String[] excludedDomains) {
         LinkedList<String> results = new LinkedList<String>();
         
         try {            
             Document doc = Jsoup.parse(file, "UTF-8", "http://example.com/");
 
             // get all links, results are enclosed in div elements with the "rc" class
-            Elements tag = doc.getElementsByClass("rc");
+//            Elements tag = doc.getElementsByClass("rc");
+            Elements tag = doc.getElementsByClass("tF2Cxc");
             Elements links = tag.select("a[href]");
             for (Element link : links) {
                 String cleanUrl = link.attr("href");

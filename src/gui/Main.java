@@ -51,10 +51,10 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.3;
+    private final Double    versionNumber       = 1.31;
     private final String    codeName            = "Duchess";
-    private final int       buildNumber         = 187;
-    private final int       copyRightYear       = 2020;
+    private final int       buildNumber         = 193;
+    private final int       copyRightYear       = 2021;
 
     private File            programDir;
     private File            defaultBootCatDir;

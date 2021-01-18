@@ -84,7 +84,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
-import sun.tools.java.ClassPath;
+//import sun.tools.java.ClassPath;
 
 /**
  *
