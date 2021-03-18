@@ -18,7 +18,11 @@
 package gui;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  *
@@ -115,10 +119,6 @@ public class Paths {
         this.queriesDir = queriesDir;
     }
 
-//    public File getBuildRandomTuples() {
-//        return new File(toolkitPath + File.separator + buildRandomTuples);
-//    }
-
     public File getLanguageProfiles() {
         return new File(toolkitPath + File.separator + languageProfiles);
     }
@@ -127,12 +127,6 @@ public class Paths {
         return new File(toolkitPath + File.separator + customLanguageProfiles);
     }
     
-//    public File getIncPath() {
-//        File modulePath = new File(config.getBootCatDir());
-//        File patent = modulePath.getParentFile().getParentFile();
-//        return patent;
-//    }
-
     public File getJava() {
         return new File(java);
     }
@@ -144,11 +138,7 @@ public class Paths {
     public File getFinalUrlList() {
         return new File(getProjectDataPath() + File.separator + finalUrlList);
     }
-        
-//    public File getCollectUrls() {
-//        return new File(toolkitPath + File.separator + collectUrls);
-//    }
-    
+            
     public File getSeedsFile() {
         return new File(getProjectDataPath() + File.separator + seeds);
     }
@@ -181,4 +171,47 @@ public class Paths {
 
         return scripts;
     }
+    
+    public String getCurlPath() {
+        
+        String path = null;
+        
+        try {
+            if (SystemUtils.IS_OS_MAC) {
+                path = "/usr/bin/curl";
+            }
+            else if (SystemUtils.IS_OS_LINUX) {
+                path = "/usr/bin/curl";
+            }
+            else if (SystemUtils.IS_OS_WINDOWS) {
+                // work out running file's path in order to locate the curl executable file
+                File rootAppPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+                // find out if this is a development build or an actual build
+                if (rootAppPath.getParentFile().getName().equals("build")) {
+                    rootAppPath = rootAppPath.getParentFile().getParentFile();
+                }
+                else {
+                    rootAppPath = rootAppPath.getParentFile();
+                }
+                
+                path = rootAppPath + File.separator + "resources" + File.separator + "curl" + File.separator + "win" + File.separator + "curl.exe";
+            }
+            else {
+                System.err.println("Your OS is not supported");
+            }
+            
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // if curl executable does not exist, return null
+        File curlExecutable = new File(path);
+        if (!curlExecutable.exists()) {
+            System.err.println("Paths: cannot find Curl executable, using internal downloader");
+            return null;
+        }
+        
+        return path;
+    }    
 }

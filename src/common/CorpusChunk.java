@@ -46,6 +46,7 @@ public class CorpusChunk {
     private HtmlExtractionMode      htmlExtractionMode;
     private List<DetectedLanguage>  detectedLanguages;
     private String                  baseFileName;
+    private Downloader              downloader;
     
     public enum CorpusChunkStatus {
         OK,
@@ -61,6 +62,11 @@ public class CorpusChunk {
 //        TOO_FEW_WHITELISTED_WORDS_FIX_ME,  // as of August 2019, whitelist is not really implemented, it's just a manual hack I used to create a few ad hoc corpora
         TOO_MANY_BLACKLISTED_WORDS,
         WRONG_LANGUAGE
+    }
+    
+    public enum Downloader {
+        CURL,
+        INTERNAL
     }
     
     /**
@@ -111,6 +117,14 @@ public class CorpusChunk {
         }
         
         return out;
+    }
+
+    public Downloader getDownloader() {
+        return downloader;
+    }
+
+    public void setDownloader(Downloader downloader) {
+        this.downloader = downloader;
     }
 
     public String getBaseFileName() {
@@ -243,18 +257,6 @@ public class CorpusChunk {
         if (stringDate == null) return null;
         
         return stringDate;
-        
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-//        
-//        try {
-//            Date result =  df.parse(stringDate);
-//            return result;
-//        } catch (ParseException ex) {
-//            System.err.println("Cannot parse creation date in file " + this.getDownloadedFile());
-//            Logger.getLogger(CorpusChunk.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        return null;
     }
 
     public CorpusChunkStatus getStatus() {

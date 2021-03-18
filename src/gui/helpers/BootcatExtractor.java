@@ -171,6 +171,7 @@ public class BootcatExtractor implements Runnable {
             writer.print("Character_count" + delimiter);
             writer.print("URL" + delimiter);
             writer.print("Redirected from URL" + delimiter);
+            writer.print("Downloader" + delimiter);
             writer.print("Detected_languages" + delimiter);
             writer.print("Content_type" + delimiter);
             writer.print("Status" + delimiter);
@@ -194,6 +195,7 @@ public class BootcatExtractor implements Runnable {
                 writer.print(chunk.getCharacterCount() + delimiter);
                 writer.print(chunk.getUri() + delimiter);
                 writer.print(chunk.getRedirectedFrom() + delimiter);
+                writer.print(chunk.getDownloader() + delimiter);
                 writer.print(chunk.getDetectedLanguagesString() + delimiter);
                 writer.print(chunk.getContentType() + delimiter);
                 writer.print(chunk.getStatus() + delimiter);

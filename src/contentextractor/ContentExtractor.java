@@ -521,6 +521,21 @@ public class ContentExtractor {
         
         return output;
     }
+
+    private boolean copyLocalFile(CorpusChunk corpusChunk) {
+        
+        // convert URL to File
+        File sourceFile = new File(corpusChunk.getUri());
+        
+        try {
+            FileUtils.copyFile(sourceFile, corpusChunk.getDownloadedFile());
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+    }
     
     /**
      * 
@@ -538,72 +553,48 @@ public class ContentExtractor {
         
         switch (corpusChunk.getUri().getScheme()) {
             case "https":
-                return downloadViaHTTPS(corpusChunk);
-                
+                if (mainPanel.getPaths().getCurlPath() != null) {
+                    return downloadViaCurl(corpusChunk);
+                }
+                else {
+                    return downloadViaHTTPS(corpusChunk);                    
+                }
+
             case "http":
-                return downloadViaHTTP(corpusChunk);
-                
+                if (mainPanel.getPaths().getCurlPath() != null) {
+                    return downloadViaCurl(corpusChunk);
+                }
+                else {
+                    return downloadViaHTTP(corpusChunk);                    
+                }
+
             case "file":
                 return copyLocalFile(corpusChunk);
-                
+
             default:
                 System.err.println("Cannot download this URL: " + corpusChunk.getUri().toString());
                 return false;
         }
     }
     
-//    private boolean downloadWithHttpClient(CorpusChunk corpusChunk) {
-//        
-//        int BUFFER_SIZE = 4096;
-//        disableSslVerification();
-//        CloseableHttpClient httpclient = null;
-//        try {            
-//            httpclient = HttpClients.createDefault();
-//            
-//            HttpGet httpget = new HttpGet(corpusChunk.getUri().toString());
-//
-//            CloseableHttpResponse response = httpclient.execute(httpget);
-//            HttpEntity entity = response.getEntity();
-//            if (entity != null) {
-//                
-//                // opens input stream from the HTTP connection
-//                InputStream inputStream = entity.getContent();
-//                File saveFilePath = corpusChunk.getDownloadedFile();
-//
-//                // opens an output stream to save into file
-//                FileOutputStream outputStream = new FileOutputStream(saveFilePath);
-//
-//                int bytesRead = -1;
-//                byte[] buffer = new byte[BUFFER_SIZE];
-//                while ((bytesRead = inputStream.read(buffer)) != -1) {
-//                    outputStream.write(buffer, 0, bytesRead);
-//                }
-//
-//                outputStream.close();
-//                inputStream.close();
-//                httpclient.close();
-//            }
-//        } catch (IOException ex) {
-//            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
-//        
-//        return true;
-//    }
-    
-    private boolean copyLocalFile(CorpusChunk corpusChunk) {
+    private boolean downloadViaCurl(CorpusChunk corpusChunk) {
         
-        // convert URL to File
-        File sourceFile = new File(corpusChunk.getUri());
+        String curlPath = mainPanel.getPaths().getCurlPath();
         
-        try {
-            FileUtils.copyFile(sourceFile, corpusChunk.getDownloadedFile());
-            return true;
-        } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        // if curl is unavailable, return false
+        if (curlPath == null) {
+            System.err.println("ContentExtractor: Curl path is null");
+            return false;
         }
         
-        return false;
+        CurlWrapper curlWrapper = new CurlWrapper(curlPath, corpusChunk);
+        curlWrapper.getFile();
+        
+        if (curlWrapper.getExitCode() == 0) {
+            corpusChunk.setDownloader(CorpusChunk.Downloader.CURL);
+        }
+        
+        return true;
     }
     
     private boolean downloadViaHTTPS(CorpusChunk corpusChunk) {
@@ -659,6 +650,8 @@ public class ContentExtractor {
             return false;
         }
         
+        corpusChunk.setDownloader(CorpusChunk.Downloader.INTERNAL);
+        
         return true;
     }
     
@@ -708,6 +701,8 @@ public class ContentExtractor {
             Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+        
+        corpusChunk.setDownloader(CorpusChunk.Downloader.INTERNAL);
         
         return true;
     }
