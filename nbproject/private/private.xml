@@ -5,7 +5,10 @@
         <group>
             <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Paths.java</file>
             <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/CurlWrapper.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/common/CorpusChunk.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/helpers/BootcatExtractor.java</file>
             <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/ContentExtractor.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Main.java</file>
         </group>
     </open-files>
 </project-private>

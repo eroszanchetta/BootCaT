@@ -51,9 +51,9 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.4;
-    private final String    codeName            = "Pink Panther";
-    private final int       buildNumber         = 195;
+    private final Double    versionNumber       = 1.5;
+    private final String    codeName            = "Cringer";
+    private final int       buildNumber         = 197;
     private final int       copyRightYear       = 2021;
 
     private File            programDir;
@@ -65,7 +65,7 @@ public class Main {
     private String          bootCatInstallationId;
     
     private boolean         vogonMode = false;
-    private final boolean   develMode = false;
+    private final boolean   develMode = true;
     
     public enum UpdateStatus {
         UPDATE_AVAILABLE,
