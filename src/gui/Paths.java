@@ -188,7 +188,7 @@ public class Paths {
                 File rootAppPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
                 // find out if this is a development build or an actual build
-                if (rootAppPath.getParentFile().getName().equals("build")) {
+                if (rootAppPath.getParentFile().getName().equals("dist")) {
                     rootAppPath = rootAppPath.getParentFile().getParentFile();
                 }
                 else {
@@ -208,7 +208,6 @@ public class Paths {
         // if curl executable does not exist, return null
         File curlExecutable = new File(path);
         if (!curlExecutable.exists()) {
-            System.err.println("Paths: cannot find Curl executable, using internal downloader");
             return null;
         }
         

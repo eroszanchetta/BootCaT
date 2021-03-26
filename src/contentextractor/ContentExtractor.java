@@ -205,7 +205,16 @@ public class ContentExtractor {
             String baseFileName  = corpusName + "_" + String.format(fileNameFormat, fileCount++);
                         
             // determine extension, if no extension is found (or if the extension contains numbers), use .html
-            String extension = FilenameUtils.getExtension(fixedUri.getPath());
+            String extension;
+            
+            try {
+                extension = FilenameUtils.getExtension(fixedUri.getPath());                
+            }
+            catch (IllegalArgumentException ex) {
+                int lastDot = fixedUri.getPath().lastIndexOf(".");
+                extension = fixedUri.getPath().substring(lastDot);
+            }
+
             if (extension.equals("") || extension.matches(".*\\d+.*")) extension = "html";
             
             // create reference to local downloaded file
@@ -405,7 +414,7 @@ public class ContentExtractor {
                     port +
                     encodedPath +
                     encodedQuery;
-            
+                        
             fixedUri = new URI(address);
             
             return fixedUri;

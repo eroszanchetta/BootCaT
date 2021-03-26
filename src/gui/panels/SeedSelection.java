@@ -19,6 +19,8 @@ package gui.panels;
 
 import common.Utils;
 import gui.WizardStep;
+import gui.dialogs.ConfirmDialog;
+import gui.dialogs.GenericMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -102,6 +104,7 @@ public class SeedSelection extends WizardStep {
 
         catch (IOException ex) {
             ex.printStackTrace();
+            return null;
         }
 
         finally {
@@ -110,6 +113,7 @@ public class SeedSelection extends WizardStep {
             }
             catch (IOException ex) {
                 ex.printStackTrace();
+                return null;
             }
         }
         
@@ -273,6 +277,7 @@ public class SeedSelection extends WizardStep {
     @Override
     public void save() {
         TreeSet seeds = writeSeedsToFile();
+                
         mainPanel.getProject().setSeeds(seeds);
     }
 

@@ -28,20 +28,6 @@ import java.io.IOException;
  */
 public class PathVerifier {
 
-//    public static boolean bootcat(String path, Config config, String defaultPath) {
-//        if (path == null || path.equals("")) path = defaultPath;
-//
-//        String[] scripts = Paths.bootCatScriptNames();
-//
-//        for (int i=0; i < scripts.length; i++) {
-//            File file = new File(path + File.separator + scripts[i]);
-//            if (!file.exists()) return false;
-//        }
-//
-//		config.setBootCatDirectory(path);
-//        return true;
-//    }
-
 	/**
 	 * Check if user's data path has been set, if it hasn't, set it to default value
 	 * and create all necessary directories as needed
@@ -71,7 +57,7 @@ public class PathVerifier {
 		 */
 		try {
 			File testWrite = new File(pathFile + File.separator + Utils.generateId());
-
+            
 			if (testWrite.createNewFile()) testWrite.delete();
 			else return false;
 		}

@@ -20,6 +20,7 @@ package gui.panels;
 import common.Language;
 import gui.WizardStep;
 import common.UriRedirect;
+import gui.dialogs.GenericMessage;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;
@@ -787,7 +788,7 @@ public class ProjectProperties extends WizardStep {
     /**
      * Define file and directory names and create project directory tree
      */
-    private void assignProjectFiles() {                                
+    private boolean assignProjectFiles() {                                
         File corpusDir      = new File(projectDir.getPath() + File.separator + "corpus");
         File corpusFile     = new File(projectDir.getPath() + File.separator + "corpus.txt");
         File xmlCorpusDir   = new File(projectDir.getPath() + File.separator + "xml_corpus");
@@ -795,11 +796,11 @@ public class ProjectProperties extends WizardStep {
         File downloadDir    = new File(projectDir.getPath() + File.separator + "download");
         File queriesDir     = new File(projectDir.getPath() + File.separator + "queries");
 
-        projectDir.mkdir();
-        corpusDir.mkdir();
-        xmlCorpusDir.mkdir();
-        downloadDir.mkdir();
-        queriesDir.mkdir();
+        if (!projectDir.mkdir()) return false;
+        if (!corpusDir.mkdir()) return false;
+        if (!xmlCorpusDir.mkdir()) return false;
+        if (!downloadDir.mkdir()) return false;
+        if (!queriesDir.mkdir()) return false;
 
         mainPanel.getPaths().setProjectDataPath(projectDir);
         mainPanel.getPaths().setCorpusDir(corpusDir);
@@ -808,6 +809,8 @@ public class ProjectProperties extends WizardStep {
         mainPanel.getPaths().setXmlCorpusFile(xmlCorpusFile);
         mainPanel.getPaths().setDownloadDir(downloadDir);
         mainPanel.getPaths().setQueriesDir(queriesDir);
+        
+        return true;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -842,7 +845,18 @@ public class ProjectProperties extends WizardStep {
     public void save() {
         if (projectDir == null) return;
         
-        assignProjectFiles();
+        if (!assignProjectFiles()) {
+            GenericMessage genericMessage = new GenericMessage(
+                    mainPanel,
+                    true,
+                    "Could not create project folder (Data Directory Not Writable)",
+                    GenericMessage.Type.ERROR,
+                    mainPanel.getMain().redirectUrl(Issues.DATA_DIR_NOT_WRITABLE),
+                    null
+                    );
+            genericMessage.setVisible(true);
+            System.exit(0);
+        }
         
         String corpusName = corpusNameTextArea.getText().trim();
         mainPanel.getProject().setCorpusName(corpusName);
@@ -851,7 +865,7 @@ public class ProjectProperties extends WizardStep {
 
         Language corpusLanguage = mainPanel.getProject().getLanguage();
         
-	// store blacklist preferences on file and in project class
+        // store blacklist preferences on file and in project class
         if (blacklistCheckbox.isSelected()) {
             mainPanel.getMain().getConfig().setBlacklist(
 		corpusLanguage,
