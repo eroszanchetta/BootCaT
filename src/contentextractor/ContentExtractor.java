@@ -204,18 +204,25 @@ public class ContentExtractor {
             String fileNameFormat = "%0" + leadingZeroes + "d";
             String baseFileName  = corpusName + "_" + String.format(fileNameFormat, fileCount++);
                         
-            // determine extension, if no extension is found (or if the extension contains numbers), use .html
-            String extension;
+            // determine extension, use .html if no extension is found or if the URL contains numbers or illegal characters (such as a colon)
+            String extension = "";
             
             try {
-                extension = FilenameUtils.getExtension(fixedUri.getPath());                
+                extension = FilenameUtils.getExtension(fixedUri.getPath());
             }
             catch (IllegalArgumentException ex) {
+                // URL contains illegal characters, work out extension manually
                 int lastDot = fixedUri.getPath().lastIndexOf(".");
-                extension = fixedUri.getPath().substring(lastDot);
+                
+                // this means there's no extension
+                if (lastDot > -1) {
+                    extension = fixedUri.getPath().substring(lastDot);                    
+                }
             }
 
-            if (extension.equals("") || extension.matches(".*\\d+.*")) extension = "html";
+            if (extension.equals("") || extension.matches(".*\\d+.*")) {
+                extension = "html";
+            }
             
             // create reference to local downloaded file
             File downloadedFile = new File(downloadDir + File.separator + baseFileName + "." + extension);
