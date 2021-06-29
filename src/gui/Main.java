@@ -51,9 +51,9 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.42;
+    private final Double    versionNumber       = 1.43;
     private final String    codeName            = "Pink Panther";
-    private final int       buildNumber         = 199;
+    private final int       buildNumber         = 201;
     private final int       copyRightYear       = 2021;
 
     private File            programDir;
