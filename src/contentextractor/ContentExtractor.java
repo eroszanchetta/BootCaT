@@ -30,6 +30,7 @@ import com.optimaize.langdetect.LanguageDetectorBuilder;
 import com.optimaize.langdetect.ngram.NgramExtractors;
 import com.optimaize.langdetect.profiles.LanguageProfile;
 import com.optimaize.langdetect.profiles.LanguageProfileReader;
+import common.Downloader;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.extractors.DefaultExtractor;
@@ -567,21 +568,28 @@ public class ContentExtractor {
         
         if (corpusChunk.incrementDownloadAttempts() > maxDownloadAttempts) return false;
         
+        Downloader downloader = mainPanel.getMain().getConfig().getDownloader();
+        
         switch (corpusChunk.getUri().getScheme()) {
             case "https":
-                if (mainPanel.getPaths().getCurlPath() != null) {
-                    return downloadViaCurl(corpusChunk);
+                
+                switch (downloader) {
+                    case CURL:
+                        return downloadViaCurl(corpusChunk);
+                    
+                    default:
+                    case INTERNAL:
+                        return downloadViaHTTPS(corpusChunk);
                 }
-                else {
-                    return downloadViaHTTPS(corpusChunk);                    
-                }
-
+                
             case "http":
-                if (mainPanel.getPaths().getCurlPath() != null) {
-                    return downloadViaCurl(corpusChunk);
-                }
-                else {
-                    return downloadViaHTTP(corpusChunk);                    
+                switch (downloader) {
+                    case CURL:
+                        return downloadViaCurl(corpusChunk);
+
+                    default:
+                    case INTERNAL:
+                        return downloadViaHTTP(corpusChunk);
                 }
 
             case "file":
@@ -607,7 +615,7 @@ public class ContentExtractor {
         curlWrapper.getFile();
         
         if (curlWrapper.getExitCode() == 0) {
-            corpusChunk.setDownloader(CorpusChunk.Downloader.CURL);
+            corpusChunk.setDownloader(Downloader.CURL);
         }
         
         return true;
@@ -666,7 +674,7 @@ public class ContentExtractor {
             return false;
         }
         
-        corpusChunk.setDownloader(CorpusChunk.Downloader.INTERNAL);
+        corpusChunk.setDownloader(Downloader.INTERNAL);
         
         return true;
     }
@@ -718,7 +726,7 @@ public class ContentExtractor {
             return false;
         }
         
-        corpusChunk.setDownloader(CorpusChunk.Downloader.INTERNAL);
+        corpusChunk.setDownloader(Downloader.INTERNAL);
         
         return true;
     }

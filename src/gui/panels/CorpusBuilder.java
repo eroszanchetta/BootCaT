@@ -661,7 +661,7 @@ public class CorpusBuilder extends WizardStep {
         if (languageFilter == null) {
             languageFilter = Language._unspecified;
         }
-        System.out.println("CorpusBuilder language filter is " + languageFilter);
+
         mainPanel.getProject().setLanguageFilter(languageFilter);
         
         mainPanel.getProject().setUseTextLevelLanguageFilter(textLanguageFilterCheckbox.isSelected());

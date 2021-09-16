@@ -23,6 +23,7 @@
 
 package gui.dialogs.options;
 
+import common.Downloader;
 import common.UriRedirect;
 import gui.Config;
 import gui.dialogs.GenericMessage;
@@ -45,12 +46,13 @@ import javax.swing.filechooser.FileSystemView;
  */
 public class General extends javax.swing.JPanel {
 
-	private Config      config;
-	private Properties  systemPreferences;
-	private MainPanel   mainPanel;
-	private File        lastOpenedDir;
+	private final Config        config;
+	private final Properties    systemPreferences;
+	private final MainPanel     mainPanel;
+	private File                lastOpenedDir;
 
-    /** Creates new form OptionsGeneral */
+    /** Creates new form OptionsGeneral
+     * @param mainPanel */
     public General(MainPanel mainPanel) {
         initComponents();
 
@@ -66,14 +68,35 @@ public class General extends javax.swing.JPanel {
         
         // change the look of cursors for buttons
         leaveThisOnLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
     }
 
 	private void populateForm() {
+        
 		dataDirTextField.setText(config.getDataDir());
-
+        
+        downloaderComboBox.removeAllItems();
+        for (Downloader downloader : Downloader.values()) {
+            downloaderComboBox.addItem(downloader);
+        }
+                
+        // set selected item for downloader
+        for (int i=0; i < downloaderComboBox.getItemCount(); ++i) {
+            String name = ((Downloader) downloaderComboBox.getItemAt(i)).getName();
+                        
+            if (name.equals(config.getDownloader().getName())) {
+                downloaderComboBox.setSelectedIndex(i);
+            }
+        }
+        
 		checkUpdatesCheckBox.setSelected(config.getCheckForNewVersion());
         collectStatsCheckBox.setSelected(config.getCollectUsageStatistics());
 	}
+    
+    public void save() {
+        Downloader downloader = (Downloader) downloaderComboBox.getSelectedItem();
+        config.setDownloader(downloader);
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -93,6 +116,8 @@ public class General extends javax.swing.JPanel {
         checkUpdatesCheckBox = new javax.swing.JCheckBox();
         collectStatsCheckBox = new javax.swing.JCheckBox();
         leaveThisOnLabel = new javax.swing.JLabel();
+        downloaderLabel = new javax.swing.JLabel();
+        downloaderComboBox = new javax.swing.JComboBox();
 
         setPreferredSize(new java.awt.Dimension(450, 380));
 
@@ -143,6 +168,29 @@ public class General extends javax.swing.JPanel {
             }
         });
 
+        downloaderLabel.setText("Downloader");
+
+        downloaderComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                downloaderComboBoxItemStateChanged(evt);
+            }
+        });
+        downloaderComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                downloaderComboBoxMouseClicked(evt);
+            }
+        });
+        downloaderComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloaderComboBoxActionPerformed(evt);
+            }
+        });
+        downloaderComboBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                downloaderComboBoxPropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,20 +198,27 @@ public class General extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(leaveThisOnLabel))
-                    .addComponent(checkUpdatesCheckBox)
                     .addComponent(dataDirError, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addComponent(searchPMDirError, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                    .addComponent(collectStatsCheckBox)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(dataDirTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dataDirBrowse)
-                        .addGap(6, 6, 6)))
+                        .addGap(6, 6, 6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(leaveThisOnLabel))
+                            .addComponent(checkUpdatesCheckBox)
+                            .addComponent(collectStatsCheckBox))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(downloaderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(downloaderComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,8 +233,12 @@ public class General extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dataDirError, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(downloaderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(downloaderLabel))
+                .addGap(50, 50, 50)
                 .addComponent(checkUpdatesCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(collectStatsCheckBox)
@@ -239,6 +298,22 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
     config.setCollectUsageStatistics(collectStatsCheckBox.isSelected());
 }//GEN-LAST:event_collectStatsCheckBoxActionPerformed
 
+    private void downloaderComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloaderComboBoxActionPerformed
+        
+    }//GEN-LAST:event_downloaderComboBoxActionPerformed
+
+    private void downloaderComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_downloaderComboBoxItemStateChanged
+        
+    }//GEN-LAST:event_downloaderComboBoxItemStateChanged
+
+    private void downloaderComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloaderComboBoxMouseClicked
+        
+    }//GEN-LAST:event_downloaderComboBoxMouseClicked
+
+    private void downloaderComboBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_downloaderComboBoxPropertyChange
+        
+    }//GEN-LAST:event_downloaderComboBoxPropertyChange
+
 	private void verifyTextFieldStatus() {
 
 		// data dir
@@ -255,6 +330,8 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JButton dataDirBrowse;
     private javax.swing.JLabel dataDirError;
     private javax.swing.JTextField dataDirTextField;
+    private javax.swing.JComboBox downloaderComboBox;
+    private javax.swing.JLabel downloaderLabel;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel leaveThisOnLabel;

@@ -31,6 +31,8 @@ import java.awt.Toolkit;
 public class Options extends javax.swing.JDialog {
 
 	private final MainPanel mainPanel;
+    private General generalOptions;
+    private Display displayOptions;
 
     /** Creates new form NewJDialog */
     public Options(java.awt.Frame parent, boolean modal) {
@@ -56,8 +58,11 @@ public class Options extends javax.swing.JDialog {
     }
 
 	private void defineOptionPanels() {
-		innerPanel.add(new General(mainPanel), "general");
-		innerPanel.add(new Display(mainPanel), "display");
+        generalOptions = new General(mainPanel);
+        displayOptions = new Display(mainPanel);
+        
+		innerPanel.add(generalOptions, "general");
+		innerPanel.add(displayOptions, "display");
 	}
 
     /** This method is called from within the constructor to
@@ -173,7 +178,7 @@ public class Options extends javax.swing.JDialog {
                 .addComponent(displayIcon)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(displayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 54, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -184,7 +189,7 @@ public class Options extends javax.swing.JDialog {
                 .addComponent(genIconPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(displayIconPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,7 +200,7 @@ public class Options extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        closeButton.setText("Close");
+        closeButton.setText("Save");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeButtonActionPerformed(evt);
@@ -251,7 +256,8 @@ public class Options extends javax.swing.JDialog {
 	}//GEN-LAST:event_generalIconMouseClicked
 
 	private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-		setVisible(false);
+        generalOptions.save();
+        setVisible(false);
 		dispose();
 	}//GEN-LAST:event_closeButtonActionPerformed
 

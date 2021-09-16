@@ -17,6 +17,7 @@
 
 package gui;
 
+import common.Downloader;
 import common.Language;
 import common.SearchEngine;
 import java.io.BufferedReader;
@@ -38,11 +39,27 @@ public class Config {
     private final int           defaultBlackListMaxTypes  = 3;
     private final int           defaultBlackListMaxTokens = 10;
     private final SearchEngine  defaultSearchEngine = SearchEngine.EXTERNAL_BROWSER_GOOGLE;
+    private final Downloader    defaultDownloader = Downloader.CURL;
 
 	public Config() {
 		initialize();
 	}
+    
+    public Downloader getDownloader() {
+        if (properties.getProperty("downloader") == null) {
+            this.setDownloader(defaultDownloader);
+            return defaultDownloader;
+        }
+        
+        for (Downloader downloader : Downloader.values()) {
+            if (properties.getProperty("downloader").equals(downloader.getName())) {
+                return downloader;
+            }
+        }
 
+        return defaultDownloader;
+    }
+    
 	public String getDataDir() {
 		return properties.getProperty("dataDirectory");
 	}
@@ -91,6 +108,12 @@ public class Config {
         return Boolean.parseBoolean(properties.getProperty("rememberAccountKey"));
     }
 
+    public boolean setDownloader(Downloader downloader) {
+        System.out.println("Config: setting downloader to " + downloader);
+        properties.setProperty("downloader", downloader.getName());
+        return store();
+    }
+    
     public boolean setRememberAccountKey(Boolean value) {
         properties.setProperty("rememberAccountKey", value.toString());
         return store();

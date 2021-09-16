@@ -63,12 +63,7 @@ public class CorpusChunk {
         TOO_MANY_BLACKLISTED_WORDS,
         WRONG_LANGUAGE
     }
-    
-    public enum Downloader {
-        CURL,
-        INTERNAL
-    }
-    
+        
     /**
      * Create an instance or CorpusChunk.
      * 
