@@ -17,13 +17,103 @@ import java.util.logging.Logger;
  */
 public class CurlWrapper {
 
-    private final String curlPath;
-    private final CorpusChunk corpusChunk;
-    private Process process;
-    private int exitCode;
+    private final String        curlPath;
+    private final CorpusChunk   corpusChunk;
+    private Process             process;
+    private int                 exitCode;
+    private String              httpProxy;
+    private String              httpsProxy;
+    private int                 httpProxyPort;
+    private int                 httpsProxyPort;
+    private boolean             useProxy;
+    private boolean             proxyAuth;
+    private String              httpProxyUser;
+    private String              httpsProxyUser;
+    private String              httpProxyPassword;
+    private String              httpsProxyPassword;
 
     public int getExitCode() {
         return exitCode;
+    }
+
+    public String getHttpProxyUser() {
+        return httpProxyUser;
+    }
+
+    public void setHttpProxyUser(String httpProxyUser) {
+        this.httpProxyUser = httpProxyUser;
+    }
+
+    public String getHttpsProxyUser() {
+        return httpsProxyUser;
+    }
+
+    public void setHttpsProxyUser(String httpsProxyUser) {
+        this.httpsProxyUser = httpsProxyUser;
+    }
+
+    public String getHttpProxy() {
+        return httpProxy;
+    }
+
+    public void setHttpProxy(String httpProxy) {
+        this.httpProxy = httpProxy;
+    }
+
+    public String getHttpsProxy() {
+        return httpsProxy;
+    }
+
+    public void setHttpsProxy(String httpsProxy) {
+        this.httpsProxy = httpsProxy;
+    }
+
+    public int getHttpProxyPort() {
+        return httpProxyPort;
+    }
+
+    public void setHttpProxyPort(int httpProxyPort) {
+        this.httpProxyPort = httpProxyPort;
+    }
+
+    public int getHttpsProxyPort() {
+        return httpsProxyPort;
+    }
+
+    public void setHttpsProxyPort(int httpsProxyPort) {
+        this.httpsProxyPort = httpsProxyPort;
+    }
+
+    public boolean isUseProxy() {
+        return useProxy;
+    }
+
+    public void setUseProxy(boolean useProxy) {
+        this.useProxy = useProxy;
+    }
+
+    public boolean isProxyAuth() {
+        return proxyAuth;
+    }
+
+    public void setProxyAuth(boolean proxyAuth) {
+        this.proxyAuth = proxyAuth;
+    }
+
+    public String getHttpProxyPassword() {
+        return httpProxyPassword;
+    }
+
+    public void setHttpProxyPassword(String httpProxyPassword) {
+        this.httpProxyPassword = httpProxyPassword;
+    }
+
+    public String getHttpsProxyPassword() {
+        return httpsProxyPassword;
+    }
+
+    public void setHttpsProxyPassword(String httpsProxyPassword) {
+        this.httpsProxyPassword = httpsProxyPassword;
     }
     
     public CurlWrapper(String curlPath, CorpusChunk corpusChunk) {
@@ -38,6 +128,34 @@ public class CurlWrapper {
         parameters.add("-o");
         parameters.add(corpusChunk.getDownloadedFile().getPath());
         parameters.add(corpusChunk.getUri().toString());
+        
+        if (useProxy) {
+            parameters.add("-x");
+            
+            // HTTPS proxy
+            if (corpusChunk.getUri().toString().startsWith("https")) {
+                parameters.add(httpsProxy + ":" + httpsProxyPort);
+                
+                if (proxyAuth) {
+                    parameters.add("-U");
+                    parameters.add(httpsProxyUser + ":" + httpsProxyPassword);
+                }
+            }
+            else if (corpusChunk.getUri().toString().startsWith("http")) {
+                parameters.add(httpProxy + ":" + httpProxyPort);
+                
+                if (proxyAuth) {
+                    parameters.add("-U");
+                    parameters.add(httpProxyUser + ":" + httpProxyPassword);
+                }                
+            }
+        }
+        
+//        System.out.println("CURL LINE:");
+//        for (int i=0; i<parameters.size(); ++i) {
+//            System.out.print(parameters.get(i) + " ");
+//        }
+//        System.out.println("");
         
         String[] params = new String[parameters.size()];
         params = parameters.toArray(params);

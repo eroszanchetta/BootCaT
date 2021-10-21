@@ -20,8 +20,11 @@ package gui.panels;
 import common.Language;
 import common.HtmlExtractionMode;
 import gui.WizardStep;
+import gui.dialogs.ProxyAuthDialog;
 import gui.helpers.BootcatExtractor;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -216,6 +219,18 @@ public class CorpusBuilder extends WizardStep {
     }
     
     private void buildCorpus() {
+        if (mainPanel.getMain().getConfig().getUseProxy() && mainPanel.getMain().getConfig().getProxyAuth()) {
+            ProxyAuthDialog proxyAuthDialog = new ProxyAuthDialog(mainPanel, true);
+            proxyAuthDialog.setProject(mainPanel.getProject());
+
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            int initialXPosition = (dim.width - proxyAuthDialog.getSize().width) / 2;
+            int initialYPosition = (dim.height - proxyAuthDialog.getSize().height) / 2;
+
+            proxyAuthDialog.setLocation(initialXPosition, initialYPosition);
+            proxyAuthDialog.setVisible(true);
+        }
+                
         save();
                 
         BootcatExtractor bootcatExtractor = new BootcatExtractor(this, mainPanel.getPaths(), mainPanel);

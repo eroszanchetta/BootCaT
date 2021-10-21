@@ -36,6 +36,8 @@ import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.extractors.DefaultExtractor;
 import de.l3s.boilerpipe.extractors.KeepEverythingExtractor;
 import de.l3s.boilerpipe.extractors.LargestContentExtractor;
+import gui.Config;
+import gui.Project;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -612,6 +614,22 @@ public class ContentExtractor {
         }
         
         CurlWrapper curlWrapper = new CurlWrapper(curlPath, corpusChunk);
+        
+        // proxy parameters
+        Config config = mainPanel.getMain().getConfig();
+        Project project = mainPanel.getProject();
+        
+        curlWrapper.setUseProxy(config.getUseProxy());
+        curlWrapper.setHttpProxy(config.getHttpProxy());
+        curlWrapper.setHttpProxyPort(config.getHttpProxyPort());
+        curlWrapper.setHttpsProxy(config.getHttpsProxy());
+        curlWrapper.setHttpsProxyPort(config.getHttpsProxyPort());
+        curlWrapper.setProxyAuth(config.getProxyAuth());
+        curlWrapper.setHttpProxyUser(project.getHttpProxyUser());
+        curlWrapper.setHttpProxyPassword(project.getHttpProxyPassword());
+        curlWrapper.setHttpsProxyUser(project.getHttpsProxyUser());
+        curlWrapper.setHttpsProxyPassword(project.getHttpsProxyPassword());
+        
         curlWrapper.getFile();
         
         if (curlWrapper.getExitCode() == 0) {

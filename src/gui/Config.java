@@ -40,6 +40,7 @@ public class Config {
     private final int           defaultBlackListMaxTokens = 10;
     private final SearchEngine  defaultSearchEngine = SearchEngine.EXTERNAL_BROWSER_GOOGLE;
     private final Downloader    defaultDownloader = Downloader.CURL;
+    private final int           defaultProxyPort = 8080;
 
 	public Config() {
 		initialize();
@@ -109,7 +110,6 @@ public class Config {
     }
 
     public boolean setDownloader(Downloader downloader) {
-        System.out.println("Config: setting downloader to " + downloader);
         properties.setProperty("downloader", downloader.getName());
         return store();
     }
@@ -204,7 +204,102 @@ public class Config {
 		properties.setProperty("lookAndFeel", value);
 		return store();
 	}
+    
+    public boolean setUseProxy(Boolean value) {
+		properties.setProperty("useProxy", value.toString());
+		return store();
+	}
 
+    public boolean setProxyAuth(Boolean value) {
+		properties.setProperty("proxyAuth", value.toString());
+		return store();
+	}
+    
+	public boolean getProxyAuth() {
+		String value = properties.getProperty("proxyAuth");
+
+		if (value == null) return false;
+
+		return Boolean.parseBoolean(value);
+	}    
+    
+    
+	public boolean getUseProxy() {
+		String value = properties.getProperty("useProxy");
+
+		if (value == null) return false;
+
+		return Boolean.parseBoolean(value);
+	}    
+    
+	public boolean setHttpProxy(String value) {
+		properties.setProperty("httpProxy", value);
+		return store();
+	}
+
+    public String getHttpProxy() {
+        return properties.getProperty("httpProxy");
+    }
+    
+	public boolean setHttpProxyPort(Integer value) {
+		properties.setProperty("httpProxyPort", value.toString());
+		return store();
+	}
+    
+    public Integer getHttpProxyPort() {
+        String value = properties.getProperty("httpProxyPort");
+                
+        if (value == null) return defaultProxyPort;
+        if (value.equals("")) return defaultProxyPort;
+        
+        int intValue;
+        
+        try {
+            intValue = Integer.parseInt(value);
+        }
+        catch (NumberFormatException ex) {
+            intValue = defaultProxyPort;
+        }
+        
+        return intValue;
+    }
+    
+	public boolean setHttpsProxy(String value) {
+		properties.setProperty("httpsProxy", value);
+		return store();
+	}
+    
+    public String getHttpsProxy() {
+        return properties.getProperty("httpsProxy");
+    }
+
+	public boolean setHttpsProxyPort(Integer value) {
+		properties.setProperty("httpsProxyPort", value.toString());
+		return store();
+	}
+
+    public int getDefaultProxyPort() {
+        return defaultProxyPort;
+    }
+    
+    public Integer getHttpsProxyPort() {
+        String value = properties.getProperty("httpsProxyPort");
+        
+        if (value == null) return defaultProxyPort;
+        if (value.equals("")) return defaultProxyPort;
+        
+        int intValue;
+        
+        try {
+            intValue = Integer.parseInt(value);
+        }
+        catch (NumberFormatException ex) {
+            intValue = defaultProxyPort;
+        }
+        
+        return intValue;
+    }    
+    
     /**
      * Create a directory in user home and use it to store preferences
      * @return true if the directory was created, false if the directory already exists

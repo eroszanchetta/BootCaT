@@ -63,6 +63,10 @@ public class Project {
     private int                             tuplesLength;
     private HashMap<URI, Boolean>           uris;
     private LinkedHashMap<String, String>   xmlAttributes;
+    private String                          httpProxyUser;
+    private String                          httpsProxyUser;
+    private String                          httpProxyPassword;
+    private String                          httpsProxyPassword;
     
     public Project() {
         initialize();
@@ -378,5 +382,37 @@ public class Project {
 
     public void setUseTextLevelLanguageFilter(boolean useTextLevelLanguageFilter) {
         this.useTextLevelLanguageFilter = useTextLevelLanguageFilter;
+    }
+
+    public String getHttpProxyUser() {
+        return httpProxyUser;
+    }
+
+    public void setHttpProxyUser(String httpProxyUser) {
+        this.httpProxyUser = httpProxyUser;
+    }
+
+    public String getHttpsProxyUser() {
+        return httpsProxyUser;
+    }
+
+    public void setHttpsProxyUser(String httpsProxyUser) {
+        this.httpsProxyUser = httpsProxyUser;
+    }
+
+    public String getHttpProxyPassword() {
+        return httpProxyPassword;
+    }
+
+    public void setHttpProxyPassword(String httpProxyPassword) {
+        this.httpProxyPassword = httpProxyPassword;
+    }
+
+    public String getHttpsProxyPassword() {
+        return httpsProxyPassword;
+    }
+
+    public void setHttpsProxyPassword(String httpsProxyPassword) {
+        this.httpsProxyPassword = httpsProxyPassword;
     }
 }
