@@ -200,9 +200,6 @@ public class ModeChooser extends WizardStep {
     private void customUrlsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customUrlsButtonActionPerformed
         mainPanel.resetStepOrder();
         mainPanel.getProject().setProjectMode(ProjectMode.CUSTOM_URLS, mainPanel);
-        
-
-        
         mainPanel.goToNextStep();
     }//GEN-LAST:event_customUrlsButtonActionPerformed
 

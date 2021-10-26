@@ -150,13 +150,7 @@ public class CurlWrapper {
                 }                
             }
         }
-        
-//        System.out.println("CURL LINE:");
-//        for (int i=0; i<parameters.size(); ++i) {
-//            System.out.print(parameters.get(i) + " ");
-//        }
-//        System.out.println("");
-        
+                
         String[] params = new String[parameters.size()];
         params = parameters.toArray(params);
         

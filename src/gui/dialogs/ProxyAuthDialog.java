@@ -200,7 +200,7 @@ public class ProxyAuthDialog extends javax.swing.JDialog {
         httpsProxyPWDPasswordField.setEnabled(!useSameCheckBox.isSelected());
         
         if (useSameCheckBox.isSelected()) {
-            HttpProxyLabel.setText("HTTP(s) Proxy");
+            HttpProxyLabel.setText("HTTP(S) Proxy");
         }
         else {
             HttpProxyLabel.setText("HTTP Proxy");

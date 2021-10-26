@@ -51,9 +51,9 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.45;
+    private final Double    versionNumber       = 1.46;
     private final String    codeName            = "Pink Panther"; // 1.5 will be Crookshanks
-    private final int       buildNumber         = 210;
+    private final int       buildNumber         = 212;
     private final int       copyRightYear       = 2021;
 
     private File            programDir;
