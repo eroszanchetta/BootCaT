@@ -567,7 +567,7 @@ public class ContentExtractor {
      * @return 
      */    
     private boolean download(CorpusChunk corpusChunk) {
-        
+
         if (corpusChunk.incrementDownloadAttempts() > maxDownloadAttempts) return false;
         
         Downloader downloader = mainPanel.getMain().getConfig().getDownloader();
@@ -604,7 +604,6 @@ public class ContentExtractor {
     }
     
     private boolean downloadViaCurl(CorpusChunk corpusChunk) {
-        
         String curlPath = mainPanel.getPaths().getCurlPath();
         
         // if curl is unavailable, return false
@@ -810,15 +809,18 @@ public class ContentExtractor {
                 return -1;
             }
         }
-        
+
         // if file is remote, ask length to remote server
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) uri.toURL().openConnection();
+            conn.setConnectTimeout(connectionTimeout);
+            conn.setReadTimeout(readTimeout);
             conn.setRequestMethod("HEAD");
             conn.getInputStream();
             return conn.getContentLength();
         } catch (IOException e) {
+            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, e);
             return -1;
         } finally {
             if (conn != null) conn.disconnect();

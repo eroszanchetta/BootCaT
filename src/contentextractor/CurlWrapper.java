@@ -120,8 +120,18 @@ public class CurlWrapper {
         this.curlPath = curlPath;
         this.corpusChunk = corpusChunk;
     }
-    
+
     public void getFile() {
+        getFile(false);
+    }
+
+    public void getFile(boolean testOnly) {
+        // TODO: if testOnly is set to true, just get the HTTP return code for the page
+        // i.e. see if the page is downloadable or not
+        // to do it, use "curl -i https://example.com" and parse the results
+
+        System.out.println("CurlWrapper: getFile " + corpusChunk.getUri().toString());
+
         ArrayList<String> parameters = new ArrayList<>();
         
         parameters.add(curlPath);
@@ -155,10 +165,16 @@ public class CurlWrapper {
         params = parameters.toArray(params);
         
         try {
+            System.out.println("CurlWrapper: launching CURL process");
+
             process = Runtime.getRuntime().exec(params);
-            
+
+            System.out.println("CurlWrapper: waiting for");
+
             process.waitFor();
             
+            System.out.println("CurlWrapper: finished waiting for");
+
             exitCode = process.exitValue();
             
         } catch (IOException ex) {
@@ -166,7 +182,6 @@ public class CurlWrapper {
         } catch (InterruptedException ex) {
             Logger.getLogger(CurlWrapper.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
 }
