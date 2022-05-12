@@ -100,8 +100,8 @@ public class ContentExtractor {
     private final String        userAgent;
     private final int           maxDownloadAttempts = 3;
     
-    private int                 connectionTimeout               = 10000;
-    private int                 readTimeout                     = 10000;
+    private int                 connectionTimeout               = 5000;
+    private int                 readTimeout                     = 5000;
     private int                 maxBlackListTypes               = 3;
     private int                 maxBlackListTokens              = 10;
     
@@ -612,7 +612,7 @@ public class ContentExtractor {
             return false;
         }
         
-        CurlWrapper curlWrapper = new CurlWrapper(curlPath, corpusChunk);
+        CurlWrapper curlWrapper = new CurlWrapper(curlPath, corpusChunk, userAgent);
         
         // proxy parameters
         Config config = mainPanel.getMain().getConfig();

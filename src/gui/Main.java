@@ -51,10 +51,10 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.46;
-    private final String    codeName            = "Pink Panther"; // 1.5 will be Crookshanks
+    private final Double    versionNumber       = 1.50;
+    private final String    codeName            = "Crookshanks";
     private final int       buildNumber         = 212;
-    private final int       copyRightYear       = 2021;
+    private final int       copyRightYear       = 2022;
 
     private File            programDir;
     private File            defaultBootCatDir;
@@ -164,7 +164,7 @@ public class Main {
                 
         config = new Config();
         initializeSystemPreferences();
-
+        
 		String currentLookAndFeel =
 				config.getLookAndFeelName() == null ?
 					systemPreferences.getProperty("defaultLookAndFeel") :

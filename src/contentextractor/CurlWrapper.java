@@ -31,6 +31,7 @@ public class CurlWrapper {
     private String              httpsProxyUser;
     private String              httpProxyPassword;
     private String              httpsProxyPassword;
+    private String              userAgent;
 
     public int getExitCode() {
         return exitCode;
@@ -116,9 +117,10 @@ public class CurlWrapper {
         this.httpsProxyPassword = httpsProxyPassword;
     }
     
-    public CurlWrapper(String curlPath, CorpusChunk corpusChunk) {
+    public CurlWrapper(String curlPath, CorpusChunk corpusChunk, String userAgent) {
         this.curlPath = curlPath;
         this.corpusChunk = corpusChunk;
+        this.userAgent = userAgent;
     }
 
     public void getFile() {
@@ -130,11 +132,11 @@ public class CurlWrapper {
         // i.e. see if the page is downloadable or not
         // to do it, use "curl -i https://example.com" and parse the results
 
-        System.out.println("CurlWrapper: getFile " + corpusChunk.getUri().toString());
-
         ArrayList<String> parameters = new ArrayList<>();
         
         parameters.add(curlPath);
+        parameters.add("-A");
+        parameters.add(userAgent);
         parameters.add("-o");
         parameters.add(corpusChunk.getDownloadedFile().getPath());
         parameters.add(corpusChunk.getUri().toString());
@@ -165,16 +167,8 @@ public class CurlWrapper {
         params = parameters.toArray(params);
         
         try {
-            System.out.println("CurlWrapper: launching CURL process");
-
             process = Runtime.getRuntime().exec(params);
-
-            System.out.println("CurlWrapper: waiting for");
-
             process.waitFor();
-            
-            System.out.println("CurlWrapper: finished waiting for");
-
             exitCode = process.exitValue();
             
         } catch (IOException ex) {

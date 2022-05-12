@@ -190,7 +190,7 @@ public class CorpusChunk {
         this.contentType = contentType;
     }
 
-    public Date getDownloadDate() {
+    public Date getDownloadDate() {        
         return downloadDate;
     }
 

@@ -43,6 +43,7 @@ public class Paths {
     private final String collectedUrls      = "url_list_collected.txt";
     private final String finalUrlList       = "url_list_final.txt";
     private final String reportFile         = "report.csv";
+    private final String excelReportFile    = "report.xlsx";
 
     private File toolkitPath;
     private File projectDataPath;
@@ -89,6 +90,10 @@ public class Paths {
 
     public void setToolkitPath(File toolkitPath) {
         this.toolkitPath = toolkitPath;
+    }
+
+    public File getExcelReportFile() {
+        return new File(getProjectDataPath().getPath() + File.separator + excelReportFile);
     }
 
     public File getReportFile() {

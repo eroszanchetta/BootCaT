@@ -28,6 +28,7 @@ import gui.panels.MainPanel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,6 +41,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JProgressBar;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -139,7 +143,8 @@ public class BootcatExtractor implements Runnable {
         Integer creationTime = (totalTime).intValue();
         
         // write log file
-        writeLogFile(corpusChunks);
+        writeExcelLogFile(corpusChunks);
+//        writeCSVLogFile(corpusChunks);
                 
         // mark step as finished by removing blocking issues
         corpusBuilder.getBlockingIssues().remove(Issues.BUILDING_CORPUS);
@@ -157,7 +162,123 @@ public class BootcatExtractor implements Runnable {
         corpusBuilder.setComplete();
     }
     
-    private void writeLogFile(ArrayList<CorpusChunk> corpusChunks) {
+    private void writeExcelLogFile(ArrayList<CorpusChunk> corpusChunks) {
+       
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Report");
+            
+            // create table header row
+            XSSFRow rowhead = sheet.createRow(0);
+            rowhead.createCell(0).setCellValue("Downloaded_file");
+            rowhead.createCell(1).setCellValue("Extracted_plain_file");
+            rowhead.createCell(2).setCellValue("Extracted_XML_file");
+            rowhead.createCell(3).setCellValue("Approximate_token_count");
+            rowhead.createCell(4).setCellValue("Character_count");
+            rowhead.createCell(5).setCellValue("URL");
+            rowhead.createCell(6).setCellValue("Redirected from URL");
+            rowhead.createCell(7).setCellValue("Downloader");
+            rowhead.createCell(8).setCellValue("Detected_languages");
+            rowhead.createCell(9).setCellValue("Content_type");
+            rowhead.createCell(10).setCellValue("Status");
+            rowhead.createCell(11).setCellValue("Skipped_sentences");
+            rowhead.createCell(12).setCellValue("Downloaded_file_size");
+            rowhead.createCell(13).setCellValue("Extracted_file_size");
+            rowhead.createCell(14).setCellValue("HTML_Extraction_mode");
+            rowhead.createCell(15).setCellValue("Creation_date");
+            rowhead.createCell(16).setCellValue("Download_date");
+            
+            // generate table
+            int r=1;            
+            for (CorpusChunk chunk : corpusChunks) {
+                XSSFRow row = sheet.createRow(r++);
+                
+                String downloadedFile;
+                if (chunk.getDownloadedFile() == null) downloadedFile = "null";
+                else downloadedFile = chunk.getDownloadedFile().getName();
+                
+                String extractedName;
+                if (chunk.getExtractedFile() == null) extractedName = "null";
+                else extractedName = chunk.getExtractedFile().getName();
+                
+                String extractedXMLName;
+                if (chunk.getExtractedXMLFile().getName() == null ) extractedXMLName = "null";
+                else extractedXMLName = chunk.getExtractedXMLFile().getName();
+                
+                String tokenCount = "";
+                if (chunk.getTokenCount() == null) tokenCount = "null";
+                else tokenCount = chunk.getTokenCount().toString();
+                
+                String charCount = "";
+                if (chunk.getCharacterCount() == null) charCount = "null";
+                else charCount = chunk.getCharacterCount().toString();
+                
+                String uri;
+                if (chunk.getUri() == null) uri = "null";
+                else uri = chunk.getUri().toString();
+                
+                String redirectUri;
+                if (chunk.getRedirectedFrom() == null) redirectUri = "null";
+                else redirectUri = chunk.getRedirectedFrom().toString();
+                
+                String downloader;
+                if (chunk.getDownloader() == null) downloader = "null";
+                else downloader = chunk.getDownloader().toString();
+                
+                String detectedLangs;
+                if (chunk.getDetectedLanguagesString() == null) detectedLangs = "null";
+                else detectedLangs = chunk.getDetectedLanguagesString();
+                
+                String contentType;
+                if (chunk.getContentType() == null) contentType = "null";
+                else contentType = chunk.getContentType();
+                
+                String status;
+                if (chunk.getStatus() == null) status = "";
+                else status = chunk.getStatus().toString();
+                
+                String skippedSentences;
+                if (chunk.getSkippedSentences() == null) skippedSentences = "null";
+                else skippedSentences = chunk.getSkippedSentences().toString();
+                
+                String extractionMode;
+                if (chunk.getHtmlExtractionMode() == null) extractionMode = "null";
+                else extractionMode = chunk.getHtmlExtractionMode().toString();
+                
+                String downloadDate;
+                if (chunk.getDownloadDate() == null) downloadDate = "null";
+                else downloadDate = chunk.getDownloadDate().toString();
+                
+                row.createCell(0).setCellValue(downloadedFile);
+                row.createCell(1).setCellValue(extractedName);
+                row.createCell(2).setCellValue(extractedXMLName);
+                row.createCell(3).setCellValue(tokenCount);
+                row.createCell(4).setCellValue(charCount);
+                row.createCell(5).setCellValue(uri);
+                row.createCell(6).setCellValue(redirectUri);
+                row.createCell(7).setCellValue(downloader);
+                row.createCell(8).setCellValue(detectedLangs);
+                row.createCell(9).setCellValue(contentType);
+                row.createCell(10).setCellValue(status);
+                row.createCell(11).setCellValue(skippedSentences);
+                row.createCell(12).setCellValue(chunk.getDownloadedFileSizeHR());
+                row.createCell(13).setCellValue(chunk.getExtractedFileSizeHR());
+                row.createCell(14).setCellValue(extractionMode);
+                row.createCell(15).setCellValue(chunk.getCreationDate());
+                row.createCell(16).setCellValue(downloadDate);
+            }
+
+            // write to XLSX file and close it
+            try (
+                FileOutputStream fileOut = new FileOutputStream(mainPanel.getPaths().getExcelReportFile())) {
+                workbook.write(fileOut);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(BootcatExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void writeCSVLogFile(ArrayList<CorpusChunk> corpusChunks) {
         Iterator<CorpusChunk> it = corpusChunks.iterator();
         
         String delimiter = "\";\"";
