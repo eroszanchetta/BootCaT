@@ -17,6 +17,10 @@
 
 package gui;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import common.BootcatUrls;
 import common.UriRedirect;
 import common.Utils;
@@ -39,6 +43,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileSystemView;
+import org.apache.tika.utils.SystemUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -131,30 +136,22 @@ public class Main {
 			UIManager.setLookAndFeel(lookAndFeel);
 			return true;
 		}
-		catch (UnsupportedLookAndFeelException ex) {
-			ex.printStackTrace();
+		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		catch (InstantiationException ex) {
-			ex.printStackTrace();
-		}
-		catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
-		catch (IllegalAccessException ex) {
-			ex.printStackTrace();
-		}
-
+        
 		return false;
 	}
 
     public void main() {
-		try {
-			File jarFile = new File (gui.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			programDir = jarFile.getParentFile();
-		}
-		catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+                
+        File jarFile;
+        try {
+            jarFile = new File (gui.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            programDir = jarFile.getParentFile();
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         // if a file called "vogon.txt" is in the program directory, then enable Vogon mode
         File vogonFile = new File(programDir + File.separator + "vogon.txt");        
@@ -238,9 +235,6 @@ public class Main {
 	private void defineDefaultValues() {
 		defaultDataDir = FileSystemView.getFileSystemView().getDefaultDirectory()
 			+ File.separator + systemPreferences.getProperty("defaultDataDirName");
-
-//		defaultBootCatDir = programDir + File.separator
-//			+ systemPreferences.getProperty("bootCatDirectory");
 
         if (develMode) {
             defaultBootCatDir = new File("/Users/eros/temp/toolkit");
@@ -493,6 +487,24 @@ public class Main {
 		systemPreferences = new Properties();
         
         systemPreferences.setProperty("defaultDataDirName", "BootCaT Corpora");
-        systemPreferences.setProperty("defaultLookAndFeel", "﻿javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        
+        // add FlatLAFs options to the list of available LAFs
+        // (but not if we're on Windows because it doesn't seem to work at the moment)
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            FlatLightLaf flatLightLaf = new FlatLightLaf();
+            FlatDarkLaf flatDarkLaf = new FlatDarkLaf();
+            FlatDarculaLaf flatDarculaLaf = new FlatDarculaLaf();
+            FlatIntelliJLaf flatIntelliJLaf = new FlatIntelliJLaf();            
+                
+            UIManager.installLookAndFeel(flatLightLaf.getName(), flatLightLaf.getClass().getName());
+            UIManager.installLookAndFeel(flatDarkLaf.getName(), flatDarkLaf.getClass().getName());
+            UIManager.installLookAndFeel(flatDarculaLaf.getName(), flatDarculaLaf.getClass().getName());
+            UIManager.installLookAndFeel(flatIntelliJLaf.getName(), flatIntelliJLaf.getClass().getName());
+            
+            systemPreferences.setProperty("defaultLookAndFeel", flatLightLaf.getName());
+        }    
+        else {
+            systemPreferences.setProperty("defaultLookAndFeel", "﻿javax.swing.plaf.nimbus.NimbusLookAndFeel");            
+        }
     }
 }
