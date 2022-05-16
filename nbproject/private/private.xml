@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Paths.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/helpers/BootcatExtractor.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/CurlWrapper.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/ContentExtractor.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/common/CorpusChunk.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/panels/MainPanel.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/dialogs/options/Display.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/panels/ModeChooser.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Main.java</file>
         </group>
     </open-files>
 </project-private>
