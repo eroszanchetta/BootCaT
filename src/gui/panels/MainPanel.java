@@ -149,18 +149,10 @@ public class MainPanel extends javax.swing.JFrame {
         
         currentStepNumber = 1;
         initComponents();
-
-//        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
         
-        setIconImages(Arrays.asList(
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_16x16.png"),
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_32x32.png"),
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"),
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_128x128.png"),
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_256x256.png"),
-                Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_512x512.png")
-        ));
-                
+        // Commented this out because it breaks FlatLAF on Windows
+//        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
+                        
         if (main.isDevelMode()) {
             isDevLabel.setText("DEVELOPMENT MODE");
         }
@@ -381,7 +373,7 @@ public class MainPanel extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        myCorporaMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        myCorporaMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         myCorporaMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/my_corpora_16x16.png"))); // NOI18N
         myCorporaMenuItem.setText("My corpora");
         myCorporaMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -391,7 +383,7 @@ public class MainPanel extends javax.swing.JFrame {
         });
         fileMenu.add(myCorporaMenuItem);
 
-        quitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        quitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         quitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/exit.png"))); // NOI18N
         quitMenuItem.setText("Quit");
         quitMenuItem.addActionListener(new java.awt.event.ActionListener() {

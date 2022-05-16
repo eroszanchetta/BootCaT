@@ -41,8 +41,9 @@ public class ConfirmDialog extends javax.swing.JDialog {
 	public ConfirmDialog(java.awt.Frame parent, boolean modal, String message, String title, Type type) {
         super(parent, modal);
         initComponents();
-
-        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/dialog-warning_16x16.png"));
+        
+        // Commented this out because it breaks FlatLAF on Windows
+//        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/dialog-warning_16x16.png"));
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int initialXPosition = (dim.width - this.getSize().width) / 2;

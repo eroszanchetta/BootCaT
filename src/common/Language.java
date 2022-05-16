@@ -547,9 +547,9 @@ public enum Language {
     }
     
     /**
-     * @deprecated 
      * @return the Iso_639_2_T code of the language (3-letter code), basically useless
      */
+    @Deprecated
     public String getIso_639_2_T() {
         return iso_639_2_T;
     }

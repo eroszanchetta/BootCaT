@@ -41,8 +41,9 @@ import java.util.logging.Logger;
 /**
  *
  * @author Eros Zanchetta
- * @deprecated this was used in the command line version, which is no longer supported, use TuplesBuilder instead
+ * This was used in the command line version, which is no longer supported, use TuplesBuilder instead
  */
+@Deprecated 
 public class Main {
     
     private static final double             VERSION = 0.10;

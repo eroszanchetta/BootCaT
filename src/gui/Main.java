@@ -489,22 +489,17 @@ public class Main {
         systemPreferences.setProperty("defaultDataDirName", "BootCaT Corpora");
         
         // add FlatLAFs options to the list of available LAFs
-        // (but not if we're on Windows because it doesn't seem to work at the moment)
-        if (!SystemUtils.IS_OS_WINDOWS) {
-            FlatLightLaf flatLightLaf = new FlatLightLaf();
-            FlatDarkLaf flatDarkLaf = new FlatDarkLaf();
-            FlatDarculaLaf flatDarculaLaf = new FlatDarculaLaf();
-            FlatIntelliJLaf flatIntelliJLaf = new FlatIntelliJLaf();            
-                
-            UIManager.installLookAndFeel(flatLightLaf.getName(), flatLightLaf.getClass().getName());
-            UIManager.installLookAndFeel(flatDarkLaf.getName(), flatDarkLaf.getClass().getName());
-            UIManager.installLookAndFeel(flatDarculaLaf.getName(), flatDarculaLaf.getClass().getName());
-            UIManager.installLookAndFeel(flatIntelliJLaf.getName(), flatIntelliJLaf.getClass().getName());
-            
-            systemPreferences.setProperty("defaultLookAndFeel", flatLightLaf.getName());
-        }    
-        else {
-            systemPreferences.setProperty("defaultLookAndFeel", "﻿javax.swing.plaf.nimbus.NimbusLookAndFeel");            
-        }
+
+        FlatLightLaf flatLightLaf = new FlatLightLaf();
+        FlatDarkLaf flatDarkLaf = new FlatDarkLaf();
+        FlatDarculaLaf flatDarculaLaf = new FlatDarculaLaf();
+        FlatIntelliJLaf flatIntelliJLaf = new FlatIntelliJLaf();            
+
+        UIManager.installLookAndFeel(flatLightLaf.getName(), flatLightLaf.getClass().getName());
+        UIManager.installLookAndFeel(flatDarkLaf.getName(), flatDarkLaf.getClass().getName());
+        UIManager.installLookAndFeel(flatDarculaLaf.getName(), flatDarculaLaf.getClass().getName());
+        UIManager.installLookAndFeel(flatIntelliJLaf.getName(), flatIntelliJLaf.getClass().getName());
+
+        systemPreferences.setProperty("defaultLookAndFeel", flatLightLaf.getName());
     }
 }

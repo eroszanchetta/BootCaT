@@ -70,8 +70,8 @@ public class GoogleScraper {
      * @param restrictToDomain
      * @param excludedDomains
      * @param excludedFileTypes
-     * @deprecated 
      */
+    @Deprecated
     public void scrapeRemoteQueries(ArrayList<String> tuples, GoogleLanguageCode language, long maxResults,
             SearchEngineSafeSearch adultFilter, FileType fileType, GoogleScraperAggressiveness aggressiveness,
             File queriesDir, String restrictToDomain, String[] excludedDomains, ArrayList<FileType> excludedFileTypes) {
@@ -216,8 +216,8 @@ public class GoogleScraper {
      * @param aggressiveness
      * @param queriesDir
      * @return 
-     * @deprecated 
      */
+    @Deprecated
     private File getResultPage(URL url, int count, GoogleScraperAggressiveness aggressiveness, File queriesDir) {
         
         try {
@@ -312,8 +312,8 @@ public class GoogleScraper {
      * @param file
      * @param excludedDomains
      * @return 
-     * @deprecated 
-     */    
+     */
+    @Deprecated
     public LinkedList<String> parseLocalGoogleFile2018(File file, String[] excludedDomains) {
         LinkedList<String> results = new LinkedList<String>();
         
@@ -431,9 +431,8 @@ public class GoogleScraper {
     
     /**
      * Read file userAgents.txt into userAgents ArrayList
-     * 
-     * @deprecated 
      */
+    @Deprecated
     private void initializeUserAgentList() {
         JarFile jarFile             = null;
         JarEntry userAgentsTextFile = null;
@@ -480,8 +479,8 @@ public class GoogleScraper {
      * Get a random user agent from the list provided in userAgents.txt
      * 
      * @return 
-     * @deprecated 
      */
+    @Deprecated
     private String getRandomUserAgent() {
         Random random = new Random();
         int randomIndex = random.nextInt(userAgents.size());

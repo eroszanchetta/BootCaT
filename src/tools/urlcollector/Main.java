@@ -37,8 +37,8 @@ import java.util.logging.Logger;
  * NO LONGER MAINTAINED 
  * 
  * @author Eros Zanchetta <eros@sslmit.unibo.it>
- * @deprecated 
  */
+@Deprecated
 public class Main {
 
     private static final double VERSION = 1.2;

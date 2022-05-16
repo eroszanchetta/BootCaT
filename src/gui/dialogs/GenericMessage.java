@@ -97,8 +97,9 @@ public class GenericMessage extends javax.swing.JDialog {
 		}
 
 		textLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource(iconType)));
-
-		setIconImage(Toolkit.getDefaultToolkit().getImage(iconType));
+        
+        // Commented this out because it breaks FlatLAF on Windows
+//		setIconImage(Toolkit.getDefaultToolkit().getImage(iconType));
         
         // pack causes this Window to be sized to fit the preferred size and layouts of its subcomponents
         this.pack();

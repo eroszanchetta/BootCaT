@@ -76,70 +76,7 @@ public class CorpusBuilder extends WizardStep {
             sentLanguageFilterComboBox.addItem(l);
         }        
     }
-    
-    /**
-     * @deprecated 
-     */
-    private void populateLanguageProfilesCombobox_old() {
-        textLanguageFilterComboBox.removeAllItems();
-        textLanguageFilterComboBox.addItem(null);
         
-        ArrayList<String> profiles = new ArrayList<>();
-        
-//        for (Market m : Market.values()) {
-//            profiles.add(m.getCode());
-//        }
-
-        // get list of language profiles in "profiles" directory
-        File profilesDir[] = mainPanel.getPaths().getLanguageProfiles().listFiles();
-        for (File profilesDir1 : profilesDir) {
-            if (profilesDir1.isFile() && !profilesDir1.isHidden()) {
-                profiles.add(profilesDir1.getName());
-            }
-        }
-        
-        // get list of language profiles in "language_samples" directory
-        File customProfilesDir[] = mainPanel.getPaths().getCustomLanguageProfiles().listFiles();
-        if (customProfilesDir != null) {
-            for (File customProfilesDir1 : customProfilesDir) {
-                if (customProfilesDir1.isFile() && !customProfilesDir1.isHidden()) {
-                    profiles.add(customProfilesDir1.getName());
-                }
-            }            
-        }
-        
-        Collections.sort(profiles);
-        
-        // populate combobox
-        for (int i=0; i<profiles.size(); i++) {
-            String profileName = profiles.get(i);
-            
-            Language langItem = null;
-            for (Language lang : Language.values()) {
-                if (lang.getIso_639_1() == null) continue;
-                if (lang.getIso_639_1().equals(profileName)) langItem = lang;
-            }
-            
-            // if language is unknown create a new one
-            if (langItem == null) {
-                langItem = Language._unspecified;
-                langItem.setIso_639_1(profileName);
-                langItem.setName(profileName);
-            }
-            
-            textLanguageFilterComboBox.addItem(langItem);
-
-            // if a language was specified for the corpus, select the profile that corresponds to the chosen language
-            // and enable the relevant controls
-//            Language languageFilter = mainPanel.getProject().getLanguageFilter();
-//            if (langItem.equals(languageFilter)) {
-//                languageProfileComboBox.setSelectedItem(langItem);
-//                languageProfileComboBox.setEnabled(true);
-//                languageFilterCheckbox.setSelected(true);
-//            }
-        }
-    }
-    
     public MainPanel getMainPanel() {
         return mainPanel;
     }

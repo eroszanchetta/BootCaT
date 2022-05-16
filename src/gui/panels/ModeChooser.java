@@ -83,7 +83,6 @@ public class ModeChooser extends WizardStep {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        helpButton = new javax.swing.JButton();
         buildFromDirButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         localQueriesButton = new javax.swing.JButton();
@@ -95,7 +94,7 @@ public class ModeChooser extends WizardStep {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("How do you want to proceed?");
         add(jLabel1);
-        jLabel1.setBounds(6, 6, 507, 16);
+        jLabel1.setBounds(6, 6, 507, 17);
 
         simpleModeButton.setText("Simple mode");
         simpleModeButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -134,7 +133,7 @@ public class ModeChooser extends WizardStep {
         jLabel2.setToolTipText("Click here to get help");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         add(jLabel2);
-        jLabel2.setBounds(212, 50, 301, 16);
+        jLabel2.setBounds(212, 50, 301, 17);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setLabelFor(customTuplesButton);
@@ -142,27 +141,14 @@ public class ModeChooser extends WizardStep {
         jLabel3.setToolTipText("Click here to get help");
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         add(jLabel3);
-        jLabel3.setBounds(212, 93, 301, 16);
+        jLabel3.setBounds(212, 93, 301, 17);
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("<html><p>Download and extract text from URL list</p></html>");
         jLabel4.setToolTipText("Click here to get help");
         jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         add(jLabel4);
-        jLabel4.setBounds(212, 136, 301, 16);
-
-        helpButton.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        helpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/help_16x16.png"))); // NOI18N
-        helpButton.setText("Help");
-        helpButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        helpButton.setIconTextGap(10);
-        helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                helpButtonMouseClicked(evt);
-            }
-        });
-        add(helpButton);
-        helpButton.setBounds(6, 256, 200, 36);
+        jLabel4.setBounds(212, 136, 301, 17);
 
         buildFromDirButton.setText("Local files");
         buildFromDirButton.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +164,7 @@ public class ModeChooser extends WizardStep {
         jLabel5.setToolTipText("Click here to get help");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         add(jLabel5);
-        jLabel5.setBounds(212, 179, 301, 16);
+        jLabel5.setBounds(212, 179, 301, 17);
 
         localQueriesButton.setText("Local queries");
         localQueriesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -194,7 +180,7 @@ public class ModeChooser extends WizardStep {
         jLabel6.setToolTipText("Click here to get help");
         jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         add(jLabel6);
-        jLabel6.setBounds(212, 222, 301, 16);
+        jLabel6.setBounds(212, 222, 301, 17);
     }// </editor-fold>//GEN-END:initComponents
 
     private void customUrlsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customUrlsButtonActionPerformed
@@ -206,10 +192,6 @@ public class ModeChooser extends WizardStep {
     private void simpleModeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpleModeButtonMouseClicked
 
     }//GEN-LAST:event_simpleModeButtonMouseClicked
-
-    private void helpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helpButtonMouseClicked
-        openModeHelp();
-    }//GEN-LAST:event_helpButtonMouseClicked
 
     private void simpleModeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleModeButtonActionPerformed
         mainPanel.resetStepOrder();
@@ -259,7 +241,6 @@ public class ModeChooser extends WizardStep {
     private javax.swing.JButton buildFromDirButton;
     private javax.swing.JButton customTuplesButton;
     private javax.swing.JButton customUrlsButton;
-    private javax.swing.JButton helpButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

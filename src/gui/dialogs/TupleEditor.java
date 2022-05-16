@@ -54,7 +54,8 @@ public class TupleEditor extends javax.swing.JDialog {
 
 		this.setLocation(initialXPosition, initialYPosition);
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/settings_16x16.png"));
+        // Commented this out because it breaks FlatLAF on Windows
+//		setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/settings_16x16.png"));
     }
 
     /**

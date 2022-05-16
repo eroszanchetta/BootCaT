@@ -34,7 +34,9 @@ public class Options extends javax.swing.JDialog {
     private General generalOptions;
     private Display displayOptions;
 
-    /** Creates new form NewJDialog */
+    /** Creates new form NewJDialog
+     * @param parent
+     * @param modal */
     public Options(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -45,8 +47,9 @@ public class Options extends javax.swing.JDialog {
         int initialYPosition = (dim.height - this.getSize().height) / 2;
 
 		this.setLocation(initialXPosition, initialYPosition);
-
-		setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/settings_16x16.png"));
+        
+        // Commented this out because it breaks FlatLAF on Windows
+//		setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/settings_16x16.png"));
 
 		mainPanel = (MainPanel) parent;
 
