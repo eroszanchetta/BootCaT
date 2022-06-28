@@ -49,7 +49,7 @@ import javax.swing.SpinnerNumberModel;
 public class TupleGenerator extends WizardStep {
 
     private final String    blockingGenerateTuples = "Click on 'Generate tuples' to proceed";
-    private final String    warningNotEnoughSeeds  = "Not enough seeds, you can either add more seeds, dicrease the number of tuples or decrease the tuple length.";
+    private final String    warningNotEnoughSeeds  = "Not enough seeds, you can either add more seeds, decrease the number of tuples or decrease the tuple length.";
     private MainPanel       mainPanel;
 
 	private ArrayList<TupleCheckBox> displayedTuples;
