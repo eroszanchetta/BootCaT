@@ -26,6 +26,7 @@ import common.SearchEngine;
 import common.UriRedirect;
 import gui.Config;
 import common.Utils;
+import gui.Main;
 import gui.WizardStep;
 import java.awt.Desktop;
 import java.io.IOException;
@@ -306,7 +307,7 @@ public class SearchEngineProperties extends WizardStep {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(SearchEngineProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_noAppIdButtonActionPerformed
 

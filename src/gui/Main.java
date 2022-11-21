@@ -37,13 +37,17 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileSystemView;
-import org.apache.tika.utils.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,17 +56,22 @@ import org.json.JSONObject;
  */
 public class Main {
 
+    private static Logger       LOGGER = null;
+    public static final String  LOGNAME = "BOOTCAT LOG";
+    
     private Config          config;
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.50;
+    private final Double    versionNumber       = 1.55;
     private final String    codeName            = "Crookshanks";
-    private final int       buildNumber         = 212;
+    private final int       buildNumber         = 265;
     private final int       copyRightYear       = 2022;
 
     private File            programDir;
     private File            defaultBootCatDir;
+
+    private File            logFile;
     private String          defaultDataDir;
 
     private String          accountKey;
@@ -115,13 +124,13 @@ public class Main {
         main.main();
     }
 
-	public Properties getSystemPreferences() {
-		return systemPreferences;
-	}
+    public Properties getSystemPreferences() {
+            return systemPreferences;
+    }
 
-	public Config getConfig() {
-		return config;
-	}
+    public Config getConfig() {
+            return config;
+    }
 
     public Double getVersionNumber() {
         return versionNumber;
@@ -131,26 +140,28 @@ public class Main {
         return buildNumber;
     }
 
-	public boolean setLookAndFeel(String lookAndFeel) {
-		try {
-			UIManager.setLookAndFeel(lookAndFeel);
-			return true;
-		}
-		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-		}
-        
-		return false;
-	}
+    public boolean setLookAndFeel(String lookAndFeel) {
+        try {
+            UIManager.setLookAndFeel(lookAndFeel);
+            return true;
+        }
+        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
 
     public void main() {
-                
+
+        logFile = initializeLogger();
+        
         File jarFile;
         try {
             jarFile = new File (gui.Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             programDir = jarFile.getParentFile();
         } catch (URISyntaxException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         // if a file called "vogon.txt" is in the program directory, then enable Vogon mode
@@ -161,22 +172,22 @@ public class Main {
                 
         config = new Config();
         initializeSystemPreferences();
-        
-		String currentLookAndFeel =
-				config.getLookAndFeelName() == null ?
-					systemPreferences.getProperty("defaultLookAndFeel") :
-					config.getLookAndFeelName();
+                
+        String currentLookAndFeel =
+            config.getLookAndFeelName() == null ?
+                    systemPreferences.getProperty("defaultLookAndFeel") :
+                    config.getLookAndFeelName();
 
-		// define look-and-feels in decreasing order of preference
-		String[] lafs = new String[] {
-			currentLookAndFeel,
-			UIManager.getSystemLookAndFeelClassName(),
-		};
+        // define look-and-feels in decreasing order of preference
+        String[] lafs = new String[] {
+            currentLookAndFeel,
+            UIManager.getSystemLookAndFeelClassName(),
+        };
 
-		// loop through preferred lafs until an available one is found
-		for (int l=0; l<lafs.length; ++l) {
-			if (setLookAndFeel(lafs[l])) break;
-		}
+        // loop through preferred lafs until an available one is found
+        for (int l=0; l<lafs.length; ++l) {
+            if (setLookAndFeel(lafs[l])) break;
+        }
 
         mainPanel = new MainPanel(systemPreferences, config, this);
 
@@ -191,51 +202,88 @@ public class Main {
         mainPanel.pack();
         mainPanel.setVisible(true);
 
-		// define default values
-		defineDefaultValues();
+        // define default values
+        defineDefaultValues();
 
-		/* check that all required settings are configured
-		 * if something is missing, prompt user to provide
-		 * information.
-		 *
-		 * If user tries to cancel this without fixing the
-		 * problem, the program will try to terminate.
-		 */
-		boolean firstRun = true;
+        /* check that all required settings are configured
+         * if something is missing, prompt user to provide
+         * information.
+         *
+         * If user tries to cancel this without fixing the
+         * problem, the program will try to terminate.
+         */
+        boolean firstRun = true;
 
-		while (!checkRequiredSettings()) {
-			if (!firstRun) {
-				String msg = "One or more required parameters are missing, " +
-					"BootCaT frontend cannot continue without them.<br /><br />" +
-					"Clicking on 'Yes' will close the program.";
+        while (!checkRequiredSettings()) {
+            if (!firstRun) {
+                String msg = "One or more required parameters are missing, " +
+                    "BootCaT frontend cannot continue without them.<br /><br />" +
+                    "Clicking on 'Yes' will close the program.";
 
-				ConfirmDialog confirmQuit = new ConfirmDialog(mainPanel, true, msg, "Confirm quit", ConfirmDialog.Type.WARNING);
-				confirmQuit.setVisible(true);
+                ConfirmDialog confirmQuit = new ConfirmDialog(mainPanel, true, msg, "Confirm quit", ConfirmDialog.Type.WARNING);
+                confirmQuit.setVisible(true);
 
-				if (confirmQuit.getReturnStatus() == ConfirmDialog.RET_OK) {
-					System.exit(0);
-				}
-			}
+                if (confirmQuit.getReturnStatus() == ConfirmDialog.RET_OK) {
+                    System.exit(0);
+                }
+            }
 
-			Options options = new Options(mainPanel, true);
-			options.setVisible(true);
-			firstRun = false;
-		}
+            Options options = new Options(mainPanel, true);
+            options.setVisible(true);
+            firstRun = false;
+        }
 
 
-		// check for updated version of the program
-		if (config.getCheckForNewVersion()) checkForUpdates();
+        // check for updated version of the program
+        if (config.getCheckForNewVersion()) checkForUpdates();
 
-		// send usage statistics
+        // send usage statistics
         if (config.getCollectUsageStatistics() && develMode) {
             sendUsageStats2();
         }
     }
 
-	private void defineDefaultValues() {
-		defaultDataDir = FileSystemView.getFileSystemView().getDefaultDirectory()
-			+ File.separator + systemPreferences.getProperty("defaultDataDirName");
-
+    private File initializeLogger() {
+                
+        try {
+                        
+            Path temp = Files.createTempFile("bootcat_log", ".txt");
+            String logFileName = temp.getParent() + File.separator + temp.getFileName();
+            
+            logFile = new File(logFileName);
+                        
+            LOGGER = Logger.getLogger(LOGNAME);
+            FileHandler fh;
+            
+            // This block configure the logger with handler and formatter
+            fh = new FileHandler(logFileName);
+            LOGGER.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+            
+        } catch (IOException | SecurityException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+        }
+                
+        return logFile;
+    }
+    
+    private void defineDefaultValues() {
+        
+        // in recent versions of MacOS the home directory if hard to find, so I'll move the
+        // default dir to Documents folder, which is easier to find
+        if (SystemUtils.IS_OS_MAC) {
+            defaultDataDir =
+                    FileSystemView.getFileSystemView().getDefaultDirectory() + File.separator +
+                    "Documents" + File.separator +
+                    systemPreferences.getProperty("defaultDataDirName");            
+        }
+        else {
+            defaultDataDir =
+                    FileSystemView.getFileSystemView().getDefaultDirectory() + File.separator +
+                    systemPreferences.getProperty("defaultDataDirName");
+        }
+                
         if (develMode) {
             defaultBootCatDir = new File("/Users/eros/temp/toolkit");
         }
@@ -243,34 +291,34 @@ public class Main {
             defaultBootCatDir = new File(programDir + File.separator
                 + "toolkit");            
         }
-        
+
         mainPanel.getPaths().setToolkitPath(defaultBootCatDir);
-	}
+    }
 
-	public UpdateStatus checkForUpdates() {
-        // determine installation ID
-        bootCatInstallationId = config.getBootCatInstallationId();
+    public UpdateStatus checkForUpdates() {
+    // determine installation ID
+    bootCatInstallationId = config.getBootCatInstallationId();
 
-        if (bootCatInstallationId == null) {
-            bootCatInstallationId = Utils.generateId();
-            config.setBootCatInstallationId(bootCatInstallationId);
-        }
+    if (bootCatInstallationId == null) {
+        bootCatInstallationId = Utils.generateId();
+        config.setBootCatInstallationId(bootCatInstallationId);
+    }
 
-		Double latestVersion = getLatestVersionFromWeb();
+            Double latestVersion = getLatestVersionFromWeb();
 
-		if (latestVersion == null) return UpdateStatus.ERROR;
+            if (latestVersion == null) return UpdateStatus.ERROR;
 
-		if (latestVersion > versionNumber) {
-			String msg = "A new version of BootCaT frontend (" + latestVersion + ") ";
-			msg += "is available.<br /><br />";
-			msg += "Visit the <a href=''>BootCaT web page</a> to download it.";
+            if (latestVersion > versionNumber) {
+                    String msg = "A new version of BootCaT frontend (" + latestVersion + ") ";
+                    msg += "is available.<br /><br />";
+                    msg += "Visit the <a href=''>BootCaT web page</a> to download it.";
 
-			GenericMessage updatedVersion = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.INFO, redirectUrl(UriRedirect.HOME), null);
-			updatedVersion.setVisible(true);
-			return UpdateStatus.UPDATE_AVAILABLE;
-		}
-		else return UpdateStatus.NO_UPDATES;
-	}
+                    GenericMessage updatedVersion = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.INFO, redirectUrl(UriRedirect.HOME), null);
+                    updatedVersion.setVisible(true);
+                    return UpdateStatus.UPDATE_AVAILABLE;
+            }
+            else return UpdateStatus.NO_UPDATES;
+    }
 
     public String redirectUrl(UriRedirect UriRedirect) {
         return BootcatUrls.REDIRECT_BASE.getUrl() + UriRedirect;
@@ -280,31 +328,35 @@ public class Main {
         return BootcatUrls.REDIRECT_BASE.getUrl() + issue.toString();
     }
     
-	public String getDefaultDataDir() {
-		return defaultDataDir;
-	}
+    public String getDefaultDataDir() {
+        return defaultDataDir;
+    }
 
-	/**
-	 * Make sure that a few basic settings have been correctly configured,
-	 * if something is missing, try using default settings
-	 * @return
-	 */
-	public boolean checkRequiredSettings() {
+    public File getLogFile() {
+        return logFile;
+    }
+    
+    /**
+     * Make sure that a few basic settings have been correctly configured,
+     * if something is missing, try using default settings
+     * @return
+     */
+    public boolean checkRequiredSettings() {
 
-		boolean retval = true;
+        boolean retval = true;
 
-		/* check if user preferences are correct; if they are not, use
-		 * default value; if default values are unacceptable set
-		 * parameters to null and return false (which will cause the
-		 * program to prompt the user)
-		 */
-		if (!PathVerifier.dataDir(config.getDataDir(), config, defaultDataDir)) {
-			config.setDataPath("");
-			retval = false;
-		}
+        /* check if user preferences are correct; if they are not, use
+         * default value; if default values are unacceptable set
+         * parameters to null and return false (which will cause the
+         * program to prompt the user)
+         */
+        if (!PathVerifier.dataDir(config.getDataDir(), config, defaultDataDir)) {
+            config.setDataPath("");
+            retval = false;
+        }
 
-		return retval;
-	}
+        return retval;
+    }
 
     private void sendUsageStats() {
         try {
@@ -329,10 +381,10 @@ public class Main {
 
         }
         catch (MalformedURLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 		catch (IOException ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 		}
 		catch (NumberFormatException e) {}
     }
@@ -414,7 +466,7 @@ public class Main {
                 try (OutputStream os = conn.getOutputStream()) {
                     os.write(reportJsonString.getBytes("UTF-8"));
                 } catch (Exception ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                     return false;
                 }
 
@@ -433,7 +485,7 @@ public class Main {
                         return false;
                     }
                 } catch (Exception ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                     return false;
                 }
                 conn.disconnect();
@@ -441,16 +493,16 @@ public class Main {
                 return conn.getResponseCode() == 200;
                 
             } catch (MalformedURLException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             } catch (ProtocolException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
             
             return false;
         } catch (JSONException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
     }    
@@ -473,10 +525,10 @@ public class Main {
 			in.close();
 		}
 		catch (MalformedURLException ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 		}
 		catch (IOException ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 		}
 		catch (NumberFormatException e) {}
 
@@ -484,12 +536,12 @@ public class Main {
 	}
         
     private void initializeSystemPreferences() {
-		systemPreferences = new Properties();
+        systemPreferences = new Properties();
         
         systemPreferences.setProperty("defaultDataDirName", "BootCaT Corpora");
         
         // add FlatLAFs options to the list of available LAFs
-
+                
         FlatLightLaf flatLightLaf = new FlatLightLaf();
         FlatDarkLaf flatDarkLaf = new FlatDarkLaf();
         FlatDarculaLaf flatDarculaLaf = new FlatDarculaLaf();
@@ -499,7 +551,7 @@ public class Main {
         UIManager.installLookAndFeel(flatDarkLaf.getName(), flatDarkLaf.getClass().getName());
         UIManager.installLookAndFeel(flatDarculaLaf.getName(), flatDarculaLaf.getClass().getName());
         UIManager.installLookAndFeel(flatIntelliJLaf.getName(), flatIntelliJLaf.getClass().getName());
-
-        systemPreferences.setProperty("defaultLookAndFeel", flatLightLaf.getName());
+                
+        systemPreferences.setProperty("defaultLookAndFeel", flatLightLaf.getClass().getName());
     }
 }

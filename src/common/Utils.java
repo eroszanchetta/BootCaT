@@ -17,6 +17,7 @@
 
 package common;
 
+import gui.Main;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -41,7 +42,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -131,14 +131,9 @@ public class Utils {
             try {
                 result = (String)contents.getTransferData(DataFlavor.stringFlavor);
             }
-            catch (UnsupportedFlavorException ex){
+            catch (UnsupportedFlavorException | IOException ex){
                 //highly unlikely since we are using a standard DataFlavor
-                System.out.println(ex);
-                ex.printStackTrace();
-            }
-            catch (IOException ex) {
-                System.out.println(ex);
-                ex.printStackTrace();
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
         return result;
@@ -373,13 +368,13 @@ public class Utils {
             
             Files.copy(cleanedUrlList.toPath(), editedUrlList.toPath(), StandardCopyOption.REPLACE_EXISTING);
             
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (br != null)br.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -427,13 +422,13 @@ public class Utils {
             out.close();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (IOException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
         
@@ -470,14 +465,14 @@ public class Utils {
                 output.add(line);
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 reader.close();
             } catch (IOException ex) {
-                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -510,9 +505,9 @@ public class Utils {
             output.close();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -546,5 +541,5 @@ public class Utils {
         } finally {
             IOUtils.closeQuietly(input);
         }
-    }        
+    }
 }

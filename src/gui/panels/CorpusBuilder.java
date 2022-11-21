@@ -19,6 +19,7 @@ package gui.panels;
 
 import common.Language;
 import common.HtmlExtractionMode;
+import gui.Main;
 import gui.WizardStep;
 import gui.dialogs.ProxyAuthDialog;
 import gui.helpers.BootcatExtractor;
@@ -27,8 +28,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
@@ -134,7 +135,7 @@ public class CorpusBuilder extends WizardStep {
             Desktop.getDesktop().open(dataDir);
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
 

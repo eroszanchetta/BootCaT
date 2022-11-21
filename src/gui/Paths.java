@@ -189,27 +189,43 @@ public class Paths {
                 path = "/usr/bin/curl";
             }
             else if (SystemUtils.IS_OS_WINDOWS) {
-                // work out running file's path in order to locate the curl executable file
-                File rootAppPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                
+                switch(config.getDownloader()) {
+                    case CURL_OS:
+                        path = System.getenv("SystemRoot") + File.separator + "system32" + File.separator + "curl.exe";
+                        
+                        // now see if the file actually exists, if it doesn't, use external Curl
+                        File curlFile = new File(path);
+                        if (curlFile.exists()) {
+                            break;
+                        }
+                        
+                    case CURL_EXT:
+                        // work out running file's path in order to locate the curl executable file
+                        File rootAppPath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
-                // find out if this is a development build or an actual build
-                if (rootAppPath.getParentFile().getName().equals("dist")) {
-                    rootAppPath = rootAppPath.getParentFile().getParentFile();
-                }
-                else {
-                    rootAppPath = rootAppPath.getParentFile();
+                        // find out if this is a development build or an actual build
+                        if (rootAppPath.getParentFile().getName().equals("dist")) {
+                            rootAppPath = rootAppPath.getParentFile().getParentFile();
+                        }
+                        else {
+                            rootAppPath = rootAppPath.getParentFile();
+                        }
+
+                        path = rootAppPath + File.separator + "resources" + File.separator + "curl" + File.separator + "win" + File.separator + "curl.exe";
+                        break;
                 }
                 
-                path = rootAppPath + File.separator + "resources" + File.separator + "curl" + File.separator + "win" + File.separator + "curl.exe";
+
             }
             else {
                 System.err.println("Your OS is not supported");
             }
             
         } catch (URISyntaxException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
-        
+                
         // if curl executable does not exist, return null
         File curlExecutable = new File(path);
         if (!curlExecutable.exists()) {

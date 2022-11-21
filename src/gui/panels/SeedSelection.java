@@ -18,6 +18,7 @@
 package gui.panels;
 
 import common.Utils;
+import gui.Main;
 import gui.WizardStep;
 import gui.dialogs.ConfirmDialog;
 import gui.dialogs.GenericMessage;
@@ -27,6 +28,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -103,7 +106,7 @@ public class SeedSelection extends WizardStep {
         }
 
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return null;
         }
 
@@ -112,7 +115,7 @@ public class SeedSelection extends WizardStep {
                 fos.close();
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                 return null;
             }
         }

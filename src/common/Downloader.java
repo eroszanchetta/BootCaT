@@ -10,7 +10,8 @@ package common;
  * @author Eros Zanchetta <eros@sslmit.unibo.it>
  */
 public enum Downloader {
-    CURL        ("Curl", "Recommended setting"),
+    CURL_OS     ("Curl_OS", "The version of Curl shipped with your OS"),
+    CURL_EXT    ("Curl_EXT", "The version of Curl shipped with BootCaT"),
     INTERNAL    ("Internal", "Use this if you connect using a proxy");
     
     private final String name;

@@ -24,6 +24,7 @@ import common.GoogleLanguageCode;
 import common.Language;
 import common.SearchEngine;
 import common.SearchEngineSafeSearch;
+import gui.Main;
 import gui.Project;
 import tools.urlcollector.GoogleScraper;
 import java.io.FileNotFoundException;
@@ -505,7 +506,7 @@ public class UrlFinder extends WizardStep {
             }
             s.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(CollectUrls.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
                 
         return tuples;

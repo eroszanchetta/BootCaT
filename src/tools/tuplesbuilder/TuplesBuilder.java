@@ -81,10 +81,10 @@ public class TuplesBuilder {
             writer.close();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(TuplesBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (IOException ex) {
-            Logger.getLogger(TuplesBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
         
@@ -139,7 +139,7 @@ public class TuplesBuilder {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return seedsArray;

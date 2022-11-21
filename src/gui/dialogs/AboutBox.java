@@ -228,7 +228,7 @@ public class AboutBox extends javax.swing.JDialog {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(AboutBox.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jLabel10MouseClicked
 

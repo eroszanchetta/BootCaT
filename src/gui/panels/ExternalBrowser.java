@@ -18,6 +18,7 @@ package gui.panels;
 
 import common.UriRedirect;
 import common.Utils;
+import gui.Main;
 import gui.WizardStep;
 import gui.dialogs.ConfirmDialog;
 import gui.dialogs.GenericMessage;
@@ -159,7 +160,7 @@ public class ExternalBrowser extends WizardStep {
         try {
             Desktop.getDesktop().open(mainPanel.getPaths().getQueriesDir());
         } catch (IOException ex) {
-            Logger.getLogger(ExternalBrowser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -316,7 +317,7 @@ public class ExternalBrowser extends WizardStep {
             
             Utils.cleanAndRemoveDuplicateUrls(collectedUrlList, cleanedUrlList, editedUrlList);            
         } catch (IOException ex) {
-            Logger.getLogger(ExternalBrowser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         return !resultEmpty;

@@ -17,6 +17,7 @@
 
 package gui.dialogs;
 
+import gui.Main;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -235,7 +236,7 @@ public class GenericMessage extends javax.swing.JDialog {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(GenericMessage.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }            
     }
     
@@ -245,7 +246,7 @@ public class GenericMessage extends javax.swing.JDialog {
         try {
             Desktop.getDesktop().open(directory);
         } catch (IOException ex) {
-            Logger.getLogger(GenericMessage.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     

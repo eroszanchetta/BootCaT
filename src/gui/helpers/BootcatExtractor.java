@@ -21,6 +21,7 @@ import common.Language;
 import common.Utils;
 import contentextractor.ContentExtractor;
 import common.CorpusChunk;
+import gui.Main;
 import gui.Paths;
 import gui.WizardStep.Issues;
 import gui.panels.CorpusBuilder;
@@ -60,8 +61,8 @@ public class BootcatExtractor implements Runnable {
     public BootcatExtractor(CorpusBuilder corpusBuilder, Paths paths, MainPanel mainPanel) {
         this.progBar        = corpusBuilder.getProgressBar();
         this.corpusBuilder  = corpusBuilder;
-        this.editedUrlList	= paths.getFinalUrlList();
-		this.mainPanel		= mainPanel;
+        this.editedUrlList  = paths.getFinalUrlList();
+        this.mainPanel      = mainPanel;
     }
 
     @Override
@@ -274,7 +275,7 @@ public class BootcatExtractor implements Runnable {
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(BootcatExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -339,7 +340,7 @@ public class BootcatExtractor implements Runnable {
 
             writer.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            Logger.getLogger(BootcatExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -357,7 +358,7 @@ public class BootcatExtractor implements Runnable {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
         
         return blacklist;
@@ -379,7 +380,7 @@ public class BootcatExtractor implements Runnable {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         return lineNumber;

@@ -19,6 +19,7 @@ package gui.panels;
 
 import common.UriRedirect;
 import common.Utils;
+import gui.Main;
 import gui.ProjectMode;
 import gui.WizardStep;
 import gui.dialogs.GenericMessage;
@@ -117,7 +118,7 @@ public class UrlEditor extends WizardStep {
 
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 	}
 
@@ -149,7 +150,7 @@ public class UrlEditor extends WizardStep {
 			totalUrlsCountLabel.setText(((Integer) displayedUrlList.size()).toString());
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
 
@@ -190,7 +191,7 @@ public class UrlEditor extends WizardStep {
                 FileUtils.copyFile(mainPanel.getPaths().getCleanedUrlList(), mainPanel.getPaths().getFinalUrlList());
             }
             catch (IOException ex) {
-                Logger.getLogger(CorpusBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
             
             return true;
@@ -272,10 +273,10 @@ public class UrlEditor extends WizardStep {
             }
         }
         catch (FileNotFoundException ex) {
-            Logger.getLogger(CorpusBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            Logger.getLogger(CorpusBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return true;
@@ -353,7 +354,7 @@ public class UrlEditor extends WizardStep {
                         uriMap.put(new URI(url.getUrl()), false);
                     }
                 } catch (URISyntaxException ex) {
-                    Logger.getLogger(UrlEditor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                 }
 			}
 
@@ -368,7 +369,7 @@ public class UrlEditor extends WizardStep {
             return uriMap;
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         return null;
     }

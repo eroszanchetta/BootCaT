@@ -60,13 +60,13 @@ public class Options extends javax.swing.JDialog {
 		genIconPanel.repaint();
     }
 
-	private void defineOptionPanels() {
+    private void defineOptionPanels() {
         generalOptions = new General(mainPanel);
         displayOptions = new Display(mainPanel);
         
-		innerPanel.add(generalOptions, "general");
-		innerPanel.add(displayOptions, "display");
-	}
+        innerPanel.add(generalOptions, "general");
+        innerPanel.add(displayOptions, "display");
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -240,38 +240,38 @@ public class Options extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-	private void unselectIcons() {
-		genIconPanel.setOpaque(false);
-		genIconPanel.repaint();
+    private void unselectIcons() {
+        genIconPanel.setOpaque(false);
+        genIconPanel.repaint();
 
-		displayIconPanel.setOpaque(false);
-		displayIconPanel.repaint();
-	}
+        displayIconPanel.setOpaque(false);
+        displayIconPanel.repaint();
+    }
 
 	private void generalIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generalIconMouseClicked
-		unselectIcons();
+            unselectIcons();
 
-		genIconPanel.setOpaque(true);
-		genIconPanel.repaint();
-		
-		CardLayout cardLayout = (CardLayout) innerPanel.getLayout();
-		cardLayout.show(innerPanel, "general");
+            genIconPanel.setOpaque(true);
+            genIconPanel.repaint();
+
+            CardLayout cardLayout = (CardLayout) innerPanel.getLayout();
+            cardLayout.show(innerPanel, "general");
 	}//GEN-LAST:event_generalIconMouseClicked
 
 	private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        generalOptions.save();
-        setVisible(false);
-		dispose();
+            generalOptions.save();
+            setVisible(false);
+            dispose();
 	}//GEN-LAST:event_closeButtonActionPerformed
 
 	private void displayIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayIconMouseClicked
-		unselectIcons();
+            unselectIcons();
 
-		displayIconPanel.setOpaque(true);
-		displayIconPanel.repaint();
+            displayIconPanel.setOpaque(true);
+            displayIconPanel.repaint();
 
-		CardLayout cardLayout = (CardLayout) innerPanel.getLayout();
-		cardLayout.show(innerPanel, "display");
+            CardLayout cardLayout = (CardLayout) innerPanel.getLayout();
+            cardLayout.show(innerPanel, "display");
 	}//GEN-LAST:event_displayIconMouseClicked
 
 	private void displayLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_displayLabelMouseClicked

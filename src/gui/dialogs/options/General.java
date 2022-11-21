@@ -26,6 +26,7 @@ package gui.dialogs.options;
 import common.Downloader;
 import common.UriRedirect;
 import gui.Config;
+import gui.Main;
 import gui.dialogs.GenericMessage;
 import gui.helpers.PathVerifier;
 import gui.panels.MainPanel;
@@ -41,6 +42,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileSystemView;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  *
@@ -58,15 +60,15 @@ public class General extends javax.swing.JPanel {
     public General(MainPanel mainPanel) {
         initComponents();
 
-		this.mainPanel = mainPanel;
+        this.mainPanel = mainPanel;
 
-		config = mainPanel.getMain().getConfig();
+        config = mainPanel.getMain().getConfig();
 
-		systemPreferences = mainPanel.getMain().getSystemPreferences();
-                
-		populateForm();
+        systemPreferences = mainPanel.getMain().getSystemPreferences();
 
-		verifyTextFieldStatus();
+        populateForm();
+
+        verifyTextFieldStatus();
         
         // change the look of cursors for buttons
         leaveThisOnLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -75,10 +77,15 @@ public class General extends javax.swing.JPanel {
 
 	private void populateForm() {
         
-		dataDirTextField.setText(config.getDataDir());
+        dataDirTextField.setText(config.getDataDir());
         
         downloaderComboBox.removeAllItems();
         for (Downloader downloader : Downloader.values()) {
+            // only display CURL_EXT on Windows
+            if (!SystemUtils.IS_OS_WINDOWS && downloader == Downloader.CURL_EXT) {
+                continue;
+            }
+                
             downloaderComboBox.addItem(downloader);
         }
                 
@@ -107,7 +114,7 @@ public class General extends javax.swing.JPanel {
                 
         toggleProxySection();
         
-		checkUpdatesCheckBox.setSelected(config.getCheckForNewVersion());
+        checkUpdatesCheckBox.setSelected(config.getCheckForNewVersion());
         collectStatsCheckBox.setSelected(config.getCollectUsageStatistics());
 	}
     
@@ -373,34 +380,34 @@ public class General extends javax.swing.JPanel {
 }//GEN-LAST:event_checkUpdatesCheckBoxActionPerformed
 
 	private void dataDirBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataDirBrowseActionPerformed
-		JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser();
 
-		// set initial directory for file chooser (either the last opened directory of the default user directory)
-		File currentDir;
-		if (lastOpenedDir == null) currentDir = FileSystemView.getFileSystemView().getDefaultDirectory();
-		else currentDir = lastOpenedDir;
-		fc.setCurrentDirectory(currentDir);
+        // set initial directory for file chooser (either the last opened directory of the default user directory)
+        File currentDir;
+        if (lastOpenedDir == null) currentDir = FileSystemView.getFileSystemView().getDefaultDirectory();
+        else currentDir = lastOpenedDir;
+        fc.setCurrentDirectory(currentDir);
 
-		fc.setMultiSelectionEnabled(false);
+        fc.setMultiSelectionEnabled(false);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(this);
 
-		if (fc.getSelectedFile() != null) {
-			lastOpenedDir = fc.getSelectedFile();
-			String newDataDir = fc.getSelectedFile().getPath();
+        if (fc.getSelectedFile() != null) {
+                lastOpenedDir = fc.getSelectedFile();
+                String newDataDir = fc.getSelectedFile().getPath();
 
-			if (PathVerifier.dataDir(newDataDir, config, mainPanel.getMain().getDefaultDataDir())) {
-				config.setDataPath(newDataDir);
-				dataDirTextField.setText(newDataDir);
-			}
-			else {
-				String msg = "The folder you chose is not valid.";
-				GenericMessage errorMessage = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.ERROR);
-				errorMessage.setVisible(true);
-			}
-		}
+                if (PathVerifier.dataDir(newDataDir, config, mainPanel.getMain().getDefaultDataDir())) {
+                        config.setDataPath(newDataDir);
+                        dataDirTextField.setText(newDataDir);
+                }
+                else {
+                        String msg = "The folder you chose is not valid.";
+                        GenericMessage errorMessage = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.ERROR);
+                        errorMessage.setVisible(true);
+                }
+        }
 
-		verifyTextFieldStatus();
+        verifyTextFieldStatus();
 	}//GEN-LAST:event_dataDirBrowseActionPerformed
 
     private void leaveThisOnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_leaveThisOnLabelMouseClicked
@@ -408,7 +415,7 @@ public class General extends javax.swing.JPanel {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(General.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_leaveThisOnLabelMouseClicked
 
@@ -437,6 +444,11 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
     }//GEN-LAST:event_useProxyCheckBoxActionPerformed
 
     private void toggleProxySection() {
+        if (useProxyCheckBox.isSelected()) {
+            config.setDownloader(Downloader.CURL_OS);
+            downloaderComboBox.setSelectedItem(Downloader.CURL_OS);
+        }
+        
         httpProxyAddressLabel.setEnabled(useProxyCheckBox.isSelected());
         httpPortLabel.setEnabled(useProxyCheckBox.isSelected());
         httpPortSpinner.setEnabled(useProxyCheckBox.isSelected());
@@ -448,14 +460,14 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
         proxyAuthCheckBox.setEnabled(useProxyCheckBox.isSelected());
     }
     
-	private void verifyTextFieldStatus() {
+    private void verifyTextFieldStatus() {
 
-		// data dir
-		if (dataDirTextField.getText().equals("")) {
-			dataDirError.setText("<html><p>Choose the folder where BootCaT will store your corpora</p></html>");
-		}
-		else dataDirError.setText("");
-	}
+        // data dir
+        if (dataDirTextField.getText().equals("")) {
+                dataDirError.setText("<html><p>Choose the folder where BootCaT will store your corpora</p></html>");
+        }
+        else dataDirError.setText("");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

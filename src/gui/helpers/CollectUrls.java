@@ -22,6 +22,7 @@ import common.Language;
 import common.SearchEngine;
 import common.SearchEngineSafeSearch;
 import common.Utils;
+import gui.Main;
 import gui.Paths;
 import gui.panels.UrlFinder;
 import tools.urlcollector.YacySearch;
@@ -163,7 +164,7 @@ public class CollectUrls implements Runnable {
             }
             s.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(CollectUrls.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         for (String t : tuples) {
@@ -185,7 +186,7 @@ public class CollectUrls implements Runnable {
             while (br.readLine() != null) lineNumber++;
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         return lineNumber;

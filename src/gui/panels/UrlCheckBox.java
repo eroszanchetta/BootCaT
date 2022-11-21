@@ -23,6 +23,7 @@
 
 package gui.panels;
 
+import gui.Main;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -82,7 +83,7 @@ public class UrlCheckBox extends javax.swing.JPanel {
         try {
             Desktop.getDesktop().browse(asciiUri);
         } catch (IOException ex) {
-            Logger.getLogger(UrlCheckBox.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
     

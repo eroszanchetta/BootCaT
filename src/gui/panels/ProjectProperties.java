@@ -20,6 +20,7 @@ package gui.panels;
 import common.Language;
 import gui.WizardStep;
 import common.UriRedirect;
+import gui.Main;
 import gui.dialogs.GenericMessage;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -624,7 +625,7 @@ public class ProjectProperties extends WizardStep {
             try {
                 Desktop.getDesktop().browse(uri);
             } catch (IOException ex) {
-                Logger.getLogger(ProjectProperties.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
 	}//GEN-LAST:event_listsHelpLabel1MouseClicked
 

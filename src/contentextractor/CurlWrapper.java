@@ -6,6 +6,7 @@
 package contentextractor;
 
 import common.CorpusChunk;
+import gui.Main;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -171,10 +172,8 @@ public class CurlWrapper {
             process.waitFor();
             exitCode = process.exitValue();
             
-        } catch (IOException ex) {
-            Logger.getLogger(CurlWrapper.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(CurlWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     

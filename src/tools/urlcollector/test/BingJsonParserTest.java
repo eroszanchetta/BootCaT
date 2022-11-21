@@ -16,6 +16,7 @@
  */
 package tools.urlcollector.test;
 
+import gui.Main;
 import tools.urlcollector.BingSearch;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class BingJsonParserTest {
             BingSearch.parseJsonObjectV7(jsonString, System.out);
             
         } catch (IOException ex) {
-            Logger.getLogger(BingJsonParserTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
 }

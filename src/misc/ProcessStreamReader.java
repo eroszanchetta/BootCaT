@@ -16,11 +16,14 @@
  */
 package misc;
 
+import gui.Main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 
@@ -57,8 +60,8 @@ public class ProcessStreamReader implements Runnable {
                 else if (line.toLowerCase().startsWith("warning: sax input")) continue;
                 textArea.append(line + "\n");
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
 }

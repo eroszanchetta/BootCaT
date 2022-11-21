@@ -96,7 +96,7 @@ public class BingSearch {
         try {
             ps = new PrintStream(System.out, true, charset.name());
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         // build query
@@ -131,7 +131,7 @@ public class BingSearch {
         try {
             query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             System.err.println(ex);
             System.exit(1);
         }
@@ -204,15 +204,15 @@ public class BingSearch {
             }
         }
         catch (MalformedURLException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (UnknownHostException ex) {
             String msg = "unable to contact the search API, please make sure you are connected to the Internet";
             return new BingQueryStatus(msg, 0);
         }
         catch (IOException ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-		}
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
+        }
         
         return new BingQueryStatus();
     }
@@ -250,7 +250,7 @@ public class BingSearch {
             ps.println(" (" + msg + ")");
             return new BingQueryStatus(msg, 901);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return new BingQueryStatus();
@@ -283,7 +283,7 @@ public class BingSearch {
             ps.println(" (" + msg + ")");
             return new BingQueryStatus(msg, 901);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return new BingQueryStatus();

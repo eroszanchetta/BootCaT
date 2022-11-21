@@ -16,6 +16,7 @@
  */
 package common;
 
+import gui.Main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -144,9 +145,9 @@ public class TextFormatter {
         
             output += "</text>";            
         } catch (FileNotFoundException ex) { 
-            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return output;

@@ -122,7 +122,7 @@ public class GoogleScraper {
                 FileUtils.deleteDirectory(queriesDir);
             }
         } catch (IOException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -200,9 +200,9 @@ public class GoogleScraper {
             try {                
                 tupleURLs.put(originalTuple, new URL(baseSearchUrl + URLEncoder.encode(tuple, "UTF8")));
             } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -227,7 +227,7 @@ public class GoogleScraper {
                 Thread.sleep(pause);                    
             }            
         } catch (InterruptedException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
         
         File file = new File(queriesDir.getPath() + File.separator + count++ + ".html");
@@ -250,7 +250,7 @@ public class GoogleScraper {
             writer.close();
             reader.close();
         } catch (IOException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return file;
@@ -300,7 +300,7 @@ public class GoogleScraper {
                 results.add(cleanUrl);
             }
         } catch (IOException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return results;
@@ -352,7 +352,7 @@ public class GoogleScraper {
                 results.add(cleanUrl);
             }
         } catch (IOException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return results;
@@ -410,7 +410,7 @@ public class GoogleScraper {
                 results.add(cleanUrl);
             }
         } catch (IOException ex) {
-            Logger.getLogger(GoogleScraper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return results;
@@ -451,10 +451,10 @@ public class GoogleScraper {
             userAgentsTextFile = jarFile.getJarEntry("bootcat/tools/urlcollector/userAgents.txt");
         }
         catch (URISyntaxException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         try {
@@ -468,10 +468,10 @@ public class GoogleScraper {
             }
         }
         catch (FileNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     

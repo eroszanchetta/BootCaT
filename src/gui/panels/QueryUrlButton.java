@@ -23,6 +23,7 @@
 
 package gui.panels;
 
+import gui.Main;
 import gui.dialogs.GenericMessage;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -93,10 +94,8 @@ public class QueryUrlButton extends javax.swing.JPanel {
         
         try {
             Desktop.getDesktop().browse(url.toURI());
-        } catch (IOException ex) {
-            Logger.getLogger(UrlCheckBox.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(QueryUrlButton.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | URISyntaxException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }    
     

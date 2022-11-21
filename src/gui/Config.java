@@ -26,6 +26,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,18 +35,18 @@ import java.util.Properties;
  */
 public class Config {
 
-	private File bootcatAppData;
-	private Properties properties;
+    private File bootcatAppData;
+    private Properties properties;
     
     private final int           defaultBlackListMaxTypes  = 3;
     private final int           defaultBlackListMaxTokens = 10;
     private final SearchEngine  defaultSearchEngine = SearchEngine.EXTERNAL_BROWSER_GOOGLE;
-    private final Downloader    defaultDownloader = Downloader.CURL;
+    private final Downloader    defaultDownloader = Downloader.INTERNAL;
     private final int           defaultProxyPort = 8080;
 
-	public Config() {
-		initialize();
-	}
+    public Config() {
+            initialize();
+    }
     
     public Downloader getDownloader() {
         if (properties.getProperty("downloader") == null) {
@@ -61,13 +63,13 @@ public class Config {
         return defaultDownloader;
     }
     
-	public String getDataDir() {
-		return properties.getProperty("dataDirectory");
-	}
+    public String getDataDir() {
+            return properties.getProperty("dataDirectory");
+    }
 
-	public String getLookAndFeelName() {
-		return properties.getProperty("lookAndFeel");
-	}
+    public String getLookAndFeelName() {
+            return properties.getProperty("lookAndFeel");
+    }
 
     public SearchEngine getDefaultSearchEngine() {
         String defaultValue = properties.getProperty("defaultSearchEngine");
@@ -79,21 +81,21 @@ public class Config {
         return defaultSearchEngine;
     }
     
-	public boolean getCheckForNewVersion() {
-		String value = properties.getProperty("checkForNewVersion");
+    public boolean getCheckForNewVersion() {
+            String value = properties.getProperty("checkForNewVersion");
 
-		if (value == null) return true;
+            if (value == null) return true;
 
-		return Boolean.parseBoolean(value);
-	}
+            return Boolean.parseBoolean(value);
+    }
 
-	public boolean getCollectUsageStatistics() {
-		String value = properties.getProperty("collectUsageStatistics");
+    public boolean getCollectUsageStatistics() {
+            String value = properties.getProperty("collectUsageStatistics");
 
-		if (value == null) return true;
+            if (value == null) return true;
 
-		return Boolean.parseBoolean(value);
-	}
+            return Boolean.parseBoolean(value);
+    }
 
     public String getBootCatInstallationId() {
         return properties.getProperty("bootCatInstallationId");
@@ -119,40 +121,40 @@ public class Config {
         return store();
     }
 
-	public boolean setBlacklist(Language language, File file) {
-		String path = "";
-		if (file != null) path = file.getPath();
+    public boolean setBlacklist(Language language, File file) {
+            String path = "";
+            if (file != null) path = file.getPath();
 
-		properties.setProperty("blacklist_" + language.getIso_639_2_B(), path);
-		return store();
-	}
+            properties.setProperty("blacklist_" + language.getIso_639_2_B(), path);
+            return store();
+    }
 
-	public boolean setBlackListAlways(Language language, Boolean always) {
-		properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_always", always.toString());
-		return store();
-	}    
-    
-	public boolean setBlacklistMaxTypes(Language language, String maxTypes) {
-		properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_max_types", maxTypes);
-		return store();
-	}
+    public boolean setBlackListAlways(Language language, Boolean always) {
+            properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_always", always.toString());
+            return store();
+    }    
 
-	public boolean setBlacklistMaxTokens(Language language, String maxTokens) {
-		properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_max_tokens", maxTokens);
-		return store();
-	}
+    public boolean setBlacklistMaxTypes(Language language, String maxTypes) {
+            properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_max_types", maxTypes);
+            return store();
+    }
 
-	public File getBlackList(Language language) {
-		String path = properties.getProperty("blacklist_" + language.getIso_639_2_B());
+    public boolean setBlacklistMaxTokens(Language language, String maxTokens) {
+            properties.setProperty("blacklist_" + language.getIso_639_2_B() + "_max_tokens", maxTokens);
+            return store();
+    }
 
-		if (path == null) return null;
+    public File getBlackList(Language language) {
+            String path = properties.getProperty("blacklist_" + language.getIso_639_2_B());
 
-		return new File(path);
-	}
+            if (path == null) return null;
 
-	public boolean getBlackListAlways(Language language) {
-		return Boolean.parseBoolean(properties.getProperty("blacklist_" + language.getIso_639_2_B() + "_always"));
-	}
+            return new File(path);
+    }
+
+    public boolean getBlackListAlways(Language language) {
+            return Boolean.parseBoolean(properties.getProperty("blacklist_" + language.getIso_639_2_B() + "_always"));
+    }
     
     public Integer getBlacklistMaxTokens(Language language) {
         String maxTokens = properties.getProperty("blacklist_" + language.getIso_639_2_B() + "_max_tokens");
@@ -185,66 +187,66 @@ public class Config {
         return store();
     }    
     
-	public boolean setDataPath(String value) {
-		properties.setProperty("dataDirectory", value);
-		return store();
-	}
+    public boolean setDataPath(String value) {
+            properties.setProperty("dataDirectory", value);
+            return store();
+    }
 
-	public boolean setCheckForNewVersion(Boolean value) {
-		properties.setProperty("checkForNewVersion", value.toString());
-		return store();
-	}
+    public boolean setCheckForNewVersion(Boolean value) {
+            properties.setProperty("checkForNewVersion", value.toString());
+            return store();
+    }
 
-	public boolean setCollectUsageStatistics(Boolean value) {
-		properties.setProperty("collectUsageStatistics", value.toString());
-		return store();
-	}
+    public boolean setCollectUsageStatistics(Boolean value) {
+            properties.setProperty("collectUsageStatistics", value.toString());
+            return store();
+    }
 
-	public boolean setLookAndFeelName(String value) {
-		properties.setProperty("lookAndFeel", value);
-		return store();
-	}
+    public boolean setLookAndFeelName(String value) {
+            properties.setProperty("lookAndFeel", value);
+            return store();
+    }
     
     public boolean setUseProxy(Boolean value) {
-		properties.setProperty("useProxy", value.toString());
-		return store();
-	}
+            properties.setProperty("useProxy", value.toString());
+            return store();
+    }
 
     public boolean setProxyAuth(Boolean value) {
-		properties.setProperty("proxyAuth", value.toString());
-		return store();
-	}
+            properties.setProperty("proxyAuth", value.toString());
+            return store();
+    }
     
-	public boolean getProxyAuth() {
-		String value = properties.getProperty("proxyAuth");
+    public boolean getProxyAuth() {
+            String value = properties.getProperty("proxyAuth");
 
-		if (value == null) return false;
+            if (value == null) return false;
 
-		return Boolean.parseBoolean(value);
-	}    
-    
-    
-	public boolean getUseProxy() {
-		String value = properties.getProperty("useProxy");
+            return Boolean.parseBoolean(value);
+    }    
 
-		if (value == null) return false;
 
-		return Boolean.parseBoolean(value);
-	}    
-    
-	public boolean setHttpProxy(String value) {
-		properties.setProperty("httpProxy", value);
-		return store();
-	}
+    public boolean getUseProxy() {
+            String value = properties.getProperty("useProxy");
+
+            if (value == null) return false;
+
+            return Boolean.parseBoolean(value);
+    }    
+
+    public boolean setHttpProxy(String value) {
+            properties.setProperty("httpProxy", value);
+            return store();
+    }
 
     public String getHttpProxy() {
         return properties.getProperty("httpProxy");
     }
     
-	public boolean setHttpProxyPort(Integer value) {
-		properties.setProperty("httpProxyPort", value.toString());
-		return store();
-	}
+    public boolean setHttpProxyPort(Integer value) {
+            properties.setProperty("httpProxyPort", value.toString());
+            return store();
+    }
     
     public Integer getHttpProxyPort() {
         String value = properties.getProperty("httpProxyPort");
@@ -264,19 +266,19 @@ public class Config {
         return intValue;
     }
     
-	public boolean setHttpsProxy(String value) {
-		properties.setProperty("httpsProxy", value);
-		return store();
-	}
+    public boolean setHttpsProxy(String value) {
+            properties.setProperty("httpsProxy", value);
+            return store();
+    }
     
     public String getHttpsProxy() {
         return properties.getProperty("httpsProxy");
     }
 
-	public boolean setHttpsProxyPort(Integer value) {
-		properties.setProperty("httpsProxyPort", value.toString());
-		return store();
-	}
+    public boolean setHttpsProxyPort(Integer value) {
+            properties.setProperty("httpsProxyPort", value.toString());
+            return store();
+    }
 
     public int getDefaultProxyPort() {
         return defaultProxyPort;
@@ -304,7 +306,7 @@ public class Config {
      * Create a directory in user home and use it to store preferences
      * @return true if the directory was created, false if the directory already exists
      */
-	private void initialize() {
+    private void initialize() {
         bootcatAppData = new File(System.getProperty("user.home") + File.separator + ".bootcat");
         File userPreferencesFile = new File(bootcatAppData + File.separator + "preferences.ini");
 
@@ -320,7 +322,7 @@ public class Config {
                     properties.load(in);
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -342,7 +344,7 @@ public class Config {
             return true;
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
     }

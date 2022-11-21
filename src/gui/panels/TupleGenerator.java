@@ -16,6 +16,7 @@
  */
 
 package gui.panels;
+import gui.Main;
 import gui.dialogs.GenericMessage;
 import gui.WizardStep;
 import gui.dialogs.TupleEditor;
@@ -186,15 +187,15 @@ public class TupleGenerator extends WizardStep {
 		}
 
 		catch (IOException ex) {
-			ex.printStackTrace();
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 		}
 
 		finally {
 			try {
-				fos.close();
+                            fos.close();
 			}
 			catch (IOException ex) {
-				ex.printStackTrace();
+                            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 			}
 		}
         
@@ -214,43 +215,43 @@ public class TupleGenerator extends WizardStep {
         // create an ArrayList so we can return tuples
         HashMap<String, Boolean> tuplesMap = new HashMap<>();
         
-		try {
-			fos = new FileOutputStream(mainPanel.getPaths().getTuplesFile());
+            try {
+                fos = new FileOutputStream(mainPanel.getPaths().getTuplesFile());
 
-			OutputStreamWriter writer = new OutputStreamWriter(fos, mainPanel.getDefaultOutputCharset());
+                OutputStreamWriter writer = new OutputStreamWriter(fos, mainPanel.getDefaultOutputCharset());
 
-			Iterator<TupleCheckBox> it = displayedTuples.iterator();
-			while (it.hasNext()) {
-				TupleCheckBox tuple = it.next();
-                
-				if (tuple.isSelected()) {
-                    writer.write(tuple.getLabel() + "\n");
-                    tuplesMap.put(tuple.getLabel(), true);
+                Iterator<TupleCheckBox> it = displayedTuples.iterator();
+                while (it.hasNext()) {
+                    TupleCheckBox tuple = it.next();
+
+                    if (tuple.isSelected()) {
+                        writer.write(tuple.getLabel() + "\n");
+                        tuplesMap.put(tuple.getLabel(), true);
+                    }
+                    else {
+                        tuplesMap.put(tuple.getLabel(), false);
+                    }
                 }
-                else {
-                    tuplesMap.put(tuple.getLabel(), false);
+
+                writer.flush();
+                writer.close();
+            }
+            catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            }
+
+            finally {
+                try {
+                    fos.close();
                 }
-			}
+                catch (IOException ex) {
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+                }
+            }
 
-			writer.flush();
-			writer.close();
-		}
-        catch (FileNotFoundException ex) {
-            Logger.getLogger(TupleGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(TupleGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-		finally {
-			try {
-				fos.close();
-			}
-			catch (IOException ex) {
-				Logger.getLogger(TupleGenerator.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-
-		return tuplesMap;
+            return tuplesMap;
 	}
 
     private BigInteger getMaximumNumberOfTuples(int tupleLength) {
@@ -272,7 +273,7 @@ public class TupleGenerator extends WizardStep {
             return combs;
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return BigInteger.valueOf(-1);
         }
     }
@@ -308,10 +309,10 @@ public class TupleGenerator extends WizardStep {
             mainPanel.verifyNavigation();
         }
         catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     

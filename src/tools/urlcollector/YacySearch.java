@@ -91,9 +91,9 @@ public class YacySearch {
             else outputPrintStream = new PrintStream(new BufferedOutputStream(new FileOutputStream(collectedUrls)), true, charset.name()); 
 
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(BingSearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -139,7 +139,7 @@ public class YacySearch {
         try {
             query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             // TODO handle Exception
             return;
         }
@@ -220,9 +220,9 @@ public class YacySearch {
             }
             
         } catch (MalformedURLException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         // update progress bar
@@ -293,9 +293,9 @@ public class YacySearch {
                 urls.add(currentUrl);
             }            
         } catch (MalformedURLException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
             System.err.println("updateYacyHostsList: unable to retrieve updated Yacy hosts list, using hard-coded list");
             return null;
@@ -303,7 +303,7 @@ public class YacySearch {
             try {
                 is.close();
             } catch (IOException ex) {
-                Logger.getLogger(YacySearch.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
         

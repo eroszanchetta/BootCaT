@@ -17,13 +17,10 @@
 
 package gui.helpers;
 
+import gui.Main;
 import gui.Paths;
 import tools.tuplesbuilder.TuplesBuilder;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +37,7 @@ public class BuildRandomTuples {
             TuplesBuilder tuplesBuilder = new TuplesBuilder();
             return tuplesBuilder.buildTuples(paths.getSeedsFile().getCanonicalFile(), paths.getTuplesFile().getCanonicalFile(), tupleSize, numberOfTuples);
         } catch (IOException ex) {
-            Logger.getLogger(BuildRandomTuples.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
     }
@@ -98,7 +95,7 @@ public class BuildRandomTuples {
 //            tuplesFile = null;
 //        }
 //        catch (IOException ex) {
-//            ex.printStackTrace();
+//            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
 //        }
 //
 //        return completedCorrectly;

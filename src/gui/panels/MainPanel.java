@@ -27,6 +27,7 @@ import gui.Project;
 import gui.dialogs.AboutBox;
 import gui.dialogs.ConfirmDialog;
 import gui.dialogs.GenericMessage;
+import gui.dialogs.LogDialog;
 import gui.dialogs.Options;
 import java.awt.CardLayout;
 import java.awt.Desktop;
@@ -56,6 +57,8 @@ public class MainPanel extends javax.swing.JFrame {
     private final Paths         paths;
     private final Charset       defaultOutputCharset;
     private final Project       project;
+    
+    private final LogDialog     logDialog;
 
     private Steps               steps;
     private ArrayList<Integer>  stepOrder;    
@@ -74,9 +77,9 @@ public class MainPanel extends javax.swing.JFrame {
         return currentStepNumber;
     }
 
-	public JButton getQuitButton() {
-		return quitButton;
-	}
+    public JButton getQuitButton() {
+        return quitButton;
+    }
 
     public JButton getBackButton() {
         return backButton;
@@ -132,14 +135,14 @@ public class MainPanel extends javax.swing.JFrame {
         verifyNavigation();
     }
 
-	public Main getMain() {
-		return main;
-	}
+    public Main getMain() {
+        return main;
+    }
 
     public MainPanel(Properties systemPreferences, Config config, Main main) {
         this.main = main;
         
-		defaultOutputCharset = StandardCharsets.UTF_8;
+        defaultOutputCharset = StandardCharsets.UTF_8;
         
         this.corpusComplete = false;
 
@@ -150,8 +153,10 @@ public class MainPanel extends javax.swing.JFrame {
         currentStepNumber = 1;
         initComponents();
         
+        logDialog = new LogDialog(this, false, main.getLogFile().toPath(), this);
+        
         // Commented this out because it breaks FlatLAF on Windows
-//        setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
+        // setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));
                         
         if (main.isDevelMode()) {
             isDevLabel.setText("DEVELOPMENT MODE");
@@ -160,9 +165,9 @@ public class MainPanel extends javax.swing.JFrame {
         this.defineWizardSteps();
     }
     
-	public Charset getDefaultOutputCharset() {
-		return defaultOutputCharset;
-	}
+    public Charset getDefaultOutputCharset() {
+        return defaultOutputCharset;
+    }
 
     public ArrayList<Integer> getStepOrder() {
         return stepOrder;
@@ -202,10 +207,10 @@ public class MainPanel extends javax.swing.JFrame {
         
     }
 
-	/**
-	 * Confirm quit
-	 * @return false if user doesn't want to quit, if user does want to quit, terminate application
-	 */
+    /**
+     * Confirm quit
+     * @return false if user doesn't want to quit, if user does want to quit, terminate application
+     */
     public boolean confirmQuit() {
         // if corpus is complete, no confirmation is asked before quitting
         if (this.isCorpusComplete()) {
@@ -226,10 +231,10 @@ public class MainPanel extends javax.swing.JFrame {
         confirm.setVisible(true);
 
         if (confirm.getReturnStatus() == ConfirmDialog.RET_OK) {
-			System.exit(0);
-		}
+            System.exit(0);
+        }
 
-		return false;
+        return false;
     }
     
     public void goToStep(int stepNumber) {
@@ -261,7 +266,7 @@ public class MainPanel extends javax.swing.JFrame {
 
         steps.getStep(currentStepNumber).save();
         
-		steps.getStep(currentStepNumber).next();
+        steps.getStep(currentStepNumber).next();
 
         currentStepNumber = nextStep;
 
@@ -287,7 +292,7 @@ public class MainPanel extends javax.swing.JFrame {
 
         steps.getStep(currentStepNumber).save();
         
-		steps.getStep(currentStepNumber).back();
+        steps.getStep(currentStepNumber).back();
 
         currentStepNumber = prevStep;
 
@@ -319,6 +324,8 @@ public class MainPanel extends javax.swing.JFrame {
         quitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         optionMenuItem = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        logMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         helpMenuItem = new javax.swing.JMenuItem();
         tutorialMenuItem = new javax.swing.JMenuItem();
@@ -407,6 +414,19 @@ public class MainPanel extends javax.swing.JFrame {
         editMenu.add(optionMenuItem);
 
         jMenuBar1.add(editMenu);
+
+        viewMenu.setText("View");
+
+        logMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/log.png"))); // NOI18N
+        logMenuItem.setText("Log");
+        logMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logMenuItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(logMenuItem);
+
+        jMenuBar1.add(viewMenu);
 
         helpMenu.setText("Help");
 
@@ -543,7 +563,7 @@ public class MainPanel extends javax.swing.JFrame {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_homePageMenuItemMousePressed
 
@@ -560,77 +580,77 @@ public class MainPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
 	private void checkUpdatesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkUpdatesMenuItemActionPerformed
-		Main.UpdateStatus updateStatus = main.checkForUpdates();
+            Main.UpdateStatus updateStatus = main.checkForUpdates();
 
-		if (updateStatus.equals(Main.UpdateStatus.NO_UPDATES)) {
-			String msg = "You already have the latest version of BootCaT frontend (" + main.getVersionNumber() + ").<br /><br /> No update is necessary.";
+            if (updateStatus.equals(Main.UpdateStatus.NO_UPDATES)) {
+                String msg = "You already have the latest version of BootCaT frontend (" + main.getVersionNumber() + ").<br /><br /> No update is necessary.";
 
-			GenericMessage latestVersion = new GenericMessage(this, true, msg, GenericMessage.Type.INFO);
-			latestVersion.setVisible(true);
-		}
-		else if (updateStatus.equals(Main.UpdateStatus.ERROR)) {
-			String msg = "Unable to check for updates, please note that an Internet connection is required to check for updates.";
+                GenericMessage latestVersion = new GenericMessage(this, true, msg, GenericMessage.Type.INFO);
+                latestVersion.setVisible(true);
+            }
+            else if (updateStatus.equals(Main.UpdateStatus.ERROR)) {
+                String msg = "Unable to check for updates, please note that an Internet connection is required to check for updates.";
 
-			GenericMessage error = new GenericMessage(this, true, msg, GenericMessage.Type.WARNING);
-			error.setVisible(true);
-		}
+                GenericMessage error = new GenericMessage(this, true, msg, GenericMessage.Type.WARNING);
+                error.setVisible(true);
+            }
 	}//GEN-LAST:event_checkUpdatesMenuItemActionPerformed
 
 	private void releaseNotesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_releaseNotesMenuItemActionPerformed
-		URI uri = URI.create(main.redirectUrl(UriRedirect.RELEASE_NOTES));
-        
-        try {
-            Desktop.getDesktop().browse(uri);
-        } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            URI uri = URI.create(main.redirectUrl(UriRedirect.RELEASE_NOTES));
+
+            try {
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            }
 	}//GEN-LAST:event_releaseNotesMenuItemActionPerformed
 
 	private void helpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuItemActionPerformed
-		URI uri = URI.create(main.redirectUrl(UriRedirect.HELP_HOME));
-        
-        try {
-            Desktop.getDesktop().browse(uri);
-        } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            URI uri = URI.create(main.redirectUrl(UriRedirect.HELP_HOME));
+
+            try {
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            }
 	}//GEN-LAST:event_helpMenuItemActionPerformed
 
 	private void myCorporaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myCorporaMenuItemActionPerformed
-		try {
-            Desktop.getDesktop().open(getPaths().getUserDataPath());
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            try {
+                Desktop.getDesktop().open(getPaths().getUserDataPath());
+            }
+            catch (IOException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            }
 	}//GEN-LAST:event_myCorporaMenuItemActionPerformed
 
 	private void optionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionMenuItemActionPerformed
-		Options options = new Options(this, true);
-		options.setVisible(true);
+            Options options = new Options(this, true);
+            options.setVisible(true);
 	}//GEN-LAST:event_optionMenuItemActionPerformed
 
 	private void quitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitMenuItemActionPerformed
-		confirmQuit();
+            confirmQuit();
 	}//GEN-LAST:event_quitMenuItemActionPerformed
 
     private void tutorialMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutorialMenuItemActionPerformed
-		URI uri = URI.create(main.redirectUrl(UriRedirect.HELP_TUTORIAL));
+        URI uri = URI.create(main.redirectUrl(UriRedirect.HELP_TUTORIAL));
         
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tutorialMenuItemActionPerformed
 
     private void licenseMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_licenseMenuItemActionPerformed
-		URI uri = URI.create(main.redirectUrl(UriRedirect.LICENSE));
+        URI uri = URI.create(main.redirectUrl(UriRedirect.LICENSE));
         
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_licenseMenuItemActionPerformed
 
@@ -648,9 +668,13 @@ public class MainPanel extends javax.swing.JFrame {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(AboutBox.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_issueHelpLabelMouseClicked
+
+    private void logMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logMenuItemActionPerformed
+        logDialog.setVisible(true);
+    }//GEN-LAST:event_logMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -667,6 +691,7 @@ public class MainPanel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem licenseMenuItem;
+    private javax.swing.JMenuItem logMenuItem;
     private javax.swing.JLabel messageArea;
     private javax.swing.JMenuItem myCorporaMenuItem;
     private javax.swing.JButton nextButton;
@@ -675,6 +700,7 @@ public class MainPanel extends javax.swing.JFrame {
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem releaseNotesMenuItem;
     private javax.swing.JMenuItem tutorialMenuItem;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 
 }

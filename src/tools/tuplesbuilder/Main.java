@@ -191,10 +191,10 @@ public class Main {
             usageTextFile = jarFile.getJarEntry("bootcat/tools/tuplesbuilder/usage.txt");
         }
         catch (URISyntaxException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         try {
@@ -213,10 +213,10 @@ public class Main {
             System.out.println(String.format(usage, programFile.getName(), VERSION));
         }
         catch (FileNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -265,7 +265,7 @@ public class Main {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(gui.Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
 }

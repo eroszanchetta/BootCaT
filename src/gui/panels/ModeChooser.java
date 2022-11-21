@@ -19,6 +19,7 @@ package gui.panels;
 import common.UriRedirect;
 import gui.WizardStep;
 import common.Utils;
+import gui.Main;
 import gui.ProjectMode;
 import gui.dialogs.GenericMessage;
 import java.awt.Desktop;
@@ -65,7 +66,7 @@ public class ModeChooser extends WizardStep {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(ModeChooser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
     
@@ -287,7 +288,7 @@ public class ModeChooser extends WizardStep {
                 // now scrape results
                 return ExternalBrowser.processResults(mainPanel, tika);                
             } catch (IOException ex) {
-                Logger.getLogger(ModeChooser.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -321,7 +322,7 @@ public class ModeChooser extends WizardStep {
             try {
                 generatedFileList = File.createTempFile("BootCat", ".txt");
             } catch (IOException ex) {
-                Logger.getLogger(ModeChooser.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
                         
             Collection<File> files = FileUtils.listFiles(sourceDir, null, false);
@@ -340,7 +341,7 @@ public class ModeChooser extends WizardStep {
                 
                 writer.close();
             } catch (IOException ex) {
-                    Logger.getLogger(ModeChooser.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
             
             File destFile1  = mainPanel.getPaths().getFinalUrlList();
@@ -353,7 +354,7 @@ public class ModeChooser extends WizardStep {
                 Utils.copyFile(generatedFileList, destFile3);
             }
             catch (IOException ex) {
-                Logger.getLogger(CorpusBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }
             
             return urlListIsNotNull;

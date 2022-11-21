@@ -37,6 +37,7 @@ import de.l3s.boilerpipe.extractors.DefaultExtractor;
 import de.l3s.boilerpipe.extractors.KeepEverythingExtractor;
 import de.l3s.boilerpipe.extractors.LargestContentExtractor;
 import gui.Config;
+import gui.Main;
 import gui.Project;
 import java.io.BufferedReader;
 import java.io.File;
@@ -157,11 +158,11 @@ public class ContentExtractor {
                 uris.add(new URI(line));
             }            
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         return extract(uris, language, textLevelLanguageFilter, sentLevelLanguageFilter, minSize, maxSize, maxFileSize, corpusName, downloadDir, corpusDir,
@@ -188,7 +189,7 @@ public class ContentExtractor {
                 .build();
 
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         // compute number of figures for file names
@@ -430,7 +431,7 @@ public class ContentExtractor {
             return fixedUri;
             
         } catch (UnsupportedEncodingException | URISyntaxException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return null;
@@ -531,9 +532,9 @@ public class ContentExtractor {
                 output += currentSentence + "\n";
             }
         } catch (FileNotFoundException ex) { 
-            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TextFormatter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         corpusChunk.setSkippedSentences(skippedSentences);
@@ -550,7 +551,7 @@ public class ContentExtractor {
             FileUtils.copyFile(sourceFile, corpusChunk.getDownloadedFile());
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return false;
@@ -576,7 +577,8 @@ public class ContentExtractor {
             case "https":
                 
                 switch (downloader) {
-                    case CURL:
+                    case CURL_EXT:
+                    case CURL_OS:
                         return downloadViaCurl(corpusChunk);
                     
                     default:
@@ -586,7 +588,8 @@ public class ContentExtractor {
                 
             case "http":
                 switch (downloader) {
-                    case CURL:
+                    case CURL_EXT:
+                    case CURL_OS:
                         return downloadViaCurl(corpusChunk);
 
                     default:
@@ -632,7 +635,7 @@ public class ContentExtractor {
         curlWrapper.getFile();
         
         if (curlWrapper.getExitCode() == 0) {
-            corpusChunk.setDownloader(Downloader.CURL);
+            corpusChunk.setDownloader(config.getDownloader());
         }
         
         return true;
@@ -676,18 +679,18 @@ public class ContentExtractor {
             inputStream.close();            
 
         } catch (ProtocolException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (SSLHandshakeException ex) {
             System.err.println("SSLHandshakeException, disabling SSL verification and retrying");
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             disableSslVerification();
             return download(corpusChunk);
         } catch (SSLException | SocketTimeoutException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (IOException | URISyntaxException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
         
@@ -733,13 +736,13 @@ public class ContentExtractor {
             inputStream.close();            
 
         } catch (ProtocolException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);            
             return false;
         } catch (SocketTimeoutException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;            
         } catch (IOException | URISyntaxException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         }
         
@@ -783,8 +786,8 @@ public class ContentExtractor {
 
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);                    
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | KeyManagementException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -805,7 +808,7 @@ public class ContentExtractor {
                 Long fileLength = file.length();
                 return fileLength.intValue();                
             } catch (MalformedURLException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
                 return -1;
             }
         }
@@ -820,7 +823,7 @@ public class ContentExtractor {
             conn.getInputStream();
             return conn.getContentLength();
         } catch (IOException e) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, e);
             return -1;
         } finally {
             if (conn != null) conn.disconnect();
@@ -838,7 +841,7 @@ public class ContentExtractor {
             return tika.detect(file);
             
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
         
         return null;
@@ -858,7 +861,7 @@ public class ContentExtractor {
             corpusChunk.setMetadata(metadata);
             return reader;
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);            
             return null;
         }
     }
@@ -921,7 +924,7 @@ public class ContentExtractor {
             return text;
             
         } catch (FileNotFoundException | BoilerpipeProcessingException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
 
         return null;
@@ -937,10 +940,8 @@ public class ContentExtractor {
 
             plainTextWriter = null;
             System.gc();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
     
@@ -956,10 +957,8 @@ public class ContentExtractor {
 
             xmlFileWriter = null;
             System.gc();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }        
     }
     
@@ -1041,17 +1040,15 @@ public class ContentExtractor {
 
                 xmlFileWriter = null;
                 System.gc();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             }            
             
             System.gc();
             
             return text;
         } catch (IOException ex) {
-            Logger.getLogger(ContentExtractor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         } finally {
             
         }

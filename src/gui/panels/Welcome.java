@@ -18,6 +18,7 @@
 package gui.panels;
 
 import common.UriRedirect;
+import gui.Main;
 import gui.WizardStep;
 import java.awt.Desktop;
 import java.io.IOException;
@@ -116,7 +117,7 @@ public class Welcome extends WizardStep {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException ex) {
-            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jLabel1MouseClicked
 

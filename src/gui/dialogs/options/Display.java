@@ -51,19 +51,19 @@ public class Display extends javax.swing.JPanel {
 	}
 
 	private void addAvailableLafs() {
-		for (int i = 0; i < UIManager.getInstalledLookAndFeels().length; ++i) {
-			UIManager.LookAndFeelInfo currentLaf = UIManager.getInstalledLookAndFeels()[i];
+            for (int i = 0; i < UIManager.getInstalledLookAndFeels().length; ++i) {
+                UIManager.LookAndFeelInfo currentLaf = UIManager.getInstalledLookAndFeels()[i];
 
-			ComboBoxItem item = new ComboBoxItem(currentLaf.getName(), currentLaf);
-			lafChooserCombobox.addItem(item);
+                ComboBoxItem item = new ComboBoxItem(currentLaf.getName(), currentLaf);
+                lafChooserCombobox.addItem(item);
 
-			/* if this laf is the currently selected one,
-			 * set it as the selected one in the combobox
-			 */
-			if (UIManager.getLookAndFeel().getClass().getName().equals(currentLaf.getClassName())) {
-				lafChooserCombobox.setSelectedItem(item);
-			}
-		}
+                /* if this laf is the currently selected one,
+                 * set it as the selected one in the combobox
+                 */
+                if (UIManager.getLookAndFeel().getClass().getName().equals(currentLaf.getClassName())) {
+                    lafChooserCombobox.setSelectedItem(item);
+                }
+            }
 	}
 
 	/** This method is called from within the constructor to
@@ -124,14 +124,14 @@ public class Display extends javax.swing.JPanel {
 	}//GEN-LAST:event_lafChooserComboboxPropertyChange
 
 	private void lafChooserComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lafChooserComboboxActionPerformed
-		if (!initialized) return;
+            if (!initialized) return;
 
-		ComboBoxItem item = (ComboBoxItem) lafChooserCombobox.getSelectedItem();
-		UIManager.LookAndFeelInfo laf = (UIManager.LookAndFeelInfo) item.getValue();
+            ComboBoxItem item = (ComboBoxItem) lafChooserCombobox.getSelectedItem();
+            UIManager.LookAndFeelInfo laf = (UIManager.LookAndFeelInfo) item.getValue();
 
-		mainPanel.getMain().getConfig().setLookAndFeelName(laf.getClassName());
+            mainPanel.getMain().getConfig().setLookAndFeelName(laf.getClassName());
 
-		restartRequiredLabel.setVisible(true);
+            restartRequiredLabel.setVisible(true);
 	}//GEN-LAST:event_lafChooserComboboxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
