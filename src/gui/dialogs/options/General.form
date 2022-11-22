@@ -44,7 +44,7 @@
                                   <Component id="collectStatsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="searchPMDirError" pref="182" max="32767" attributes="0"/>
+                              <Component id="searchPMDirError" pref="202" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -66,10 +66,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="proxyAuthCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="proxyAuthCheckBox" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="httpsProxyTextField" max="32767" attributes="0"/>
@@ -77,16 +74,20 @@
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="httpPortLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="httpsPortLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="httpPortSpinner" max="32767" attributes="0"/>
-                                  <Component id="httpsPortSpinner" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="httpPortLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="httpProxyPortTextField" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="httpsPortLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="httpsProxyPortTextField" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -116,14 +117,14 @@
                   <Component id="httpProxyAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="httpProxyTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="httpPortLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="httpPortSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="httpProxyPortTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="httpsProxyAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="httpsProxyTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="httpsPortLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="httpsPortSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="httpsProxyPortTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="proxyAuthCheckBox" min="-2" max="-2" attributes="0"/>
@@ -141,7 +142,7 @@
                       <EmptySpace pref="15" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="43" max="32767" attributes="0"/>
+              <EmptySpace pref="80" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -281,15 +282,15 @@
         <Property name="text" type="java.lang.String" value="Port"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="httpPortSpinner">
-    </Component>
-    <Component class="javax.swing.JSpinner" name="httpsPortSpinner">
-    </Component>
     <Component class="javax.swing.JCheckBox" name="proxyAuthCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Proxy requires authentication"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="httpProxyPortTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="httpsProxyPortTextField">
     </Component>
   </SubComponents>
 </Form>

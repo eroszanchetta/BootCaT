@@ -75,7 +75,7 @@ public class General extends javax.swing.JPanel {
         
     }
 
-	private void populateForm() {
+    private void populateForm() {
         
         dataDirTextField.setText(config.getDataDir());
         
@@ -97,21 +97,28 @@ public class General extends javax.swing.JPanel {
                 downloaderComboBox.setSelectedIndex(i);
             }
         }
-        
-        // do not display any separators (i.e. no thousand separator 1,000)
-        httpPortSpinner.setEditor(new JSpinner.NumberEditor(httpPortSpinner, "#"));
-        httpsPortSpinner.setEditor(new JSpinner.NumberEditor(httpsPortSpinner, "#"));
-        
-        httpPortSpinner.setModel(new SpinnerNumberModel(config.getDefaultProxyPort(), 1, Integer.MAX_VALUE, 1));
-        httpsPortSpinner.setModel(new SpinnerNumberModel(config.getDefaultProxyPort(), 1, Integer.MAX_VALUE, 1));        
-        
+
         useProxyCheckBox.setSelected(config.getUseProxy());
         proxyAuthCheckBox.setSelected(config.getProxyAuth());
+        
         httpProxyTextField.setText(config.getHttpProxy());
         httpsProxyTextField.setText(config.getHttpsProxy());
-        httpPortSpinner.setValue(config.getHttpProxyPort());
-        httpsPortSpinner.setValue(config.getHttpsProxyPort());
-                
+        
+        if (config.getHttpProxyPort() > 0) {
+            httpProxyPortTextField.setText(config.getHttpProxyPort().toString());
+        }
+        else {
+            httpProxyPortTextField.setText("");
+        }
+        
+        if (config.getHttpsProxyPort() > 0) {
+            httpsProxyPortTextField.setText(config.getHttpsProxyPort().toString());
+        }
+        else {
+            httpsProxyPortTextField.setText("");
+        }
+
+        
         toggleProxySection();
         
         checkUpdatesCheckBox.setSelected(config.getCheckForNewVersion());
@@ -129,19 +136,19 @@ public class General extends javax.swing.JPanel {
         
         Integer httpProxyPort;
         try {
-            httpProxyPort = (Integer) httpPortSpinner.getValue();
+            httpProxyPort = Integer.valueOf(httpProxyPortTextField.getText());
         }
         catch (NumberFormatException ex) {
-            httpProxyPort = config.getDefaultProxyPort();
+            httpProxyPort = -1;
         }
         config.setHttpProxyPort(httpProxyPort);
         
         Integer httpsProxyPort;
         try {
-            httpsProxyPort = (Integer) httpsPortSpinner.getValue();
+            httpsProxyPort = Integer.valueOf(httpsProxyPortTextField.getText());
         }
         catch (NumberFormatException ex) {
-            httpsProxyPort = config.getDefaultProxyPort();
+            httpsProxyPort = -1;
         }
         config.setHttpsProxyPort(httpsProxyPort);
     }
@@ -172,9 +179,9 @@ public class General extends javax.swing.JPanel {
         httpPortLabel = new javax.swing.JLabel();
         httpsProxyTextField = new javax.swing.JTextField();
         httpsPortLabel = new javax.swing.JLabel();
-        httpPortSpinner = new javax.swing.JSpinner();
-        httpsPortSpinner = new javax.swing.JSpinner();
         proxyAuthCheckBox = new javax.swing.JCheckBox();
+        httpProxyPortTextField = new javax.swing.JTextField();
+        httpsProxyPortTextField = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(450, 380));
 
@@ -296,7 +303,7 @@ public class General extends javax.swing.JPanel {
                                     .addComponent(checkUpdatesCheckBox)
                                     .addComponent(collectStatsCheckBox))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchPMDirError, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
+                                .addComponent(searchPMDirError, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(downloaderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,21 +319,22 @@ public class General extends javax.swing.JPanel {
                             .addComponent(httpProxyAddressLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(proxyAuthCheckBox)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(proxyAuthCheckBox)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(httpsProxyTextField)
                                     .addComponent(httpProxyTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(httpPortLabel)
-                                    .addComponent(httpsPortLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(httpPortSpinner)
-                                    .addComponent(httpsPortSpinner)))))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(httpPortLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(httpProxyPortTextField))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(httpsPortLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(httpsProxyPortTextField)))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,16 +358,15 @@ public class General extends javax.swing.JPanel {
                     .addComponent(httpProxyAddressLabel)
                     .addComponent(httpProxyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(httpPortLabel)
-                    .addComponent(httpPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(httpProxyPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(httpsProxyAddressLabel)
                     .addComponent(httpsProxyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(httpsPortLabel)
-                    .addComponent(httpsPortSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(httpsProxyPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(proxyAuthCheckBox)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(checkUpdatesCheckBox)
@@ -371,7 +378,7 @@ public class General extends javax.swing.JPanel {
                         .addGap(26, 26, 26)
                         .addComponent(searchPMDirError, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -424,7 +431,11 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
 }//GEN-LAST:event_collectStatsCheckBoxActionPerformed
 
     private void downloaderComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloaderComboBoxActionPerformed
-        
+        // proxy only works with Curl, so if downloader is "Internal", turn off proxy
+        if (downloaderComboBox.getSelectedItem().equals(Downloader.INTERNAL)) {
+            useProxyCheckBox.setSelected(false);
+            toggleProxySection();
+        }
     }//GEN-LAST:event_downloaderComboBoxActionPerformed
 
     private void downloaderComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_downloaderComboBoxItemStateChanged
@@ -444,6 +455,7 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
     }//GEN-LAST:event_useProxyCheckBoxActionPerformed
 
     private void toggleProxySection() {
+        // proxy only works with Curl
         if (useProxyCheckBox.isSelected()) {
             config.setDownloader(Downloader.CURL_OS);
             downloaderComboBox.setSelectedItem(Downloader.CURL_OS);
@@ -451,11 +463,11 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
         
         httpProxyAddressLabel.setEnabled(useProxyCheckBox.isSelected());
         httpPortLabel.setEnabled(useProxyCheckBox.isSelected());
-        httpPortSpinner.setEnabled(useProxyCheckBox.isSelected());
+        httpProxyPortTextField.setEnabled(useProxyCheckBox.isSelected());
         httpProxyTextField.setEnabled(useProxyCheckBox.isSelected());
         httpsProxyAddressLabel.setEnabled(useProxyCheckBox.isSelected());
         httpsPortLabel.setEnabled(useProxyCheckBox.isSelected());
-        httpsPortSpinner.setEnabled(useProxyCheckBox.isSelected());
+        httpsProxyPortTextField.setEnabled(useProxyCheckBox.isSelected());
         httpsProxyTextField.setEnabled(useProxyCheckBox.isSelected());
         proxyAuthCheckBox.setEnabled(useProxyCheckBox.isSelected());
     }
@@ -479,12 +491,12 @@ private void collectStatsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JComboBox downloaderComboBox;
     private javax.swing.JLabel downloaderLabel;
     private javax.swing.JLabel httpPortLabel;
-    private javax.swing.JSpinner httpPortSpinner;
     private javax.swing.JLabel httpProxyAddressLabel;
+    private javax.swing.JTextField httpProxyPortTextField;
     private javax.swing.JTextField httpProxyTextField;
     private javax.swing.JLabel httpsPortLabel;
-    private javax.swing.JSpinner httpsPortSpinner;
     private javax.swing.JLabel httpsProxyAddressLabel;
+    private javax.swing.JTextField httpsProxyPortTextField;
     private javax.swing.JTextField httpsProxyTextField;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel leaveThisOnLabel;

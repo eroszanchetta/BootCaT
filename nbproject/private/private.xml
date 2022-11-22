@@ -3,12 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/ContentExtractor.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/panels/MainPanel.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/dialogs/options/Display.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/dialogs/options/General.java</file>
             <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Config.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Main.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/tools/urlcollector/usage_vogon_mode.txt</file>
             <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Paths.java</file>
-            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/helpers/PathVerifier.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/dialogs/GenericMessage.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/panels/TupleGenerator.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/Main.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/gui/dialogs/LogDialog.java</file>
+            <file>file:/Users/eros/Storage/devel/NetBeansProjects/Java/BootCaT/src/contentextractor/ContentExtractor.java</file>
         </group>
     </open-files>
 </project-private>
