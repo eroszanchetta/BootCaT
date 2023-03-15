@@ -63,15 +63,15 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.55;
+    private final Double    versionNumber       = 1.56;
     private final String    codeName            = "Crookshanks";
-    private final int       buildNumber         = 265;
-    private final int       copyRightYear       = 2022;
+    private final int       buildNumber         = 268;
+    private final int       copyRightYear       = 2023;
 
     private File            programDir;
     private File            defaultBootCatDir;
 
-    private File            logFile;
+    private File            tempLogFile;
     private String          defaultDataDir;
 
     private String          accountKey;
@@ -154,7 +154,7 @@ public class Main {
 
     public void main() {
 
-        logFile = initializeLogger();
+        tempLogFile = initializeLogger();
         
         File jarFile;
         try {
@@ -250,7 +250,7 @@ public class Main {
             Path temp = Files.createTempFile("bootcat_log", ".txt");
             String logFileName = temp.getParent() + File.separator + temp.getFileName();
             
-            logFile = new File(logFileName);
+            tempLogFile = new File(logFileName);
                         
             LOGGER = Logger.getLogger(LOGNAME);
             FileHandler fh;
@@ -265,7 +265,7 @@ public class Main {
             Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
         }
                 
-        return logFile;
+        return tempLogFile;
     }
     
     private void defineDefaultValues() {
@@ -332,8 +332,8 @@ public class Main {
         return defaultDataDir;
     }
 
-    public File getLogFile() {
-        return logFile;
+    public File getTempLogFile() {
+        return tempLogFile;
     }
     
     /**

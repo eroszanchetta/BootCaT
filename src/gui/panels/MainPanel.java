@@ -153,7 +153,7 @@ public class MainPanel extends javax.swing.JFrame {
         currentStepNumber = 1;
         initComponents();
         
-        logDialog = new LogDialog(this, false, main.getLogFile().toPath(), this);
+        logDialog = new LogDialog(this, false, main.getTempLogFile().toPath(), this);
         
         // Commented this out because it breaks FlatLAF on Windows
         // setIconImage(Toolkit.getDefaultToolkit().getImage("/gui/resources/sbafo_64x64.png"));

@@ -39,8 +39,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileSystemView;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -117,7 +115,6 @@ public class General extends javax.swing.JPanel {
         else {
             httpsProxyPortTextField.setText("");
         }
-
         
         toggleProxySection();
         
@@ -400,18 +397,18 @@ public class General extends javax.swing.JPanel {
         fc.showOpenDialog(this);
 
         if (fc.getSelectedFile() != null) {
-                lastOpenedDir = fc.getSelectedFile();
-                String newDataDir = fc.getSelectedFile().getPath();
+            lastOpenedDir = fc.getSelectedFile();
+            String newDataDir = fc.getSelectedFile().getPath();
 
-                if (PathVerifier.dataDir(newDataDir, config, mainPanel.getMain().getDefaultDataDir())) {
-                        config.setDataPath(newDataDir);
-                        dataDirTextField.setText(newDataDir);
-                }
-                else {
-                        String msg = "The folder you chose is not valid.";
-                        GenericMessage errorMessage = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.ERROR);
-                        errorMessage.setVisible(true);
-                }
+            if (PathVerifier.dataDir(newDataDir, config, mainPanel.getMain().getDefaultDataDir())) {
+                config.setDataPath(newDataDir);
+                dataDirTextField.setText(newDataDir);
+            }
+            else {
+                String msg = "The folder you chose is not valid.";
+                GenericMessage errorMessage = new GenericMessage(mainPanel, true, msg, GenericMessage.Type.ERROR);
+                errorMessage.setVisible(true);
+            }
         }
 
         verifyTextFieldStatus();

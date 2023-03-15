@@ -18,8 +18,6 @@ package gui.helpers;
 
 import com.sun.nio.file.SensitivityWatchEventModifier;
 import gui.Main;
-import gui.dialogs.LogDialog;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -92,7 +90,7 @@ public class LogWatcher implements Runnable {
                     Path fileName = (Path) event.context();
                     
                     if (fileName.equals(logFilePath.getFileName())) {
-                                                
+                                                                        
                         logTextArea.setText(Files.readString(logFilePath));
                         
                     }                    

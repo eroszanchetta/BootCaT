@@ -42,8 +42,12 @@ public class Paths {
     private final String cleanedUrlList     = "url_list_cleaned.txt";    
     private final String collectedUrls      = "url_list_collected.txt";
     private final String finalUrlList       = "url_list_final.txt";
-    private final String reportFile         = "report.csv";
     private final String excelReportFile    = "report.xlsx";
+    
+    // this is the path to the log file in the corpus directory, this is where the log file will
+    // be copied at the end of the corpus creation process. Note that the actual log file is a temp
+    // file defined in the Main class
+    private final String exportedLogFile    = "log.txt";
 
     private File toolkitPath;
     private File projectDataPath;
@@ -92,12 +96,16 @@ public class Paths {
         this.toolkitPath = toolkitPath;
     }
 
+    /**
+     * 
+     * @return the file that will be saved in the corpus directory at the end of the corpus creation process
+     */
+    public File getExportedLogFile() {
+        return new File(getProjectDataPath().getPath() + File.separator + exportedLogFile);
+    }
+    
     public File getExcelReportFile() {
         return new File(getProjectDataPath().getPath() + File.separator + excelReportFile);
-    }
-
-    public File getReportFile() {
-        return new File(getProjectDataPath().getPath() + File.separator + reportFile);
     }
     
     public File getDownloadDir() {

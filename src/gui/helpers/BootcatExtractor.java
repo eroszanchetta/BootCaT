@@ -17,6 +17,7 @@
 
 package gui.helpers;
 
+import com.google.common.io.Files;
 import common.Language;
 import common.Utils;
 import contentextractor.ContentExtractor;
@@ -28,17 +29,13 @@ import gui.panels.CorpusBuilder;
 import gui.panels.MainPanel;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JProgressBar;
@@ -144,8 +141,14 @@ public class BootcatExtractor implements Runnable {
         Integer creationTime = (totalTime).intValue();
         
         // write log file
-        writeExcelLogFile(corpusChunks);
-//        writeCSVLogFile(corpusChunks);
+        writeExcelReportFile(corpusChunks);
+        
+        // write log file to corpus dir
+        try {
+            Files.copy(mainPanel.getMain().getTempLogFile(), mainPanel.getPaths().getExportedLogFile());            
+        } catch (IOException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+        }
                 
         // mark step as finished by removing blocking issues
         corpusBuilder.getBlockingIssues().remove(Issues.BUILDING_CORPUS);
@@ -163,7 +166,7 @@ public class BootcatExtractor implements Runnable {
         corpusBuilder.setComplete();
     }
     
-    private void writeExcelLogFile(ArrayList<CorpusChunk> corpusChunks) {
+    private void writeExcelReportFile(ArrayList<CorpusChunk> corpusChunks) {
        
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Report");
@@ -279,71 +282,6 @@ public class BootcatExtractor implements Runnable {
         }
     }
     
-    private void writeCSVLogFile(ArrayList<CorpusChunk> corpusChunks) {
-        Iterator<CorpusChunk> it = corpusChunks.iterator();
-        
-        String delimiter = "\";\"";
-        
-        try (PrintWriter writer = new PrintWriter(mainPanel.getPaths().getReportFile(), "UTF-8")) {
-            writer.print("\"");
-            writer.print("Downloaded_file" + delimiter);
-            writer.print("Extracted_plain_file" + delimiter);
-            writer.print("Extracted_XML_file" + delimiter);
-            writer.print("Approximate_token_count" + delimiter);
-            writer.print("Character_count" + delimiter);
-            writer.print("URL" + delimiter);
-            writer.print("Redirected from URL" + delimiter);
-            writer.print("Downloader" + delimiter);
-            writer.print("Detected_languages" + delimiter);
-            writer.print("Content_type" + delimiter);
-            writer.print("Status" + delimiter);
-            writer.print("Skipped_sentences" + delimiter);
-            writer.print("Downloaded_file_size" + delimiter);
-            writer.print("Extracted_file_size" + delimiter);
-            writer.print("HTML_Extraction_mode" + delimiter);
-            writer.print("Creation_date" + delimiter);
-            writer.print("Download_date");
-            writer.println("\"");
-
-            while (it.hasNext()) {
-                CorpusChunk chunk = it.next();
-
-                // write chunk info to file
-                writer.print("\"");
-                writer.print(chunk.getDownloadedFile().getName() + delimiter);
-                writer.print(chunk.getExtractedFile().getName() + delimiter);
-                writer.print(chunk.getExtractedXMLFile().getName() + delimiter);
-                writer.print(chunk.getTokenCount() + delimiter);
-                writer.print(chunk.getCharacterCount() + delimiter);
-                writer.print(chunk.getUri() + delimiter);
-                writer.print(chunk.getRedirectedFrom() + delimiter);
-                writer.print(chunk.getDownloader() + delimiter);
-                writer.print(chunk.getDetectedLanguagesString() + delimiter);
-                writer.print(chunk.getContentType() + delimiter);
-                writer.print(chunk.getStatus() + delimiter);
-                writer.print(chunk.getSkippedSentences() + delimiter);
-                writer.print(chunk.getDownloadedFileSizeHR() + delimiter);
-                writer.print(chunk.getExtractedFileSizeHR() + delimiter);
-                writer.print(chunk.getHtmlExtractionMode() + delimiter);
-                writer.print(chunk.getCreationDate() + delimiter);
-                writer.print(chunk.getDownloadDate());
-                writer.println("\"");
-                
-                // add token count of this chunk to corpus token count
-                corpusTokenCount += chunk.getTokenCount();
-                
-                // if URI couldtn't be downloaded, add it to project so we can report it
-                if (chunk.getStatus().equals(CorpusChunk.CorpusChunkStatus.CANNOT_DOWNLOAD)) {
-                    corpusBuilder.getMainPanel().getProject().getDownloadErrors().add(chunk.getUri());
-                }
-            }
-
-            writer.flush();
-        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
-        }
-    }
-
     private ArrayList<String> parseBlackList(File file) {
         
         ArrayList<String> blacklist = new ArrayList<>();

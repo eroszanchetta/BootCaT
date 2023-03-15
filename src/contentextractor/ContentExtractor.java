@@ -17,6 +17,7 @@
 
 package contentextractor;
 
+import com.google.common.io.Files;
 import common.HtmlExtractionMode;
 import common.CorpusChunk;
 import common.Language;
@@ -208,28 +209,26 @@ public class ContentExtractor {
             String fileNameFormat = "%0" + leadingZeroes + "d";
             String baseFileName  = corpusName + "_" + String.format(fileNameFormat, fileCount++);
                         
-            // determine extension, use .html if no extension is found or if the URL contains numbers or illegal characters (such as a colon)
+            // determine extension, set it to empty string if no extension is found or if the URL contains
+            // numbers or illegal characters (such as a colon). We'll try to fix it later, after downloading
+            // the file and determining the mime type
             String extension = "";
             
             try {
-                extension = FilenameUtils.getExtension(fixedUri.getPath());
+                extension = "." + FilenameUtils.getExtension(fixedUri.getPath());
             }
             catch (IllegalArgumentException ex) {
-                // URL contains illegal characters, work out extension manually
-                int lastDot = fixedUri.getPath().lastIndexOf(".");
-                
-                // this means there's no extension
-                if (lastDot > -1) {
-                    extension = fixedUri.getPath().substring(lastDot);                    
-                }
+                // URL contains illegal characters
+                Logger.getLogger(Main.LOGNAME).log(Level.WARNING, "ContentExtractor: extension contains illegal characters, removing it", ex);
             }
 
-            if (extension.equals("") || extension.matches(".*\\d+.*")) {
-                extension = "html";
+            // if extension contains digits or a colon, set it to empty string
+            if (extension.contains(":") || extension.matches(".*\\d+.*")) {
+                extension = "";
             }
-            
+                        
             // create reference to local downloaded file
-            File downloadedFile = new File(downloadDir + File.separator + baseFileName + "." + extension);
+            File downloadedFile = new File(downloadDir + File.separator + baseFileName + extension);
 
             // create reference to extracted file
             File extractedFile  = new File(corpusDir + File.separator + baseFileName + ".txt");
@@ -298,6 +297,34 @@ public class ContentExtractor {
                 continue;                    
             }
 
+            // if the extension is empty, try to fix the most common cases
+            if (extension.equals("")) {
+                switch (contentType) {
+                    case "application/xhtml+xml":
+                        extension = ".html";
+                        break;
+                    case "text/html":
+                        extension = ".html";
+                        break;
+                    case "application/pdf":
+                        extension = ".pdf";
+                        break;
+                    default:
+                        break;
+                }
+                
+                // if we were able to detect a different file type, rename the file accordingly
+                if (!extension.equals("")) {
+                    try {
+                        File renamedFile = new File(corpusChunk.getDownloadedFile() + extension);
+                        Files.move(corpusChunk.getDownloadedFile(), renamedFile);
+                        corpusChunk.setDownloadedFile(renamedFile);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, "Could not rename file", ex);
+                    }
+                }
+            }
+            
             String text;
             // use BolierPipe for HTML files or Tika for everything else
             // extracted text will be written to output file, metadata of the
@@ -314,7 +341,7 @@ public class ContentExtractor {
                 corpusChunk.setStatus(CorpusChunk.CorpusChunkStatus.CANNOT_EXTRACT);
                 updateProgressBar(progBar);
                 continue;
-            };
+            }
 
             // check blacklisted words
             if (!getBlackList().isEmpty()) {
@@ -808,7 +835,7 @@ public class ContentExtractor {
                 Long fileLength = file.length();
                 return fileLength.intValue();                
             } catch (MalformedURLException ex) {
-                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, "cannot determine file size", ex);
                 return -1;
             }
         }
@@ -823,7 +850,7 @@ public class ContentExtractor {
             conn.getInputStream();
             return conn.getContentLength();
         } catch (IOException e) {
-            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, e);
+            Logger.getLogger(Main.LOGNAME).log(Level.WARNING, "cannot determine file size, trying to download it anyway", e);
             return -1;
         } finally {
             if (conn != null) conn.disconnect();
