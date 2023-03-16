@@ -17,7 +17,6 @@
 
 package contentextractor;
 
-import com.google.common.io.Files;
 import common.HtmlExtractionMode;
 import common.CorpusChunk;
 import common.Language;
@@ -32,6 +31,7 @@ import com.optimaize.langdetect.ngram.NgramExtractors;
 import com.optimaize.langdetect.profiles.LanguageProfile;
 import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import common.Downloader;
+import common.MimeType;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.extractors.DefaultExtractor;
@@ -61,6 +61,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -208,38 +209,15 @@ public class ContentExtractor {
             // create filename by padding out fileCount with zeroes
             String fileNameFormat = "%0" + leadingZeroes + "d";
             String baseFileName  = corpusName + "_" + String.format(fileNameFormat, fileCount++);
-                        
-            // determine extension, set it to empty string if no extension is found or if the URL contains
-            // numbers or illegal characters (such as a colon). We'll try to fix it later, after downloading
-            // the file and determining the mime type
-            String extension = "";
-            
-            try {
-                extension = "." + FilenameUtils.getExtension(fixedUri.getPath());
-            }
-            catch (IllegalArgumentException ex) {
-                // URL contains illegal characters
-                Logger.getLogger(Main.LOGNAME).log(Level.WARNING, "ContentExtractor: extension contains illegal characters, removing it", ex);
-            }
-
-            // if extension contains digits or a colon, set it to empty string
-            if (extension.contains(":") || extension.matches(".*\\d+.*")) {
-                extension = "";
-            }
-                        
-            // create reference to local downloaded file
-            File downloadedFile = new File(downloadDir + File.separator + baseFileName + extension);
-
-            // create reference to extracted file
-            File extractedFile  = new File(corpusDir + File.separator + baseFileName + ".txt");
-            
-            // create reference to extracted XML file
-            File extractedXMLFile  = new File(xmlCorpusDir + File.separator + baseFileName + ".xml");
             
             // create CorpusChunk instance
-            CorpusChunk corpusChunk = new CorpusChunk(downloadedFile, extractedFile,
-                    extractedXMLFile, baseFileName, fixedUri);
-                        
+
+            CorpusChunk corpusChunk = new CorpusChunk(baseFileName, fixedUri);
+            
+            corpusChunk.setDownloadDir(downloadDir);
+            corpusChunk.setCorpusDir(corpusDir);
+            corpusChunk.setXmlCorpusDir(xmlCorpusDir);
+
             corpusChunks.add(corpusChunk);
             
             // determine file size
@@ -287,49 +265,12 @@ public class ContentExtractor {
                 updateProgressBar(progBar);
                 continue;
             }
-
-            // detect file type
-            String contentType = detectContentType(corpusChunk.getDownloadedFile());
-            corpusChunk.setContentType(contentType);
-            if (contentType == null) {
-                corpusChunk.setStatus(CorpusChunk.CorpusChunkStatus.CANNOT_DETECT);
-                updateProgressBar(progBar);
-                continue;                    
-            }
-
-            // if the extension is empty, try to fix the most common cases
-            if (extension.equals("")) {
-                switch (contentType) {
-                    case "application/xhtml+xml":
-                        extension = ".html";
-                        break;
-                    case "text/html":
-                        extension = ".html";
-                        break;
-                    case "application/pdf":
-                        extension = ".pdf";
-                        break;
-                    default:
-                        break;
-                }
-                
-                // if we were able to detect a different file type, rename the file accordingly
-                if (!extension.equals("")) {
-                    try {
-                        File renamedFile = new File(corpusChunk.getDownloadedFile() + extension);
-                        Files.move(corpusChunk.getDownloadedFile(), renamedFile);
-                        corpusChunk.setDownloadedFile(renamedFile);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, "Could not rename file", ex);
-                    }
-                }
-            }
             
             String text;
             // use BolierPipe for HTML files or Tika for everything else
             // extracted text will be written to output file, metadata of the
             // operation will be saved in the corpusChunk object
-            if (corpusChunk.getContentType().contains("html") && htmlExtractionMode != HtmlExtractionMode.TIKA) {
+            if (corpusChunk.getMimeType().getMimeType().contains("html") && htmlExtractionMode != HtmlExtractionMode.TIKA) {
                 text = extractWithBoilerpipe(corpusChunk, xmlAttributes);
                 corpusChunk.setHtmlExtractionMode(htmlExtractionMode);
             }
@@ -573,6 +514,14 @@ public class ContentExtractor {
         
         // convert URL to File
         File sourceFile = new File(corpusChunk.getUri());
+
+        // detect file type
+        String mimeType = detectMimeType(sourceFile);
+        corpusChunk.setMimeType(mimeType);
+                
+        // create reference to downloaded file
+        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+        corpusChunk.setDownloadedFile(downloadedFile);
         
         try {
             FileUtils.copyFile(sourceFile, corpusChunk.getDownloadedFile());
@@ -659,6 +608,9 @@ public class ContentExtractor {
         curlWrapper.setHttpsProxyUser(project.getHttpsProxyUser());
         curlWrapper.setHttpsProxyPassword(project.getHttpsProxyPassword());
         
+        //first determine contentType
+        corpusChunk.setMimeType(curlWrapper.getMimeType());
+        
         curlWrapper.getFile();
         
         if (curlWrapper.getExitCode() == 0) {
@@ -682,6 +634,18 @@ public class ContentExtractor {
             conn.setReadTimeout(readTimeout);
             conn.connect();
 
+            // determine mime type (content type includes character encoding, we're interested in mime type only)
+            String contentType = conn.getContentType();
+            contentType = contentType.replaceAll("'", "");
+            String[] cType = contentType.split(";");
+            String mimeType = "";
+            
+            // check length of array to avoid array out of bounds errors
+            if (cType.length > 0) {
+                mimeType = cType[0];
+            }            
+            corpusChunk.setMimeType(mimeType);
+                        
             // if we get a redirection response, record information in corpushunk and try again with new URL
             if (conn.getResponseCode() == 301) {
                 corpusChunk.setRedirectedFrom(uri);
@@ -689,6 +653,10 @@ public class ContentExtractor {
                 return download(corpusChunk);
             }
 
+            // create reference to downloaded file
+            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+            corpusChunk.setDownloadedFile(downloadedFile);
+            
             // opens input stream from the HTTP connection
             InputStream inputStream = conn.getInputStream();
             File saveFilePath = corpusChunk.getDownloadedFile();
@@ -709,8 +677,7 @@ public class ContentExtractor {
             Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
             return false;
         } catch (SSLHandshakeException ex) {
-            System.err.println("SSLHandshakeException, disabling SSL verification and retrying");
-            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.LOGNAME).log(Level.WARNING, "SSLHandshakeException, disabling SSL verification and retrying", ex);
             disableSslVerification();
             return download(corpusChunk);
         } catch (SSLException | SocketTimeoutException ex) {
@@ -738,7 +705,19 @@ public class ContentExtractor {
             conn.setConnectTimeout(connectionTimeout);
             conn.setReadTimeout(readTimeout);
             conn.connect();
-
+            
+            // determine mime type
+            String contentType = conn.getContentType();
+            contentType = contentType.replaceAll("'", "");
+            String[] cType = contentType.split(";");
+            String mimeType = "";
+            
+            // check length of array to avoid array out of bounds errors
+            if (cType.length > 0) {
+                mimeType = cType[0];
+            }            
+            corpusChunk.setMimeType(mimeType);
+            
             // if we get a redirection response, record information in corpushunk and try again with new URL
             if (conn.getResponseCode() == 301) {
                 corpusChunk.setRedirectedFrom(uri);
@@ -746,6 +725,10 @@ public class ContentExtractor {
                 return download(corpusChunk);
             }
 
+            // create reference to downloaded file
+            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+            corpusChunk.setDownloadedFile(downloadedFile);
+            
             // opens input stream from the HTTP connection
             InputStream inputStream = conn.getInputStream();
             File saveFilePath = corpusChunk.getDownloadedFile();
@@ -760,7 +743,7 @@ public class ContentExtractor {
             }
 
             outputStream.close();
-            inputStream.close();            
+            inputStream.close();
 
         } catch (ProtocolException ex) {
             Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);            
@@ -835,7 +818,7 @@ public class ContentExtractor {
                 Long fileLength = file.length();
                 return fileLength.intValue();                
             } catch (MalformedURLException ex) {
-                Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, "cannot determine file size", ex);
+                Logger.getLogger(Main.LOGNAME).log(Level.WARNING, "cannot determine file size", ex);
                 return -1;
             }
         }
@@ -858,11 +841,11 @@ public class ContentExtractor {
     }
     
     /**
-     * Detect content type
+     * Detect mime type
      * @param file
-     * @return String describing content type or null if detection fails
+     * @return String describing mime type or null if detection fails
      */
-    private String detectContentType(File file) {
+    private String detectMimeType(File file) {
                 
         try {
             return tika.detect(file);
@@ -1014,7 +997,7 @@ public class ContentExtractor {
             while ((line = br.readLine()) != null) {
                 
                 // reformat PDF files removing extra whitespaces and newlines
-                if (corpusChunk.getContentType().equals("application/pdf")) {
+                if (corpusChunk.getMimeType().equals("application/pdf")) {
                     line = line.replaceAll("\r", " ");
                     line = line.replaceAll("\n", " ");
                     line = line.trim();

@@ -182,7 +182,7 @@ public class BootcatExtractor implements Runnable {
             rowhead.createCell(6).setCellValue("Redirected from URL");
             rowhead.createCell(7).setCellValue("Downloader");
             rowhead.createCell(8).setCellValue("Detected_languages");
-            rowhead.createCell(9).setCellValue("Content_type");
+            rowhead.createCell(9).setCellValue("Mime_type");
             rowhead.createCell(10).setCellValue("Status");
             rowhead.createCell(11).setCellValue("Skipped_sentences");
             rowhead.createCell(12).setCellValue("Downloaded_file_size");
@@ -232,9 +232,9 @@ public class BootcatExtractor implements Runnable {
                 if (chunk.getDetectedLanguagesString() == null) detectedLangs = "null";
                 else detectedLangs = chunk.getDetectedLanguagesString();
                 
-                String contentType;
-                if (chunk.getContentType() == null) contentType = "null";
-                else contentType = chunk.getContentType();
+                String mimeType;
+                if (chunk.getMimeType() == null) mimeType = "null";
+                else mimeType = chunk.getMimeType().getMimeType();
                 
                 String status;
                 if (chunk.getStatus() == null) status = "";
@@ -261,7 +261,7 @@ public class BootcatExtractor implements Runnable {
                 row.createCell(6).setCellValue(redirectUri);
                 row.createCell(7).setCellValue(downloader);
                 row.createCell(8).setCellValue(detectedLangs);
-                row.createCell(9).setCellValue(contentType);
+                row.createCell(9).setCellValue(mimeType);
                 row.createCell(10).setCellValue(status);
                 row.createCell(11).setCellValue(skippedSentences);
                 row.createCell(12).setCellValue(chunk.getDownloadedFileSizeHR());

@@ -30,15 +30,16 @@ import org.apache.tika.metadata.Metadata;
 public class CorpusChunk {
     
     private int                     downloadAttempts;
+    private File                    downloadDir;
+    private File                    corpusDir;
     private File                    downloadedFile;
+    private File                    xmlCorpusDir;
     private URI                     uri;
     private URI                     redirectedFrom;
     private Metadata                metadata;
-    private File                    extractedFile;
-    private File                    extractedXMLFile;
     private long                    downloadedFileSize;
     private Date                    downloadDate;
-    private String                  contentType;
+    private MimeType                mimeType;
     private CorpusChunkStatus       status;
     private Integer                 tokenCount;
     private Integer                 characterCount;
@@ -64,29 +65,45 @@ public class CorpusChunk {
         WRONG_LANGUAGE
     }
         
+//    /**
+//     * Create an instance or CorpusChunk.
+//     * 
+//     * This class only contains metadata and references to the downloaded file and the extracted content text file,
+//     * it DOES NOT contain the actual data.
+//     * 
+//     * @param downloadedFile
+//     * @param extractedFile
+//     * @param extractedXMLFile
+//     * @param baseFileName
+//     * @param uri
+//     */
+//    public CorpusChunk(File downloadedFile, File extractedFile, File extractedXMLFile,
+//            String baseFileName, URI uri) {
+//        this.downloadedFile     = downloadedFile;
+//        this.extractedFile      = extractedFile;
+//        this.extractedXMLFile   = extractedXMLFile;
+//        this.baseFileName       = baseFileName;
+//        this.uri                = uri;
+//        this.tokenCount         = 0;
+//        this.downloadAttempts   = 0;
+//    }    
+
     /**
      * Create an instance or CorpusChunk.
      * 
      * This class only contains metadata and references to the downloaded file and the extracted content text file,
      * it DOES NOT contain the actual data.
      * 
-     * @param downloadedFile
-     * @param extractedFile
-     * @param extractedXMLFile
      * @param baseFileName
      * @param uri
      */
-    public CorpusChunk(File downloadedFile, File extractedFile, File extractedXMLFile,
-            String baseFileName, URI uri) {
-        this.downloadedFile     = downloadedFile;
-        this.extractedFile      = extractedFile;
-        this.extractedXMLFile   = extractedXMLFile;
+    public CorpusChunk(String baseFileName, URI uri) {
         this.baseFileName       = baseFileName;
         this.uri                = uri;
         this.tokenCount         = 0;
         this.downloadAttempts   = 0;
-    }    
-
+    }        
+    
     /**
      * Get all detected languages as a single string (for logging purposes).
      * 
@@ -112,6 +129,30 @@ public class CorpusChunk {
         }
         
         return out;
+    }
+
+    public File getDownloadDir() {
+        return downloadDir;
+    }
+
+    public void setDownloadDir(File downloadDir) {
+        this.downloadDir = downloadDir;
+    }
+
+    public File getCorpusDir() {
+        return corpusDir;
+    }
+
+    public void setCorpusDir(File corpusDir) {
+        this.corpusDir = corpusDir;
+    }
+
+    public File getXmlCorpusDir() {
+        return xmlCorpusDir;
+    }
+
+    public void setXmlCorpusDir(File xmlCorpusDir) {
+        this.xmlCorpusDir = xmlCorpusDir;
     }
 
     public Downloader getDownloader() {
@@ -182,12 +223,19 @@ public class CorpusChunk {
         this.detectedLanguages = detectedLanguages;
     }
     
-    public String getContentType() {
-        return contentType;
+    public MimeType getMimeType() {
+        return mimeType;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public void setMimeType(String mimeType) {
+        this.mimeType = MimeType._UNDEF;
+        
+        for (MimeType mType : MimeType.values()) {
+            if (mimeType.equals(mType.getMimeType())) {
+                this.mimeType = mType;
+                break;
+            }
+        }
     }
 
     public Date getDownloadDate() {        
@@ -202,16 +250,12 @@ public class CorpusChunk {
         return downloadedFile;
     }
 
-    public File getExtractedXMLFile() {
-        return extractedXMLFile;
-    }
-
-    public void setExtractedXMLFile(File extractedXMLFile) {
-        this.extractedXMLFile = extractedXMLFile;
-    }
-
     public void setDownloadedFile(File downloadedFile) {
         this.downloadedFile = downloadedFile;
+    }
+
+    public File getExtractedXMLFile() {
+        return new File(xmlCorpusDir + File.separator + baseFileName + ".xml");
     }
     
     public URI getUri() {
@@ -231,11 +275,7 @@ public class CorpusChunk {
     }
 
     public File getExtractedFile() {
-        return extractedFile;
-    }
-
-    public void setExtractedFile(File extractedFile) {
-        this.extractedFile = extractedFile;
+        return new File(corpusDir + File.separator + baseFileName + ".txt");
     }
     
     /**

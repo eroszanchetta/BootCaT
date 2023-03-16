@@ -7,10 +7,15 @@ package contentextractor;
 
 import common.CorpusChunk;
 import gui.Main;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdk.internal.org.jline.utils.InfoCmp;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  *
@@ -128,11 +133,88 @@ public class CurlWrapper {
         getFile(false);
     }
 
+    public String getMimeType() {        
+        String devNull = "/dev/null";
+        if (SystemUtils.IS_OS_WINDOWS) {
+            devNull = "NUL";
+        }
+        
+        ArrayList<String> parameters = new ArrayList<>();
+        
+        parameters.add(curlPath);
+        parameters.add("-s");
+        parameters.add("-o");
+        parameters.add(devNull);
+        parameters.add("-w");
+        parameters.add("'%{content_type}'");
+        parameters.add(corpusChunk.getUri().toString());
+        
+        if (useProxy) {
+            parameters.add("-x");
+            
+            // HTTPS proxy
+            if (corpusChunk.getUri().toString().startsWith("https")) {
+                parameters.add(httpsProxy + ":" + httpsProxyPort);
+                
+                if (proxyAuth) {
+                    parameters.add("-U");
+                    parameters.add(httpsProxyUser + ":" + httpsProxyPassword);
+                }
+            }
+            else if (corpusChunk.getUri().toString().startsWith("http")) {
+                parameters.add(httpProxy + ":" + httpProxyPort);
+                
+                if (proxyAuth) {
+                    parameters.add("-U");
+                    parameters.add(httpProxyUser + ":" + httpProxyPassword);
+                }                
+            }
+        }
+
+        String[] params = new String[parameters.size()];
+        params = parameters.toArray(params);
+        
+        
+        String contentType = "";
+        
+        try {
+            process = Runtime.getRuntime().exec(params);
+            
+            BufferedReader is = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            
+            String line;
+            while ((line = is.readLine(  )) != null) {
+                contentType += line;
+            }
+            
+            process.waitFor();
+            exitCode = process.exitValue();
+            
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(Main.LOGNAME).log(Level.SEVERE, null, ex);
+        }
+        
+        contentType = contentType.replaceAll("'", "");
+        String[] cType = contentType.split(";");
+
+        String mimeType = "";
+        // check length of array to avoid array out of bounds errors
+        if (cType.length > 0) {
+            mimeType = cType[0];
+        }            
+        
+        return mimeType;
+    }
+    
     public void getFile(boolean testOnly) {
         // TODO: if testOnly is set to true, just get the HTTP return code for the page
         // i.e. see if the page is downloadable or not
         // to do it, use "curl -i https://example.com" and parse the results
-
+        
+        // create reference to downloaded file
+        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+        corpusChunk.setDownloadedFile(downloadedFile);
+        
         ArrayList<String> parameters = new ArrayList<>();
         
         parameters.add(curlPath);

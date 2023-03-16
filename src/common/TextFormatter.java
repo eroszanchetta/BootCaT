@@ -115,8 +115,8 @@ public class TextFormatter {
         String output = "<text id='" +
                 FilenameUtils.removeExtension(corpusChunk.getDownloadedFile().getName()) + "' filename='" +
                 corpusChunk.getDownloadedFile().getName() + "' uri='" +
-                corpusChunk.getUri().toString()  + "' content_type='" +
-                corpusChunk.getContentType() + "'";
+                corpusChunk.getUri().toString()  + "' mime_type='" +
+                corpusChunk.getMimeType() + "'";
         
         // if user specified optional XML attributes, add them
         if (xmlAttributes != null) {
