@@ -638,7 +638,11 @@ public class ContentExtractor {
             String contentType = conn.getContentType();
             contentType = contentType.replaceAll("'", "");
             String[] cType = contentType.split(";");
-            String mimeType = "";
+
+            // set text/html as a default in case the remote serve doesn't provide a content-type
+            // this is not ideal but since it's something we download from the Internet,
+            // let's assume it's a html page
+            String mimeType = "text/html";
             
             // check length of array to avoid array out of bounds errors
             if (cType.length > 0) {
@@ -710,7 +714,11 @@ public class ContentExtractor {
             String contentType = conn.getContentType();
             contentType = contentType.replaceAll("'", "");
             String[] cType = contentType.split(";");
-            String mimeType = "";
+
+            // set text/html as a default in case the remote serve doesn't provide a content-type
+            // this is not ideal but since it's something we download from the Internet,
+            // let's assume it's a html page
+            String mimeType = "text/html";
             
             // check length of array to avoid array out of bounds errors
             if (cType.length > 0) {
