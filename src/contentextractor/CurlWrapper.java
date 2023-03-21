@@ -216,7 +216,7 @@ public class CurlWrapper {
         // to do it, use "curl -i https://example.com" and parse the results
         
         // create reference to downloaded file
-        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + corpusChunk.getMimeType().getDotExtension());
         corpusChunk.setDownloadedFile(downloadedFile);
         
         ArrayList<String> parameters = new ArrayList<>();

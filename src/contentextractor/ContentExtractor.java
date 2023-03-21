@@ -31,7 +31,6 @@ import com.optimaize.langdetect.ngram.NgramExtractors;
 import com.optimaize.langdetect.profiles.LanguageProfile;
 import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import common.Downloader;
-import common.MimeType;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.extractors.DefaultExtractor;
@@ -520,7 +519,7 @@ public class ContentExtractor {
         corpusChunk.setMimeType(mimeType);
                 
         // create reference to downloaded file
-        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+        File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + corpusChunk.getMimeType().getDotExtension());
         corpusChunk.setDownloadedFile(downloadedFile);
         
         try {
@@ -658,7 +657,7 @@ public class ContentExtractor {
             }
 
             // create reference to downloaded file
-            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + corpusChunk.getMimeType().getDotExtension());
             corpusChunk.setDownloadedFile(downloadedFile);
             
             // opens input stream from the HTTP connection
@@ -734,7 +733,7 @@ public class ContentExtractor {
             }
 
             // create reference to downloaded file
-            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + "." + corpusChunk.getMimeType().getExtension());
+            File downloadedFile = new File(corpusChunk.getDownloadDir() + File.separator + corpusChunk.getBaseFileName() + corpusChunk.getMimeType().getDotExtension());
             corpusChunk.setDownloadedFile(downloadedFile);
             
             // opens input stream from the HTTP connection

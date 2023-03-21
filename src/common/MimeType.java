@@ -1025,6 +1025,20 @@ public enum MimeType {
         this.mimeType = mimeType;
     }
 
+    /**
+     * Convenience method that returns the extension conventionally
+     * associated with the mimetype, complete with the dot
+     * (i.e. ".pdf")
+     * @return 
+     */
+    public String getDotExtension() {
+        return "." + extension;
+    }
+    
+    /**
+     * Return the extension conventionally associated with the mimetype
+     * @return 
+     */
     public String getExtension() {
         return extension;
     }
