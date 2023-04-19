@@ -137,7 +137,7 @@ public enum MimeType {
     CII	("cii", "application/vnd.anser-web-certificate-issue-initiation"),
     CIL	("cil", "application/vnd.ms-artgalry"),
     CLA	("cla", "application/vnd.claymore"),
-    CLASS	("class", "application/java-vm"),
+    CLASS   ("class", "application/java-vm"),
     CLKK	("clkk", "application/vnd.crick.clicker.keyboard"),
     CLKP	("clkp", "application/vnd.crick.clicker.palette"),
     CLKT	("clkt", "application/vnd.crick.clicker.template"),
@@ -1029,7 +1029,7 @@ public enum MimeType {
      * Convenience method that returns the extension conventionally
      * associated with the mimetype, complete with the dot
      * (i.e. ".pdf")
-     * @return 
+     * @return a string representing the extension, preceded by a dot
      */
     public String getDotExtension() {
         return "." + extension;
@@ -1037,7 +1037,7 @@ public enum MimeType {
     
     /**
      * Return the extension conventionally associated with the mimetype
-     * @return 
+     * @return a string representing the extension
      */
     public String getExtension() {
         return extension;

@@ -63,9 +63,18 @@ public class Main {
     private MainPanel       mainPanel;
     private Properties      systemPreferences;
 
-    private final Double    versionNumber       = 1.56;
-    private final String    codeName            = "Crookshanks";
-    private final int       buildNumber         = 268;
+    /**
+     * Ideas for future code names:
+     *      Behemoth (The Master and Margarita)
+     *      Buttercup (The Hunger Games)
+     *      Greebo (Discworld)
+     *      Mrs. Norris (Harry Potter)
+     *      Pluto (The Black Cat by Edgar Allan Poe)
+     *      Siamese (A Dream of a Thousand Cats by Neil Gaiman)
+     */
+    private final Double    versionNumber       = 1.57;
+    private final String    codeName            = "Crookshanks";    
+    private final int       buildNumber         = 269;
     private final int       copyRightYear       = 2023;
 
     private File            programDir;

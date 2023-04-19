@@ -619,6 +619,11 @@ public class ContentExtractor {
         return true;
     }
     
+    /**
+     * TODO: see if you can merge downloadViaHTTPS with downloadViaHTTP, maybe the only thing that changes is the class used for the connection?
+     * @param corpusChunk
+     * @return 
+     */
     private boolean downloadViaHTTPS(CorpusChunk corpusChunk) {
         int BUFFER_SIZE = 4096;
         
