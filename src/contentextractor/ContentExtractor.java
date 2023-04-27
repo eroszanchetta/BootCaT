@@ -60,7 +60,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -85,7 +84,6 @@ import javax.swing.JTextArea;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
@@ -639,19 +637,24 @@ public class ContentExtractor {
             conn.connect();
 
             // determine mime type (content type includes character encoding, we're interested in mime type only)
-            String contentType = conn.getContentType();
-            contentType = contentType.replaceAll("'", "");
-            String[] cType = contentType.split(";");
-
+            
             // set text/html as a default in case the remote serve doesn't provide a content-type
             // this is not ideal but since it's something we download from the Internet,
             // let's assume it's a html page
             String mimeType = "text/html";
             
-            // check length of array to avoid array out of bounds errors
-            if (cType.length > 0) {
-                mimeType = cType[0];
-            }            
+            String contentType = conn.getContentType();            
+            
+            if (contentType != null) {
+                contentType = contentType.replaceAll("'", "");
+                String[] cType = contentType.split(";");
+                
+                // check length of array to avoid array out of bounds errors
+                if (cType.length > 0) {
+                    mimeType = cType[0];
+                }                
+            }
+            
             corpusChunk.setMimeType(mimeType);
                         
             // if we get a redirection response, record information in corpushunk and try again with new URL
@@ -715,19 +718,24 @@ public class ContentExtractor {
             conn.connect();
             
             // determine mime type
-            String contentType = conn.getContentType();
-            contentType = contentType.replaceAll("'", "");
-            String[] cType = contentType.split(";");
-
+            
             // set text/html as a default in case the remote serve doesn't provide a content-type
             // this is not ideal but since it's something we download from the Internet,
             // let's assume it's a html page
-            String mimeType = "text/html";
+            String mimeType = "text/html";            
+
+            String contentType = conn.getContentType();            
             
-            // check length of array to avoid array out of bounds errors
-            if (cType.length > 0) {
-                mimeType = cType[0];
-            }            
+            if (contentType != null) {
+                contentType = contentType.replaceAll("'", "");
+                String[] cType = contentType.split(";");
+
+                // check length of array to avoid array out of bounds errors
+                if (cType.length > 0) {
+                    mimeType = cType[0];
+                }                
+            }
+            
             corpusChunk.setMimeType(mimeType);
             
             // if we get a redirection response, record information in corpushunk and try again with new URL
