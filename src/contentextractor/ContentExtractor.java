@@ -636,9 +636,9 @@ public class ContentExtractor {
             conn.setReadTimeout(readTimeout);
             conn.connect();
 
-            // determine mime type (content type includes character encoding, we're interested in mime type only)
+            // determine mime type
             
-            // set text/html as a default in case the remote serve doesn't provide a content-type
+            // set text/html as a default in case the remote server doesn't provide a content-type
             // this is not ideal but since it's something we download from the Internet,
             // let's assume it's a html page
             String mimeType = "text/html";
@@ -647,6 +647,8 @@ public class ContentExtractor {
             
             if (contentType != null) {
                 contentType = contentType.replaceAll("'", "");
+                
+                // content type includes character encoding, we're interested in mime type only (the first part of the string)
                 String[] cType = contentType.split(";");
                 
                 // check length of array to avoid array out of bounds errors
@@ -719,7 +721,7 @@ public class ContentExtractor {
             
             // determine mime type
             
-            // set text/html as a default in case the remote serve doesn't provide a content-type
+            // set text/html as a default in case the remote server doesn't provide a content-type
             // this is not ideal but since it's something we download from the Internet,
             // let's assume it's a html page
             String mimeType = "text/html";            
@@ -728,6 +730,8 @@ public class ContentExtractor {
             
             if (contentType != null) {
                 contentType = contentType.replaceAll("'", "");
+                
+                // content type includes character encoding, we're interested in mime type only (the first part of the string)
                 String[] cType = contentType.split(";");
 
                 // check length of array to avoid array out of bounds errors

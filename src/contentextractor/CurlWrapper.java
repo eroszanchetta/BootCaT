@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdk.internal.org.jline.utils.InfoCmp;
 import org.apache.commons.lang3.SystemUtils;
 
 /**
@@ -197,7 +196,7 @@ public class CurlWrapper {
         contentType = contentType.replaceAll("'", "");
         String[] cType = contentType.split(";");
 
-        // set text/html as a default in case the remote serve doesn't provide a content-type
+        // set text/html as a default in case the remote server doesn't provide a content-type
         // this is not ideal but since it's something we download from the Internet,
         // let's assume it's a html page
         String mimeType = "text/html";
